@@ -4,14 +4,6 @@ import "xwing-miniatures-font/dist/xwing-miniatures.css";
 
 import "./index.css";
 
-// const xwing = [
-//   [0, 0, 0, 0, 0, 0],
-//   [0, 2, 2, 2, 0, 0],
-//   [1, 1, 2, 1, 1, 0],
-//   [1, 1, 1, 1, 1, 0],
-//   [0, 0, 1, 0, 0, 3]
-// ];
-
 /* ManeuverSquare is a represetnation of a single maneuver square */
 function ManeuverSquare(props) {
   if (props.bearing) {
@@ -32,11 +24,6 @@ function ManeuverSquare(props) {
 }
 
 class ManeuverCard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
   renderRow(row) {
     let render = [];
     const len = row.length;
@@ -46,8 +33,12 @@ class ManeuverCard extends React.Component {
         continue;
       }
       const bearing = getBearing(i);
+      let color;
+      if (row[i] > 1) {
+        color = row[i] === 2 ? "green" : "red";
+      }
 
-      render.push(this.renderSquare(bearing));
+      render.push(this.renderSquare(bearing, color));
     }
 
     return <div className="board-row">{render}</div>;
@@ -65,14 +56,52 @@ class ManeuverCard extends React.Component {
   }
 
   render() {
+    const maneuvers = this.props.maneuvers;
+
+    const rows = maneuvers.map((row, speed) => {
+      speed = maneuvers.length - 1 - speed;
+      return (
+        < div className="board-row" >
+          {this.renderSquare(speed)}
+          {this.renderRow(row)}
+        </div >
+      )
+    })
+
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(1)}
-          {this.renderRow([0, 2, 2, 2, 0, 0])}
-        </div>
+        {rows}
       </div>
     );
+  }
+}
+
+class Ship extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      // maneuvers: [
+      //   [0, 0, 0, 0, 0, 0],
+      //   [0, 2, 2, 2, 0, 0],
+      //   [1, 1, 2, 1, 1, 0],
+      //   [1, 1, 1, 1, 1, 0],
+      //   [0, 0, 1, 0, 0, 3]
+      // ]
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <ManeuverCard maneuvers={[
+          [0, 0, 1, 0, 0, 3],
+          [1, 1, 1, 1, 1, 0],
+          [1, 1, 2, 1, 1, 0],
+          [0, 2, 2, 2, 0, 0],
+          [0, 0, 0, 0, 0, 0]
+        ]
+        } />
+      </div>);
   }
 }
 
@@ -96,4 +125,4 @@ function getBearing(i) {
 }
 // =============================================================================
 
-ReactDOM.render(<ManeuverCard />, document.getElementById("root"));
+ReactDOM.render(<Ship />, document.getElementById("root"));
