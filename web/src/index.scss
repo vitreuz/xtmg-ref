@@ -22,7 +22,7 @@
   /*  */
   outline: none;
 }
-  
+
 .manuevers-font {
   font-family: Xwing;
   font-style: normal;
@@ -31,17 +31,13 @@
 }
 
 .red-manuevers-font {
-  font-family: Xwing;
-  font-style: normal;
+  @extend .manuevers-font;
   color: #F5171D;
-  font-size: 1em;
 }
 
 .green-manuevers-font {
-  font-family: Xwing;
-  font-style: normal;
+  @extend .manuevers-font;
   color: #7EDA24;
-  font-size: 1em;
 }
 
-  
+
