@@ -1,0 +1,47 @@
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.square {
+  background: #2E2D3B;
+  border: 1px solid #D9E8ED;
+  float: left;
+  font-size: 24px;
+  height: 34px;
+  line-height: 44px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 26px;
+}
+
+.square:focus {
+  /*  */
+  outline: none;
+}
+  
+.manuevers-font {
+  font-family: Xwing;
+  font-style: normal;
+  color: #FCFCFB;
+  font-size: 1em;
+}
+
+.red-manuevers-font {
+  font-family: Xwing;
+  font-style: normal;
+  color: #F5171D;
+  font-size: 1em;
+}
+
+.green-manuevers-font {
+  font-family: Xwing;
+  font-style: normal;
+  color: #7EDA24;
+  font-size: 1em;
+}
+
+  
