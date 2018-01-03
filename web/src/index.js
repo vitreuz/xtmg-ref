@@ -11,7 +11,6 @@ function ManeuverSquare(props) {
       (props.color ? props.color + "-" : "") +
       "manuevers-font xwing-miniatures-font-" +
       props.bearing;
-    console.log(maneuver);
 
     return (
       <div className="square">
@@ -24,24 +23,18 @@ function ManeuverSquare(props) {
 }
 
 class ManeuverCard extends React.Component {
+  renderEmptySquare() {
+    return <div className="square" />;
+  }
+
   renderRow(row) {
-    let render = [];
-    const len = row.length;
-    for (let i = 0; i < len; i++) {
-      if (row[i] === 0) {
-        if (i < 5) render.push(this.renderSquare());
-        continue;
-      }
-      const bearing = getBearing(i);
-      let color;
-      if (row[i] > 1) {
-        color = row[i] === 2 ? "green" : "red";
-      }
+    return row.map((maneuver) => {
+      if (maneuver === null) return this.renderEmptySquare();
+      const difficulty = maneuver[0];
+      const bearing = maneuver[1];
 
-      render.push(this.renderSquare(bearing, color));
-    }
-
-    return <div className="board-row">{render}</div>;
+      return this.renderSquare(bearing, difficulty);
+    })
   }
 
   renderSquare(bearing, color) {
@@ -60,6 +53,7 @@ class ManeuverCard extends React.Component {
 
     const rows = maneuvers.map((row, speed) => {
       speed = maneuvers.length - 1 - speed;
+
       return (
         < div className="board-row" >
           {this.renderSquare(speed)}
@@ -80,33 +74,42 @@ class Ship extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // maneuvers: [
-      //   [0, 0, 0, 0, 0, 0],
-      //   [0, 2, 2, 2, 0, 0],
-      //   [1, 1, 2, 1, 1, 0],
-      //   [1, 1, 1, 1, 1, 0],
-      //   [0, 0, 1, 0, 0, 3]
-      // ]
+      maneuvers: [
+        [0, 0, 0, 0, 0, 0],
+        [0, 2, 2, 2, 0, 0],
+        [1, 1, 2, 1, 1, 0],
+        [1, 1, 1, 1, 1, 0],
+        [0, 0, 1, 0, 0, 3]
+      ]
     }
   }
 
   render() {
+    const maneuvers = formatManeuvers(this.state.maneuvers);
+
     return (
       <div>
-        <ManeuverCard maneuvers={[
-          [0, 0, 1, 0, 0, 3],
-          [1, 1, 1, 1, 1, 0],
-          [1, 1, 2, 1, 1, 0],
-          [0, 2, 2, 2, 0, 0],
-          [0, 0, 0, 0, 0, 0]
-        ]
-        } />
+        <ManeuverCard maneuvers={maneuvers} />
       </div>);
   }
 }
 
-function getBearing(i) {
-  switch (i) {
+function formatManeuvers(maneuvers) {
+  const maxSpeed = maneuvers.length - 1;
+  let rows = Array(maxSpeed).fill([]);
+
+  return maneuvers.map((row, i) => {
+    let speed = maxSpeed - i;
+
+    return row.map((difficulty, bearing) => {
+      if (difficulty === 0) { return null; }
+      return ([getDifficulty(difficulty), getBearing(bearing)]);
+    })
+  }).reverse();
+}
+
+function getBearing(bearing) {
+  switch (bearing) {
     case 0:
       return "turnleft";
     case 1:
@@ -120,7 +123,18 @@ function getBearing(i) {
     case 5:
       return "kturn";
     default:
-      return "";
+      return null;
+  }
+}
+
+function getDifficulty(difficulty) {
+  switch (difficulty) {
+    case 2:
+      return "green";
+    case 3:
+      return "red";
+    default:
+      return null;
   }
 }
 // =============================================================================
