@@ -6,14 +6,11 @@ import "./index.css";
 
 /* ManeuverSquare is a represetnation of a single maneuver square */
 function ManeuverSquare(props) {
-  if (props.bearing) {
-    const maneuver =
-      (props.color ? props.color + "-" : "") +
-      "manuevers-font xwing-miniatures-font-" +
-      props.bearing;
+  if (props.difficulty) {
+    const maneuver = props.difficulty + "-manuevers-font xwing-miniatures-font-" + props.bearing
 
     return (
-      <div className="square">
+      <div className="square" key={props.bearing}>
         <i className={maneuver} />
       </div>
     );
@@ -23,8 +20,8 @@ function ManeuverSquare(props) {
 }
 
 class ManeuverCard extends React.Component {
-  renderEmptySquare() {
-    return <div className="square" />;
+  renderEmptySquare(bearing) {
+    return <div className="square" key={bearing} />;
   }
 
   renderRow(row) {
@@ -33,19 +30,16 @@ class ManeuverCard extends React.Component {
       const difficulty = maneuver[0];
       const bearing = maneuver[1];
 
-      return this.renderSquare(bearing, difficulty);
+      return this.renderManeuverSquare(bearing, difficulty);
     })
   }
 
-  renderSquare(bearing, color) {
-    if (isNaN(bearing)) {
-      return <ManeuverSquare bearing={bearing} color={color} />;
-    }
-    return (
-      <div className="square">
-        <i className="maneuvers-font">{bearing}</i>
-      </div>
-    );
+  renderManeuverSquare(bearing, difficulty) {
+    return <ManeuverSquare bearing={bearing} difficulty={difficulty} key={bearing} />;
+  }
+
+  renderSpeedSquare(speed) {
+    return <div className="square">{speed}</div>;
   }
 
   render() {
@@ -55,8 +49,8 @@ class ManeuverCard extends React.Component {
       speed = maneuvers.length - 1 - speed;
 
       return (
-        < div className="board-row" >
-          {this.renderSquare(speed)}
+        <div className="board-row" key={speed}>
+          {this.renderSpeedSquare(speed)}
           {this.renderRow(row)}
         </div >
       )
@@ -95,14 +89,8 @@ class Ship extends React.Component {
 }
 
 function formatManeuvers(maneuvers) {
-  const maxSpeed = maneuvers.length - 1;
-  let rows = Array(maxSpeed).fill([]);
-
-  return maneuvers.map((row, i) => {
-    let speed = maxSpeed - i;
-
+  return maneuvers.map((row) => {
     return row.map((difficulty, bearing) => {
-      if (difficulty === 0) { return null; }
       return ([getDifficulty(difficulty), getBearing(bearing)]);
     })
   }).reverse();
@@ -129,6 +117,8 @@ function getBearing(bearing) {
 
 function getDifficulty(difficulty) {
   switch (difficulty) {
+    case 1:
+      return "white";
     case 2:
       return "green";
     case 3:

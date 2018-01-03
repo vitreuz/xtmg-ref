@@ -23,20 +23,25 @@
   outline: none;
 }
 
-.manuevers-font {
+.xwing-font {
   font-family: Xwing;
   font-style: normal;
   color: #FCFCFB;
   font-size: 1em;
 }
 
+.white-manuevers-font {
+  @extend .xwing-font;
+  color: #FCFCFB;
+}
+
 .red-manuevers-font {
-  @extend .manuevers-font;
+  @extend .xwing-font;
   color: #F5171D;
 }
 
 .green-manuevers-font {
-  @extend .manuevers-font;
+  @extend .xwing-font;
   color: #7EDA24;
 }
 
