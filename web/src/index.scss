@@ -4,15 +4,15 @@
   display: table;
 }
 
+
 .square {
-  background: #2E2D3B;
-  border: 1px solid #D9E8ED;
   float: left;
+  border-top: 1px solid #4C4C4C;
+  border-bottom: 1px solid #4C4C4C;
   font-size: 24px;
   height: 34px;
-  line-height: 44px;
-  margin-right: -1px;
   margin-top: -1px;
+  line-height: 44px;
   padding: 0;
   text-align: center;
   width: 26px;
@@ -23,24 +23,47 @@
   outline: none;
 }
 
+.empty-square {
+  @extend .square;
+  background: #240C0C;
+  border-right: 1px solid #240C0C;
+}
+
+.speed-square {
+  @extend .square;
+  font-size: 28px;
+  line-height: 38px;
+  color: #FCFCFB;
+  background: #2E2D3B;
+  border: 1px solid #4C4C4C;
+}
+
+.maneuver-square {
+  @extend .square;
+  margin-left: -1px;
+  background: #CBCBCB;
+  border: 1px solid#4C4C4C;
+}
+
 .xwing-font {
   font-family: Xwing;
   font-style: normal;
+  -webkit-text-stroke: 1px black;
   color: #FCFCFB;
   font-size: 1em;
 }
 
-.white-manuevers-font {
+.white-maneuvers-font {
   @extend .xwing-font;
   color: #FCFCFB;
 }
 
-.red-manuevers-font {
+.red-maneuvers-font {
   @extend .xwing-font;
   color: #F5171D;
 }
 
-.green-manuevers-font {
+.green-maneuvers-font {
   @extend .xwing-font;
   color: #7EDA24;
 }

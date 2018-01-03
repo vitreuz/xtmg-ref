@@ -7,10 +7,10 @@ import "./index.css";
 /* ManeuverSquare is a represetnation of a single maneuver square */
 function ManeuverSquare(props) {
   if (props.difficulty) {
-    const maneuver = props.difficulty + "-manuevers-font xwing-miniatures-font-" + props.bearing
+    const maneuver = props.difficulty + "-maneuvers-font xwing-miniatures-font-" + props.bearing
 
     return (
-      <div className="square" key={props.bearing}>
+      <div className="maneuver-square" key={props.bearing}>
         <i className={maneuver} />
       </div>
     );
@@ -21,15 +21,14 @@ function ManeuverSquare(props) {
 
 class ManeuverCard extends React.Component {
   renderEmptySquare(bearing) {
-    return <div className="square" key={bearing} />;
+    return <div className="empty-square" key={bearing} />;
   }
 
   renderRow(row) {
     return row.map((maneuver) => {
-      if (maneuver === null) return this.renderEmptySquare();
       const difficulty = maneuver[0];
       const bearing = maneuver[1];
-
+      if (difficulty === null) return this.renderEmptySquare(bearing);
       return this.renderManeuverSquare(bearing, difficulty);
     })
   }
@@ -39,7 +38,7 @@ class ManeuverCard extends React.Component {
   }
 
   renderSpeedSquare(speed) {
-    return <div className="square">{speed}</div>;
+    return <div className="speed-square">{speed}</div>;
   }
 
   render() {
