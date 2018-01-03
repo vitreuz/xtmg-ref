@@ -4,10 +4,30 @@ import "xwing-miniatures-font/dist/xwing-miniatures.css";
 
 import "./index.css";
 
+const xwingMan = [
+  [],
+  [0, 2, 2, 2],
+  [1, 1, 2, 1, 1],
+  [1, 1, 1, 1, 1],
+  [0, 0, 1, 0, 0, 3]
+];
+
+const tieFMan = [
+  [],
+  [1, 0, 0, 0, 1],
+  [2, 2, 2, 2, 2],
+  [1, 2, 2, 2, 1, 0, 0, 0, 3, 3],
+  [0, 0, 2, 0, 0, 3],
+  [0, 0, 2]
+];
+
 /* ManeuverSquare is a represetnation of a single maneuver square */
 function ManeuverSquare(props) {
   if (props.difficulty) {
-    const maneuver = props.difficulty + "-maneuvers-font xwing-miniatures-font-" + props.bearing
+    const maneuver =
+      props.difficulty +
+      "-maneuvers-font xwing-miniatures-font-" +
+      props.bearing;
 
     return (
       <div className="maneuver-square" key={props.bearing}>
@@ -25,16 +45,18 @@ class ManeuverCard extends React.Component {
   }
 
   renderRow(row) {
-    return row.map((maneuver) => {
+    return row.map(maneuver => {
       const difficulty = maneuver[0];
       const bearing = maneuver[1];
       if (difficulty === null) return this.renderEmptySquare(bearing);
       return this.renderManeuverSquare(bearing, difficulty);
-    })
+    });
   }
 
   renderManeuverSquare(bearing, difficulty) {
-    return <ManeuverSquare bearing={bearing} difficulty={difficulty} key={bearing} />;
+    return (
+      <ManeuverSquare bearing={bearing} difficulty={difficulty} key={bearing} />
+    );
   }
 
   renderSpeedSquare(speed) {
@@ -51,15 +73,11 @@ class ManeuverCard extends React.Component {
         <div className="board-row" key={speed}>
           {this.renderSpeedSquare(speed)}
           {this.renderRow(row)}
-        </div >
-      )
-    })
+        </div>
+      );
+    });
 
-    return (
-      <div>
-        {rows}
-      </div>
-    );
+    return <div>{rows}</div>;
   }
 }
 
@@ -67,32 +85,92 @@ class Ship extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      maneuvers: [
-        [0, 0, 0, 0, 0, 0],
-        [0, 2, 2, 2, 0, 0],
-        [1, 1, 2, 1, 1, 0],
-        [1, 1, 1, 1, 1, 0],
-        [0, 0, 1, 0, 0, 3]
-      ]
-    }
+      isXwing: true
+    };
+  }
+
+  switchShip() {
+    this.setState({
+      isXwing: !this.state.isXwing
+    });
   }
 
   render() {
-    const maneuvers = formatManeuvers(this.state.maneuvers);
-
+    const maneuvers = formatManeuvers(this.state.isXwing ? xwingMan : tieFMan);
     return (
-      <div>
-        <ManeuverCard maneuvers={maneuvers} />
-      </div>);
+      <div className="main">
+        <div>
+          <ManeuverCard maneuvers={maneuvers} />
+        </div>
+        <div className="side-button">
+          <button onClick={() => this.switchShip()}>Switch Ship</button>
+        </div>
+      </div>
+    );
   }
 }
 
 function formatManeuvers(maneuvers) {
-  return maneuvers.map((row) => {
-    return row.map((difficulty, bearing) => {
-      return ([getDifficulty(difficulty), getBearing(bearing)]);
+  let longest = maneuvers.reduce((a, b) => {
+    return a.length > b.length ? a : b;
+  }).length;
+  longest = longest > 6 ? longest : 6;
+  let hasSloop = false;
+  let hasTroll = false;
+
+  let rows = maneuvers
+    .map(row => {
+      const fullRow = row.concat(Array(longest - row.length).fill(0));
+
+      return fullRow.map((value, column) => {
+        const difficulty = getDifficulty(value);
+        const bearing = getBearing(column);
+        if (difficulty) {
+          switch (bearing) {
+            case "sloopleft":
+            case "sloopright":
+              hasSloop = true;
+              break;
+            case "trollleft":
+            case "trollright":
+              hasTroll = true;
+              break;
+            default:
+          }
+        }
+
+        return [difficulty, bearing];
+      });
     })
-  }).reverse();
+    .reverse();
+  let buffer = 0;
+
+  if (hasSloop) {
+    rows = rearangeManeuverRow(rows, buffer, 1);
+    buffer += 2;
+  }
+  if (hasTroll) {
+    rows = rearangeManeuverRow(rows, buffer, 3);
+    buffer += 2;
+    console.log(rows);
+  }
+
+  return rows;
+}
+
+function rearangeManeuverRow(rows, buffer, location) {
+  return rows.map(row => {
+    const end = buffer + 5;
+    const left = end + location - buffer;
+    const right = end + location - buffer + 1;
+    console.log(end, left, right);
+    return [row[left]].concat(
+      row.slice(0, end),
+      [row[right]],
+      [row[end]],
+      row.slice(right + 1)
+    );
+  });
 }
 
 function getBearing(bearing) {
@@ -109,6 +187,14 @@ function getBearing(bearing) {
       return "turnright";
     case 5:
       return "kturn";
+    case 6:
+      return "sloopleft";
+    case 7:
+      return "sloopright";
+    case 8:
+      return "trollleft";
+    case 9:
+      return "trollright";
     default:
       return null;
   }

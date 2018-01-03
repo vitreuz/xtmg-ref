@@ -4,6 +4,9 @@
   display: table;
 }
 
+.side-button{
+  padding-left: 10px
+}
 
 .square {
   float: left;
@@ -68,4 +71,7 @@
   color: #7EDA24;
 }
 
-
+.main {
+  display: flex;
+  flex-direction: row;
+}
