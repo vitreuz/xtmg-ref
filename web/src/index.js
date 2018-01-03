@@ -152,18 +152,17 @@ function formatManeuvers(maneuvers) {
   if (hasTroll) {
     rows = rearangeManeuverRow(rows, buffer, 3);
     buffer += 2;
-    console.log(rows);
   }
 
   return rows;
 }
 
-function rearangeManeuverRow(rows, buffer, location) {
+function rearangeManeuverRow(rows, buffer, offset) {
   return rows.map(row => {
     const end = buffer + 5;
-    const left = end + location - buffer;
-    const right = end + location - buffer + 1;
-    console.log(end, left, right);
+    const left = end + offset - buffer;
+    const right = end + offset - buffer + 1;
+
     return [row[left]].concat(
       row.slice(0, end),
       [row[right]],
