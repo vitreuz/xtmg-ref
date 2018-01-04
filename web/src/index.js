@@ -48,7 +48,9 @@ class ManeuverCard extends React.Component {
     return row.map(maneuver => {
       const difficulty = maneuver[0];
       const bearing = maneuver[1];
-      if (difficulty === null) return this.renderEmptySquare(bearing);
+      if (difficulty === null) {
+        return this.renderEmptySquare(bearing);
+      }
       return this.renderManeuverSquare(bearing, difficulty);
     });
   }
@@ -70,7 +72,7 @@ class ManeuverCard extends React.Component {
       speed = maneuvers.length - 1 - speed;
 
       return (
-        <div className="board-row" key={speed}>
+        <div className="maneuver-row" key={speed}>
           {this.renderSpeedSquare(speed)}
           {this.renderRow(row)}
         </div>
@@ -99,7 +101,7 @@ class Ship extends React.Component {
     const maneuvers = formatManeuvers(this.state.isXwing ? xwingMan : tieFMan);
     return (
       <div className="main">
-        <div>
+        <div className="maneuver-card">
           <ManeuverCard maneuvers={maneuvers} />
         </div>
         <div className="side-button">
@@ -111,9 +113,8 @@ class Ship extends React.Component {
 }
 
 function formatManeuvers(maneuvers) {
-  let longest = maneuvers.reduce((a, b) => {
-    return a.length > b.length ? a : b;
-  }).length;
+  let longest = maneuvers.reduce((a, b) => (a.length > b.length ? a : b))
+    .length;
   longest = longest > 6 ? longest : 6;
   let hasSloop = false;
   let hasTroll = false;

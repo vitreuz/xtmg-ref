@@ -1,77 +1,84 @@
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
+.side-button {
+  padding-left: 10px;
 }
 
-.side-button{
-  padding-left: 10px
+.maneuver-card {
+  background: #240c0c;
+  border: 1px solid;
+  bottom: 0px;
+  clear: both;
+  display: table;
+  height: 40%;
+  left: 0px;
+  position: fixed;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.maneuver-row {
+  display: table-row;
+  content: "";
+  clear: both;
 }
 
 .square {
   float: left;
-  border-top: 1px solid #4C4C4C;
-  border-bottom: 1px solid #4C4C4C;
-  font-size: 24px;
-  height: 34px;
-  margin-top: -1px;
-  line-height: 44px;
-  padding: 0;
+  display: table-cell;
+  border: 1px #4c4c4c;
+  font-size: 32px;
+  height: 44px;
+  width: 27px;
   text-align: center;
-  width: 26px;
+}
+
+.square:after {
 }
 
 .square:focus {
   /*  */
-  outline: none;
+  // outline: none;
 }
 
 .empty-square {
   @extend .square;
-  background: #240C0C;
-  border-right: 1px solid #240C0C;
 }
 
 .speed-square {
   @extend .square;
-  font-size: 28px;
-  line-height: 38px;
-  color: #FCFCFB;
-  background: #2E2D3B;
-  border: 1px solid #4C4C4C;
+  font-size: auto;
+  color: #fcfcfb;
+  background: #2e2d3b;
 }
 
 .maneuver-square {
   @extend .square;
-  margin-left: -1px;
-  background: #CBCBCB;
-  border: 1px solid#4C4C4C;
+  background: #cbcbcb;
 }
 
 .xwing-font {
   font-family: Xwing;
   font-style: normal;
   -webkit-text-stroke: 1px black;
-  color: #FCFCFB;
-  font-size: 1em;
+  color: #fcfcfb;
+  font-size: 75%;
 }
 
 .white-maneuvers-font {
   @extend .xwing-font;
-  color: #FCFCFB;
+  color: #fcfcfb;
 }
 
 .red-maneuvers-font {
   @extend .xwing-font;
-  color: #F5171D;
+  color: #f5171d;
 }
 
 .green-maneuvers-font {
   @extend .xwing-font;
-  color: #7EDA24;
+  color: #7eda24;
 }
 
 .main {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
