@@ -21,56 +21,48 @@ const tieFMan = [
   [0, 0, 2]
 ];
 
-/* ManeuverSquare is a represetnation of a single maneuver square */
-function ManeuverSquare(props) {
-  if (props.difficulty) {
-    const maneuver =
-      props.difficulty +
-      "-maneuvers-font xwing-miniatures-font-" +
-      props.bearing;
+class ManeuverCard extends React.Component {
+  // renderEmptySquare creates the empty table-cells. Its key is denoted by the
+  // column bearing.
+  renderEmptySquare(bearing) {
+    return <div className="empty-square" key={bearing} />;
+  }
 
+  // renderManeuverSquare returns the proper color and bearing to populate a
+  // table-cell. Its key is denoted by the column bearing.
+  renderManeuverSquare(bearing, difficulty) {
+    const maneuver =
+      difficulty + "-maneuvers-font xwing-miniatures-font-" + bearing;
     return (
-      <div className="maneuver-square" key={props.bearing}>
+      <div className="maneuver-square" key={bearing}>
         <i className={maneuver} />
       </div>
     );
   }
 
-  return <div className="square" />;
-}
-
-class ManeuverCard extends React.Component {
-  renderEmptySquare(bearing) {
-    return <div className="empty-square" key={bearing} />;
-  }
-
+  // renderRow populates the row div with either empty-square or maneuver-square
+  // objects.
   renderRow(row) {
     return row.map(maneuver => {
       const difficulty = maneuver[0];
       const bearing = maneuver[1];
-      if (difficulty === null) {
+      if (!difficulty) {
         return this.renderEmptySquare(bearing);
       }
       return this.renderManeuverSquare(bearing, difficulty);
     });
   }
 
-  renderManeuverSquare(bearing, difficulty) {
-    return (
-      <ManeuverSquare bearing={bearing} difficulty={difficulty} key={bearing} />
-    );
-  }
-
+  // renderSpeedSquare creates the speed square for a row. It is the first
+  // element of a row div.
   renderSpeedSquare(speed) {
     return <div className="speed-square">{speed}</div>;
   }
 
   render() {
     const maneuvers = this.props.maneuvers;
-
     const rows = maneuvers.map((row, speed) => {
       speed = maneuvers.length - 1 - speed;
-
       return (
         <div className="maneuver-row" key={speed}>
           {this.renderSpeedSquare(speed)}
