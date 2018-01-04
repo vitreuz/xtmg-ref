@@ -71,7 +71,7 @@ class ManeuverCard extends React.Component {
       );
     });
 
-    return <div>{rows}</div>;
+    return <div className="maneuver-card">{rows}</div>;
   }
 }
 
@@ -93,9 +93,7 @@ class Ship extends React.Component {
     const maneuvers = formatManeuvers(this.state.isXwing ? xwingMan : tieFMan);
     return (
       <div className="main">
-        <div className="maneuver-card">
-          <ManeuverCard maneuvers={maneuvers} />
-        </div>
+        <ManeuverCard maneuvers={maneuvers} />
         <div className="side-button">
           <button onClick={() => this.switchShip()}>Switch Ship</button>
         </div>
