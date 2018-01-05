@@ -21,7 +21,7 @@ describe("ManeuverCell", () => {
         <ManeuverCell bearing={bearing} difficulty={difficulty} />
       );
 
-      expect(wrapper).toContainReact(<div className="empty-maneuver-cell" />);
+      expect(wrapper).toMatchElement(<div className="empty-maneuver-cell" />);
     });
   });
 
@@ -35,7 +35,7 @@ describe("ManeuverCell", () => {
         <ManeuverCell bearing={bearing} difficulty={difficulty} />
       );
 
-      expect(wrapper).toContainReact(
+      expect(wrapper).toMatchElement(
         <div className="white-maneuver-cell">
           <i className="xwing-miniatures-font-straight" />
         </div>
