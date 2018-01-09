@@ -10,17 +10,22 @@ describe("ManeuverRow", () => {
 
   describe("when minimum values are provided", () => {
     beforeEach(() => {
-      row = [].concat([{ bearing: "bankleft", difficulty: null }]);
-      speed = 0;
+      row = [].concat([0, 0, 0, 0, 0, 0]);
+      speed = 1;
     });
 
-    it("renders a row full of empty squares with a 0 speed cell", () => {
+    it("renders a row full of empty squares with a 1 speed cell", () => {
       const wrapper = shallow(<ManeuverRow row={row} speed={speed} />);
 
       expect(wrapper).toMatchElement(
         <div className="maneuver-row">
-          <div className="speed-cell">0</div>
+          <div className="speed-cell">1</div>
+          <ManeuverCell bearing={"turnleft"} difficulty={null} />
           <ManeuverCell bearing={"bankleft"} difficulty={null} />
+          <ManeuverCell bearing={"straight"} difficulty={null} />
+          <ManeuverCell bearing={"bankright"} difficulty={null} />
+          <ManeuverCell bearing={"turnright"} difficulty={null} />
+          <ManeuverCell bearing={"kturn"} difficulty={null} />
         </div>
       );
     });
@@ -33,14 +38,7 @@ describe("ManeuverRow", () => {
 
     describe("when the row is of length 6", () => {
       beforeEach(() => {
-        row = [].concat([
-          { bearing: "turnleft", difficulty: null },
-          { bearing: "bankleft", difficulty: "white" },
-          { bearing: "straight", difficulty: "green" },
-          { bearing: "bankright", difficulty: "white" },
-          { bearing: "turnright", difficulty: null },
-          { bearing: "kturn", difficulty: "red" }
-        ]);
+        row = [].concat([0, 1, 2, 1, 0, 3]);
       });
 
       it("renders a simple maneuever-row", () => {
@@ -62,18 +60,7 @@ describe("ManeuverRow", () => {
 
     describe("when the row is of greater than length 6", () => {
       beforeEach(() => {
-        row = [].concat([
-          { bearing: "turnleft", difficulty: null },
-          { bearing: "bankleft", difficulty: "white" },
-          { bearing: "straight", difficulty: "green" },
-          { bearing: "bankright", difficulty: "white" },
-          { bearing: "turnright", difficulty: null },
-          { bearing: "kturn", difficulty: "red" },
-          { bearing: "sloopleft", difficulty: "red" },
-          { bearing: "sloopright", difficulty: "red" },
-          { bearing: "trollleft", difficulty: "red" },
-          { bearing: "trollright", difficulty: "red" }
-        ]);
+        row = [].concat([0, 1, 2, 1, 0, 3, 3, 3, 3, 3]);
       });
 
       it("renders the manuever-row from right to left, with troll outermost and kturn last", () => {
@@ -105,14 +92,7 @@ describe("ManeuverRow", () => {
 
     describe("with a stop maneuver", () => {
       beforeEach(() => {
-        row = [].concat([
-          { bearing: "turnleft", difficulty: null },
-          { bearing: "bankleft", difficulty: null },
-          { bearing: "straight", difficulty: "red" },
-          { bearing: "bankright", difficulty: null },
-          { bearing: "turnright", difficulty: null },
-          { bearing: "kturn", difficulty: null }
-        ]);
+        row = [].concat([0, 0, 3, 0, 0, 0]);
       });
 
       it("renders with a stop cell", () => {
@@ -140,11 +120,7 @@ describe("ManeuverRow", () => {
 
     describe("with reverse maneuvers", () => {
       beforeEach(() => {
-        row = [].concat([
-          { bearing: "bankleft", difficulty: "red" },
-          { bearing: "straight", difficulty: "red" },
-          { bearing: "bankright", difficulty: "red" }
-        ]);
+        row = [].concat([0, 3, 3, 3, 0, 0]);
       });
 
       it("renders the reverse maneuvers", () => {
@@ -153,9 +129,12 @@ describe("ManeuverRow", () => {
         expect(wrapper).toMatchElement(
           <div className="maneuver-row">
             <div className="speed-cell">-1</div>
+            <ManeuverCell bearing={"turnleft"} difficulty={null} />
             <ManeuverCell bearing={"reversebankleft"} difficulty={"red"} />
             <ManeuverCell bearing={"reversestraight"} difficulty={"red"} />
             <ManeuverCell bearing={"reversebankright"} difficulty={"red"} />
+            <ManeuverCell bearing={"turnright"} difficulty={null} />
+            <ManeuverCell bearing={"kturn"} difficulty={null} />
           </div>
         );
       });
