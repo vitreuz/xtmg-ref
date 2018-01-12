@@ -17,11 +17,13 @@ describe("ManeuverCard", () => {
       // TODO: fix this test if this issue gets fixed
       expect(wrapper).toMatchElement(
         <table className="maneuver-table">
-          <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={5} />
-          <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={4} />
-          <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={3} />
-          <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={2} />
-          <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={1} />
+          <tbody>
+            <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={5} />
+            <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={4} />
+            <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={3} />
+            <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={2} />
+            <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={1} />
+          </tbody>
         </table>
       );
 
@@ -52,36 +54,38 @@ describe("ManeuverCard", () => {
           // TODO: fix this test if this issue gets fixed
           expect(wrapper).toMatchElement(
             <table className="maneuver-table">
-              <ManeuverRow
-                hasSloop={false}
-                hasTroll={false}
-                row={[]}
-                speed={5}
-              />
-              <ManeuverRow
-                hasSloop={false}
-                hasTroll={false}
-                row={[]}
-                speed={4}
-              />
-              <ManeuverRow
-                hasSloop={false}
-                hasTroll={false}
-                row={[]}
-                speed={3}
-              />
-              <ManeuverRow
-                hasSloop={false}
-                hasTroll={false}
-                row={[]}
-                speed={2}
-              />
-              <ManeuverRow
-                hasSloop={false}
-                hasTroll={false}
-                row={[]}
-                speed={1}
-              />
+              <tbody>
+                <ManeuverRow
+                  hasSloop={false}
+                  hasTroll={false}
+                  row={[]}
+                  speed={5}
+                />
+                <ManeuverRow
+                  hasSloop={false}
+                  hasTroll={false}
+                  row={[]}
+                  speed={4}
+                />
+                <ManeuverRow
+                  hasSloop={false}
+                  hasTroll={false}
+                  row={[]}
+                  speed={3}
+                />
+                <ManeuverRow
+                  hasSloop={false}
+                  hasTroll={false}
+                  row={[]}
+                  speed={2}
+                />
+                <ManeuverRow
+                  hasSloop={false}
+                  hasTroll={false}
+                  row={[]}
+                  speed={1}
+                />
+              </tbody>
             </table>
           );
 
@@ -102,36 +106,38 @@ describe("ManeuverCard", () => {
           // TODO: fix this test if this issue gets fixed
           expect(wrapper).toMatchElement(
             <table className="maneuver-table">
-              <ManeuverRow
-                hasSloop={false}
-                hasTroll={false}
-                row={[]}
-                speed={4}
-              />
-              <ManeuverRow
-                hasSloop={false}
-                hasTroll={false}
-                row={[]}
-                speed={3}
-              />
-              <ManeuverRow
-                hasSloop={false}
-                hasTroll={false}
-                row={[]}
-                speed={2}
-              />
-              <ManeuverRow
-                hasSloop={false}
-                hasTroll={false}
-                row={[]}
-                speed={1}
-              />
-              <ManeuverRow
-                hasSloop={false}
-                hasTroll={false}
-                row={[]}
-                speed={0}
-              />
+              <tbody>
+                <ManeuverRow
+                  hasSloop={false}
+                  hasTroll={false}
+                  row={[]}
+                  speed={4}
+                />
+                <ManeuverRow
+                  hasSloop={false}
+                  hasTroll={false}
+                  row={[]}
+                  speed={3}
+                />
+                <ManeuverRow
+                  hasSloop={false}
+                  hasTroll={false}
+                  row={[]}
+                  speed={2}
+                />
+                <ManeuverRow
+                  hasSloop={false}
+                  hasTroll={false}
+                  row={[]}
+                  speed={1}
+                />
+                <ManeuverRow
+                  hasSloop={false}
+                  hasTroll={false}
+                  row={[]}
+                  speed={0}
+                />
+              </tbody>
             </table>
           );
 
@@ -158,11 +164,38 @@ describe("ManeuverCard", () => {
         // TODO: fix this test if this issue gets fixed
         expect(wrapper).toMatchElement(
           <table className="maneuver-table">
-            <ManeuverRow hasSloop={true} hasTroll={false} row={[]} speed={3} />
-            <ManeuverRow hasSloop={true} hasTroll={false} row={[]} speed={2} />
-            <ManeuverRow hasSloop={true} hasTroll={false} row={[]} speed={1} />
-            <ManeuverRow hasSloop={true} hasTroll={false} row={[]} speed={0} />
-            <ManeuverRow hasSloop={true} hasTroll={false} row={[]} speed={-1} />
+            <tbody>
+              <ManeuverRow
+                hasSloop={true}
+                hasTroll={false}
+                row={[]}
+                speed={3}
+              />
+              <ManeuverRow
+                hasSloop={true}
+                hasTroll={false}
+                row={[]}
+                speed={2}
+              />
+              <ManeuverRow
+                hasSloop={true}
+                hasTroll={false}
+                row={[]}
+                speed={1}
+              />
+              <ManeuverRow
+                hasSloop={true}
+                hasTroll={false}
+                row={[]}
+                speed={0}
+              />
+              <ManeuverRow
+                hasSloop={true}
+                hasTroll={false}
+                row={[]}
+                speed={-1}
+              />
+            </tbody>
           </table>
         );
 

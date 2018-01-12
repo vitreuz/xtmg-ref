@@ -176,17 +176,19 @@ export default class ManeuverCard extends React.Component {
 
     return (
       <table className="maneuver-table">
-        {rows
-          .map((row, speed) => (
-            <ManeuverRow
-              hasSloop={hasSloop}
-              hasTroll={hasTroll}
-              row={row}
-              speed={speed + offset}
-              key={speed + offset}
-            />
-          ))
-          .reverse()}
+        <tbody>
+          {rows
+            .map((row, speed) => (
+              <ManeuverRow
+                hasSloop={hasSloop}
+                hasTroll={hasTroll}
+                row={row}
+                speed={speed + offset}
+                key={speed + offset}
+              />
+            ))
+            .reverse()}
+        </tbody>
       </table>
     );
   }
