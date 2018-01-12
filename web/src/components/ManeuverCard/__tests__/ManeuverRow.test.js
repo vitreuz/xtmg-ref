@@ -2,7 +2,6 @@ import React from "react";
 import { mount, shallow } from "enzyme";
 import "jest-enzyme";
 import { ManeuverRow, ManeuverCell } from "../ManeuverCard";
-import { join } from "path";
 
 describe("ManeuverRow", () => {
   let row = [];

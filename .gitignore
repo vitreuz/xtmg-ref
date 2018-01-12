@@ -61,3 +61,6 @@ typings/
 *.css
 *.css.map
 .sass-cache
+
+# IDE tooling
+.vscode
