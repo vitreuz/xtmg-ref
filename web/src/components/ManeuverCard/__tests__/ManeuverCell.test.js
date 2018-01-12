@@ -16,12 +16,12 @@ describe("ManeuverCell", () => {
       difficulty = null;
     });
 
-    it("should render an empty-square div", () => {
+    it("should render an empty-square td", () => {
       const wrapper = shallow(
         <ManeuverCell bearing={bearing} difficulty={difficulty} />
       );
 
-      expect(wrapper).toMatchElement(<div className="empty-maneuver-cell" />);
+      expect(wrapper).toMatchElement(<td className="empty-maneuver-cell" />);
     });
   });
 
@@ -36,9 +36,9 @@ describe("ManeuverCell", () => {
       );
 
       expect(wrapper).toMatchElement(
-        <div className="white-maneuver-cell">
+        <td className="white-maneuver-cell">
           <i className="xwing-miniatures-font-straight" />
-        </div>
+        </td>
       );
     });
   });

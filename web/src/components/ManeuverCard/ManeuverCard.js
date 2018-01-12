@@ -4,11 +4,11 @@ import PropTypes from "prop-types";
 export class ManeuverCell extends React.Component {
   render() {
     return !this.props.difficulty ? (
-      <div className="empty-maneuver-cell" />
+      <td className="empty-maneuver-cell" />
     ) : (
-      <div className={this.props.difficulty + "-maneuver-cell"}>
+      <td className={this.props.difficulty + "-maneuver-cell"}>
         <i className={"xwing-miniatures-font-" + this.props.bearing} />
-      </div>
+      </td>
     );
   }
 }
@@ -36,6 +36,7 @@ export class ManeuverRow extends React.Component {
         return "trollleft";
       case 9:
         return "trollright";
+      default:
     }
   }
 
@@ -49,31 +50,29 @@ export class ManeuverRow extends React.Component {
         return "green";
       case 3:
         return "red";
+      default:
     }
   }
 
   formatRow() {
-    const row = this.props.row.map((difficulty, bearing) => {
-      print(difficulty);
-      return {
-        bearing: this.formatBearing(bearing),
-        difficulty: this.formatDifficulty(difficulty)
-      };
-    });
+    const row = this.props.row.map((difficulty, bearing) => ({
+      bearing: this.formatBearing(bearing),
+      difficulty: this.formatDifficulty(difficulty)
+    }));
 
     var formattedRow = [];
 
-    if (row[8]) {
+    if (row[8] && this.props.hasTroll) {
       formattedRow.push(row[8]);
     }
-    if (row[6]) {
+    if (row[6] && this.props.hasSloop) {
       formattedRow.push(row[6]);
     }
     formattedRow = formattedRow.concat(row.slice(0, 5));
-    if (row[7]) {
+    if (row[7] && this.props.hasSloop) {
       formattedRow.push(row[7]);
     }
-    if (row[9]) {
+    if (row[9] && this.props.hasTroll) {
       formattedRow.push(row[9]);
     }
     formattedRow.push(row[5]);
@@ -85,8 +84,8 @@ export class ManeuverRow extends React.Component {
     const row = this.formatRow(this.props.row);
 
     return (
-      <div className="maneuver-row">
-        <div className="speed-cell">{this.props.speed}</div>
+      <tr className="maneuver-row">
+        <td className="speed-cell">{this.props.speed}</td>
         {row.map(maneuver => {
           const bearing =
             this.props.speed < 0 &&
@@ -104,7 +103,7 @@ export class ManeuverRow extends React.Component {
             />
           );
         })}
-      </div>
+      </tr>
     );
   }
 }
@@ -139,15 +138,26 @@ export default class ManeuverCard extends React.Component {
       case 1:
         rows = this.props.maneuvers.slice(1, 6);
         break;
+      default:
     }
 
     if (rows.length < 5) {
       rows.push([]);
     }
 
-    return rows.map(row => {
+    rows = rows.map(row => {
       while (row[row.length - 1] === 0) {
         row.pop();
+      }
+      return row;
+    });
+
+    const longest = rows.reduce((a, b) => (a.length > b.length ? a : b)).length;
+    const maxLen = longest < 6 ? 6 : longest;
+
+    return rows.map(row => {
+      if (row.length < maxLen) {
+        row = row.concat(Array(maxLen - row.length).fill(0));
       }
       return row;
     });
@@ -157,25 +167,27 @@ export default class ManeuverCard extends React.Component {
     const offset = this.calculateOffset();
     const rows = this.formatRows(offset);
 
-    const longest = rows.reduce((a, b) => (a.length > b.length ? a : b)).length;
-    const maxLen = longest < 6 ? 6 : longest;
+    const bearingCounts = rows.reduce((a, b) =>
+      a.map((val, i) => (b[i] ? val + b[i] : val))
+    );
+
+    const hasSloop = bearingCounts[6] || bearingCounts[7] ? true : false;
+    const hasTroll = bearingCounts[8] || bearingCounts[9] ? true : false;
 
     return (
-      <div className="maneuver-table">
-        {rows.map((row, speed) => {
-          if (row.length < maxLen) {
-            row = row.concat(Array(maxLen - row.length).fill(0));
-          }
-
-          return (
+      <table className="maneuver-table">
+        {rows
+          .map((row, speed) => (
             <ManeuverRow
+              hasSloop={hasSloop}
+              hasTroll={hasTroll}
               row={row}
               speed={speed + offset}
               key={speed + offset}
             />
-          );
-        })}
-      </div>
+          ))
+          .reverse()}
+      </table>
     );
   }
 }
@@ -201,6 +213,8 @@ ManeuverCell.propTypes = {
 };
 
 ManeuverRow.propTypes = {
+  hasSloop: PropTypes.bool,
+  hasTroll: PropTypes.bool,
   row: PropTypes.arrayOf(PropTypes.number).isRequired,
   speed: PropTypes.number.isRequired
 };

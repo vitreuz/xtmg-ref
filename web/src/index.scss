@@ -3,17 +3,15 @@
 }
 
 // This is the <table>
-.maneuver-card {
+.maneuver-table {
   background: #240c0c;
-  border: 1px solid;
   bottom: 0px;
-  clear: both;
   margin: auto;
   display: table;
   height: 280px;
   left: 0px;
-  table-layout: fixed;
   position: fixed;
+  border-collapse: collapse;
   width: 100%;
 }
 
@@ -27,17 +25,17 @@
   display: table-cell;
   text-align: center;
   width: 2%;
-  margin-bottom: 0px;
   height: 2%;
+  padding: 3px 10px;
   border-top: 1px solid #d3d3d3;
   border-bottom: 1px solid #d3d3d3;
 }
 
-.empty-square {
+.empty-manuever-cell {
   @extend .square;
 }
 
-.speed-square {
+.speed-cell {
   @extend .square;
   font-size: auto;
   color: #fcfcfb;
@@ -46,7 +44,7 @@
   border: 1px solid #d3d3d3;
 }
 
-.maneuver-square {
+.maneuver-cell {
   @extend .square;
   background: #cbcbcb;
   padding-top: 3%;
@@ -61,18 +59,22 @@
   color: #fcfcfb;
 }
 
-.white-maneuvers-font {
+.white-maneuver-cell {
   @extend .xwing-font;
+  @extend .maneuver-cell;
+
   color: #fcfcfb;
 }
 
-.red-maneuvers-font {
+.red-maneuver-cell {
   @extend .xwing-font;
+  @extend .maneuver-cell;
   color: #f5171d;
 }
 
-.green-maneuvers-font {
+.green-maneuver-cell {
   @extend .xwing-font;
+  @extend .maneuver-cell;
   color: #7eda24;
 }
 

@@ -16,13 +16,13 @@ describe("ManeuverCard", () => {
 
       // TODO: fix this test if this issue gets fixed
       expect(wrapper).toMatchElement(
-        <div className="maneuver-table">
-          <ManeuverRow row={[]} speed={1} />
-          <ManeuverRow row={[]} speed={2} />
-          <ManeuverRow row={[]} speed={3} />
-          <ManeuverRow row={[]} speed={4} />
-          <ManeuverRow row={[]} speed={5} />
-        </div>
+        <table className="maneuver-table">
+          <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={5} />
+          <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={4} />
+          <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={3} />
+          <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={2} />
+          <ManeuverRow hasSloop={false} hasTroll={false} row={[]} speed={1} />
+        </table>
       );
 
       [0, 1, 2, 3, 4].map(i => {
@@ -46,21 +46,46 @@ describe("ManeuverCard", () => {
           ];
         });
 
-        it("should render the maneuvers from speed 1 to 5", () => {
+        it("should render the maneuvers from speed 5 to 1", () => {
           const wrapper = shallow(<ManeuverCard maneuvers={maneuvers} />);
 
           // TODO: fix this test if this issue gets fixed
           expect(wrapper).toMatchElement(
-            <div className="maneuver-table">
-              <ManeuverRow row={[]} speed={1} />
-              <ManeuverRow row={[]} speed={2} />
-              <ManeuverRow row={[]} speed={3} />
-              <ManeuverRow row={[]} speed={4} />
-              <ManeuverRow row={[]} speed={5} />
-            </div>
+            <table className="maneuver-table">
+              <ManeuverRow
+                hasSloop={false}
+                hasTroll={false}
+                row={[]}
+                speed={5}
+              />
+              <ManeuverRow
+                hasSloop={false}
+                hasTroll={false}
+                row={[]}
+                speed={4}
+              />
+              <ManeuverRow
+                hasSloop={false}
+                hasTroll={false}
+                row={[]}
+                speed={3}
+              />
+              <ManeuverRow
+                hasSloop={false}
+                hasTroll={false}
+                row={[]}
+                speed={2}
+              />
+              <ManeuverRow
+                hasSloop={false}
+                hasTroll={false}
+                row={[]}
+                speed={1}
+              />
+            </table>
           );
 
-          const row = wrapper.find("ManeuverRow").at(0);
+          const row = wrapper.find("ManeuverRow").at(4);
           expect(row).toBePresent();
           expect(row).toHaveProp("row", [0, 2, 2, 2, 0, 0]);
         });
@@ -71,21 +96,46 @@ describe("ManeuverCard", () => {
           maneuvers = [[0, 0, 3], [0, 2, 2, 2], [3, 1, 2, 1, 3], [0, 3, 1, 3]];
         });
 
-        it("should render the maneuvers from speed 0 to 4", () => {
+        it("should render the maneuvers from speed 4 to 0", () => {
           const wrapper = shallow(<ManeuverCard maneuvers={maneuvers} />);
 
           // TODO: fix this test if this issue gets fixed
           expect(wrapper).toMatchElement(
-            <div className="maneuver-table">
-              <ManeuverRow row={[]} speed={0} />
-              <ManeuverRow row={[]} speed={1} />
-              <ManeuverRow row={[]} speed={2} />
-              <ManeuverRow row={[]} speed={3} />
-              <ManeuverRow row={[]} speed={4} />
-            </div>
+            <table className="maneuver-table">
+              <ManeuverRow
+                hasSloop={false}
+                hasTroll={false}
+                row={[]}
+                speed={4}
+              />
+              <ManeuverRow
+                hasSloop={false}
+                hasTroll={false}
+                row={[]}
+                speed={3}
+              />
+              <ManeuverRow
+                hasSloop={false}
+                hasTroll={false}
+                row={[]}
+                speed={2}
+              />
+              <ManeuverRow
+                hasSloop={false}
+                hasTroll={false}
+                row={[]}
+                speed={1}
+              />
+              <ManeuverRow
+                hasSloop={false}
+                hasTroll={false}
+                row={[]}
+                speed={0}
+              />
+            </table>
           );
 
-          const row = wrapper.find("ManeuverRow").at(0);
+          const row = wrapper.find("ManeuverRow").at(4);
           expect(row).toBePresent();
           expect(row).toHaveProp("row", [0, 0, 3, 0, 0, 0]);
         });
@@ -102,21 +152,21 @@ describe("ManeuverCard", () => {
         ];
       });
 
-      it("should render the maneuvers from speed -1 to 3", () => {
+      it("should render the maneuvers from speed 3 to -1", () => {
         const wrapper = shallow(<ManeuverCard maneuvers={maneuvers} />);
 
         // TODO: fix this test if this issue gets fixed
         expect(wrapper).toMatchElement(
-          <div className="maneuver-table">
-            <ManeuverRow row={[]} speed={-1} />
-            <ManeuverRow row={[]} speed={0} />
-            <ManeuverRow row={[]} speed={1} />
-            <ManeuverRow row={[]} speed={2} />
-            <ManeuverRow row={[]} speed={3} />
-          </div>
+          <table className="maneuver-table">
+            <ManeuverRow hasSloop={true} hasTroll={false} row={[]} speed={3} />
+            <ManeuverRow hasSloop={true} hasTroll={false} row={[]} speed={2} />
+            <ManeuverRow hasSloop={true} hasTroll={false} row={[]} speed={1} />
+            <ManeuverRow hasSloop={true} hasTroll={false} row={[]} speed={0} />
+            <ManeuverRow hasSloop={true} hasTroll={false} row={[]} speed={-1} />
+          </table>
         );
 
-        const row = wrapper.find("ManeuverRow").at(0);
+        const row = wrapper.find("ManeuverRow").at(4);
         expect(row).toBePresent();
         expect(row).toHaveProp("row", [0, 3, 3, 3, 0, 0, 0, 0]);
       });
