@@ -1,5 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+
+import XWingSymbols from "./XWingSymbols";
+
 import "xwing-miniatures-font/dist/xwing-miniatures.css";
 
 export default function XWingFont(props) {
@@ -9,3 +12,7 @@ export default function XWingFont(props) {
     />
   );
 }
+
+XWingFont.propTypes = {
+  symbol: PropTypes.oneOf(Object.values(XWingSymbols))
+};
