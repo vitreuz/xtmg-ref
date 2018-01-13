@@ -3,14 +3,11 @@ import PropTypes from "prop-types";
 
 import XWingSymbols from "./XWingSymbols";
 
+import "./index.css";
 import "xwing-miniatures-font/dist/xwing-miniatures.css";
 
 export default function XWingFont(props) {
-  return (
-    <i
-      className={"xwing-miniatures-font xwing-miniatures-font-" + props.symbol}
-    />
-  );
+  return <i className={"xwing-font xwing-miniatures-font-" + props.symbol} />;
 }
 
 XWingFont.propTypes = {
