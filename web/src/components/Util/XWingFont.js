@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import XWingSymbols from "./XWingSymbols";
 
-import "./index.css";
+import "./xwingfont.css";
 import "xwing-miniatures-font/dist/xwing-miniatures.css";
 
 export default function XWingFont(props) {
