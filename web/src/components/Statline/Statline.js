@@ -43,7 +43,7 @@ export default class Statline extends React.Component {
         <AttackStat value={this.props.attack} />
         <AgilityStat value={this.props.agility} />
         <HullStat value={this.props.hull} />
-        <ShieldStat value={this.props.shield} />
+        <ShieldStat value={this.props.shields} />
       </div>
     );
   }
