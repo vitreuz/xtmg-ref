@@ -43,13 +43,9 @@ class Ship extends React.Component {
   render() {
     const ship = xwingMan;
 
-    const actions = ship.actions.map(action =>
-      action.replace(" ", "").toLowerCase()
-    );
-
     return (
       <div className="main">
-        <ActionBar actions={actions} />
+        <ActionBar actions={xwingMan.actions} />
         <ManeuverCard maneuvers={xwingMan.maneuvers} />
         <Statline
           attack={xwingMan.attack}

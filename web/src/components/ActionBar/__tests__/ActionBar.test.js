@@ -11,7 +11,7 @@ describe("ActionBar", () => {
 
   describe("when given two actions", () => {
     beforeEach(() => {
-      actions = [XWingSymbols.Focus, XWingSymbols.Targetlock];
+      actions = ["Focus", "Target Lock"];
     });
     it("instantiates two actions", () => {
       const wrapper = shallow(<ActionBar actions={actions} />);

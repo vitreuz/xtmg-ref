@@ -11,11 +11,11 @@ export function Action(props) {
 }
 export default class ActionBar extends React.Component {
   render() {
+    const actions = this.props.actions.map(action => action.replace(" ", "").toLowerCase());
+
     return (
       <div className="action-bar">
-        {this.props.actions.map((action, i) => (
-          <Action action={action} key={i} />
-        ))}
+        {actions.map((action, i) => <Action action={action} key={i} />)}
       </div>
     );
   }
