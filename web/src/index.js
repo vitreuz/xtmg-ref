@@ -1,11 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import ActionBar from "./components/ActionBar/ActionBar";
+import ActionBar from "./components/ActionBar";
 import ManeuverCard from "./components/ManeuverCard";
-import Statline from "./components/Statline/Statline";
+import Statline from "./components/Statline";
 
-import "xwing-miniatures-font/dist/xwing-miniatures.css";
 import "./index.css";
 
 const xwingMan = {

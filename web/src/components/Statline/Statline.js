@@ -36,7 +36,7 @@ export function ShieldStat(props) {
   );
 }
 
-export default class Statline extends React.Component {
+export class Statline extends React.Component {
   render() {
     return (
       <div className="statline">

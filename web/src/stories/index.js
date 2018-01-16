@@ -4,8 +4,8 @@ import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import { linkTo } from "@storybook/addon-links";
 
-import ActionBar from "../components/ActionBar/ActionBar";
-import Statline from "../components/Statline/Statline";
+import ActionBar from "../components/ActionBar";
+import Statline from "../components/Statline";
 import ManeuverCard from "../components/ManevuerCard";
 import XWingFont from "../components/Util/XWingFont";
 

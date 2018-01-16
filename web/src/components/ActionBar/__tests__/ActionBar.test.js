@@ -1,8 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 
-import ActionBar from "../ActionBar";
-import { Action } from "../ActionBar";
+import { ActionBar, Action } from "../ActionBar";
 
 import XWingSymbols from "../../Util/XWingSymbols";
 
