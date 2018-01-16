@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 
 import XWingFont from "../Util/XWingFont";
 
@@ -31,6 +31,8 @@ export function BearingCell(props) {
         return "#7EDA24";
       case "red":
         return "#F5171D";
+      default:
+        return;
     }
   })(props.difficulty);
 

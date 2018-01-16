@@ -1,0 +1,32 @@
+.maneuver-table {
+  min-width: 12em;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: 1px solid;
+}
+
+.maneuver-row {
+  border-top: solid 1px;
+  border-bottom: solid 1px;
+}
+
+.maneuver-cell,
+.bordered-maneuver-cell {
+  font-size: 1em;
+  text-align: center;
+  vertical-align: bottom;
+}
+
+.bordered-maneuver-cell {
+  border: 1px solid;
+}
+
+.bearing-cell {
+  -webkit-text-stroke: 1px black;
+}
+
+.speed-cell {
+  background: #2e2d3b;
+  color: #fcfcfb;
+  font-size: 1.5em;
+}

@@ -105,3 +105,10 @@ export class ManeuverRow extends React.Component {
     );
   }
 }
+
+ManeuverRow.propTypes = {
+  hasSloop: PropTypes.bool,
+  hasTroll: PropTypes.bool,
+  row: PropTypes.arrayOf(PropTypes.number).isRequired,
+  speed: PropTypes.number.isRequired
+};

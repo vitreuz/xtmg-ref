@@ -6,7 +6,7 @@ import { linkTo } from "@storybook/addon-links";
 
 import ActionBar from "../components/ActionBar";
 import Statline from "../components/Statline";
-import ManeuverCard from "../components/ManevuerCard";
+import ManeuverCard from "../components/ManeuverCard";
 import XWingFont from "../components/Util/XWingFont";
 
 const xwingMan = {
@@ -55,6 +55,15 @@ storiesOf("Statline", module).add("default state", () => (
   />
 ));
 
-storiesOf("ManeuverCard", module).add("default state", () => (
-  <ManeuverCard maneuvers={xwingMan.maneuvers} />
-));
+storiesOf("ManeuverCard", module)
+  .add("default state", () => <ManeuverCard maneuvers={xwingMan.maneuvers} />)
+  .add("maxed state", () => (
+    <ManeuverCard
+      maneuvers={[
+        [0, 0, 3],
+        [0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 3, 3, 3],
+        [1, 1, 2, 1, 1, 0, 3, 3, 3, 3],
+        [1, 1, 2, 1, 1, 3]
+      ]}
+    />
+  ));

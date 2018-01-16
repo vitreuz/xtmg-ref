@@ -1,0 +1,26 @@
+.ship {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ship-action-bar {
+  font-size: 45px;
+  margin: auto;
+  width: 50%;
+}
+
+.ship-maneuver-card {
+  width: 100%;
+  font-size: 30px;
+  margin-right: auto;
+  margin-left: auto;
+  bottom: 0px;
+  position: fixed;
+  align-content: center;
+}
+
+.ship-statline {
+  font-size: 45px;
+  width: 100%;
+}

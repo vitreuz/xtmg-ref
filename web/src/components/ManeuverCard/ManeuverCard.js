@@ -90,13 +90,6 @@ export class ManeuverCard extends React.Component {
   }
 }
 
-ManeuverRow.propTypes = {
-  hasSloop: PropTypes.bool,
-  hasTroll: PropTypes.bool,
-  row: PropTypes.arrayOf(PropTypes.number).isRequired,
-  speed: PropTypes.number.isRequired
-};
-
 ManeuverCard.propTypes = {
   maneuvers: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired
 };

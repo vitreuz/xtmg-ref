@@ -39,20 +39,24 @@ const xwingMan = {
 
 class Ship extends React.Component {
   render() {
-    const ship = xwingMan;
-
     return (
-      <div className="main">
-        <ActionBar actions={xwingMan.actions} />
-        <div className="maneuver-card">
+      <div>
+        <div className="ship">
+          <div className="ship-statline">
+            <Statline
+              attack={xwingMan.attack}
+              agility={xwingMan.agility}
+              hull={xwingMan.hull}
+              shields={xwingMan.shields}
+            />
+          </div>
+          <div className="ship-action-bar">
+            <ActionBar actions={xwingMan.actions} />
+          </div>
+        </div>
+        <div className="ship-maneuver-card">
           <ManeuverCard maneuvers={xwingMan.maneuvers} />
         </div>
-        <Statline
-          attack={xwingMan.attack}
-          agility={xwingMan.agility}
-          hull={xwingMan.hull}
-          shields={xwingMan.shields}
-        />
       </div>
     );
   }

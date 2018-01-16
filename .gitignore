@@ -57,10 +57,6 @@ typings/
 # dotenv environment variables file
 .env
 
-# sass generated files
-*.css
-*.css.map
-.sass-cache
 
 # IDE tooling
 .vscode

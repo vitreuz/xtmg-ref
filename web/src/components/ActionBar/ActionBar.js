@@ -1,5 +1,6 @@
 import React from "react";
 
+import "./actionbar.css";
 import XWingFont from "../Util/XWingFont";
 
 export function Action(props) {
