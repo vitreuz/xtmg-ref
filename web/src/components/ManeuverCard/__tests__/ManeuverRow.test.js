@@ -1,7 +1,9 @@
 import React from "react";
 import { mount, shallow } from "enzyme";
 import "jest-enzyme";
-import { ManeuverRow, ManeuverCell } from "../ManeuverCard";
+
+import { ManeuverRow } from "../ManeuverRow";
+import { BearingCell, EmptyCell, SpeedCell } from "../ManeuverCell";
 
 describe("ManeuverRow", () => {
   let row = [];
@@ -32,13 +34,13 @@ describe("ManeuverRow", () => {
 
       expect(wrapper).toMatchElement(
         <tr className="maneuver-row">
-          <td className="speed-cell">1</td>
-          <ManeuverCell bearing={"turnleft"} difficulty={null} />
-          <ManeuverCell bearing={"bankleft"} difficulty={null} />
-          <ManeuverCell bearing={"straight"} difficulty={null} />
-          <ManeuverCell bearing={"bankright"} difficulty={null} />
-          <ManeuverCell bearing={"turnright"} difficulty={null} />
-          <ManeuverCell bearing={"kturn"} difficulty={null} />
+          <SpeedCell speed={1} />
+          <EmptyCell />
+          <EmptyCell />
+          <EmptyCell />
+          <EmptyCell />
+          <EmptyCell />
+          <EmptyCell />
         </tr>
       );
     });
@@ -68,13 +70,13 @@ describe("ManeuverRow", () => {
 
         expect(wrapper).toMatchElement(
           <tr className="maneuver-row">
-            <td className="speed-cell">1</td>
-            <ManeuverCell bearing={"turnleft"} difficulty={null} />
-            <ManeuverCell bearing={"bankleft"} difficulty={"white"} />
-            <ManeuverCell bearing={"straight"} difficulty={"green"} />
-            <ManeuverCell bearing={"bankright"} difficulty={"white"} />
-            <ManeuverCell bearing={"turnright"} difficulty={null} />
-            <ManeuverCell bearing={"kturn"} difficulty={"red"} />
+            <SpeedCell speed={1} />
+            <EmptyCell />
+            <BearingCell bearing={"bankleft"} difficulty={"white"} />
+            <BearingCell bearing={"straight"} difficulty={"green"} />
+            <BearingCell bearing={"bankright"} difficulty={"white"} />
+            <EmptyCell />
+            <BearingCell bearing={"kturn"} difficulty={"red"} />
           </tr>
         );
       });
@@ -100,17 +102,17 @@ describe("ManeuverRow", () => {
 
           expect(wrapper).toMatchElement(
             <tr className="maneuver-row">
-              <td className="speed-cell">1</td>
-              <ManeuverCell bearing={"trollleft"} difficulty={"red"} />
-              <ManeuverCell bearing={"sloopleft"} difficulty={"red"} />
-              <ManeuverCell bearing={"turnleft"} difficulty={null} />
-              <ManeuverCell bearing={"bankleft"} difficulty={"white"} />
-              <ManeuverCell bearing={"straight"} difficulty={"green"} />
-              <ManeuverCell bearing={"bankright"} difficulty={"white"} />
-              <ManeuverCell bearing={"turnright"} difficulty={null} />
-              <ManeuverCell bearing={"sloopright"} difficulty={"red"} />
-              <ManeuverCell bearing={"trollright"} difficulty={"red"} />
-              <ManeuverCell bearing={"kturn"} difficulty={"red"} />
+              <SpeedCell speed={1} />
+              <BearingCell bearing={"trollleft"} difficulty={"red"} />
+              <BearingCell bearing={"sloopleft"} difficulty={"red"} />
+              <EmptyCell />
+              <BearingCell bearing={"bankleft"} difficulty={"white"} />
+              <BearingCell bearing={"straight"} difficulty={"green"} />
+              <BearingCell bearing={"bankright"} difficulty={"white"} />
+              <EmptyCell />
+              <BearingCell bearing={"sloopright"} difficulty={"red"} />
+              <BearingCell bearing={"trollright"} difficulty={"red"} />
+              <BearingCell bearing={"kturn"} difficulty={"red"} />
             </tr>
           );
         });
@@ -133,15 +135,15 @@ describe("ManeuverRow", () => {
 
           expect(wrapper).toMatchElement(
             <tr className="maneuver-row">
-              <td className="speed-cell">1</td>
-              <ManeuverCell bearing={"trollleft"} difficulty={"red"} />
-              <ManeuverCell bearing={"turnleft"} difficulty={null} />
-              <ManeuverCell bearing={"bankleft"} difficulty={"white"} />
-              <ManeuverCell bearing={"straight"} difficulty={"green"} />
-              <ManeuverCell bearing={"bankright"} difficulty={"white"} />
-              <ManeuverCell bearing={"turnright"} difficulty={null} />
-              <ManeuverCell bearing={"trollright"} difficulty={"red"} />
-              <ManeuverCell bearing={"kturn"} difficulty={"red"} />
+              <SpeedCell speed={1} />
+              <BearingCell bearing={"trollleft"} difficulty={"red"} />
+              <EmptyCell />
+              <BearingCell bearing={"bankleft"} difficulty={"white"} />
+              <BearingCell bearing={"straight"} difficulty={"green"} />
+              <BearingCell bearing={"bankright"} difficulty={"white"} />
+              <EmptyCell />
+              <BearingCell bearing={"trollright"} difficulty={"red"} />
+              <BearingCell bearing={"kturn"} difficulty={"red"} />
             </tr>
           );
         });
@@ -171,13 +173,13 @@ describe("ManeuverRow", () => {
 
         expect(wrapper).toMatchElement(
           <tr className="maneuver-row">
-            <td className="speed-cell">0</td>
-            <ManeuverCell bearing={"turnleft"} difficulty={null} />
-            <ManeuverCell bearing={"bankleft"} difficulty={null} />
-            <ManeuverCell bearing={"stop"} difficulty={"red"} />
-            <ManeuverCell bearing={"bankright"} difficulty={null} />
-            <ManeuverCell bearing={"turnright"} difficulty={null} />
-            <ManeuverCell bearing={"kturn"} difficulty={null} />
+            <SpeedCell speed={0} />
+            <EmptyCell />
+            <EmptyCell />
+            <BearingCell bearing={"stop"} difficulty={"red"} />
+            <EmptyCell />
+            <EmptyCell />
+            <EmptyCell />
           </tr>
         );
       });
@@ -206,13 +208,13 @@ describe("ManeuverRow", () => {
 
         expect(wrapper).toMatchElement(
           <tr className="maneuver-row">
-            <td className="speed-cell">-1</td>
-            <ManeuverCell bearing={"turnleft"} difficulty={null} />
-            <ManeuverCell bearing={"reversebankleft"} difficulty={"red"} />
-            <ManeuverCell bearing={"reversestraight"} difficulty={"red"} />
-            <ManeuverCell bearing={"reversebankright"} difficulty={"red"} />
-            <ManeuverCell bearing={"turnright"} difficulty={null} />
-            <ManeuverCell bearing={"kturn"} difficulty={null} />
+            <SpeedCell speed={-1} />
+            <EmptyCell />
+            <BearingCell bearing={"reversebankleft"} difficulty={"red"} />
+            <BearingCell bearing={"reversestraight"} difficulty={"red"} />
+            <BearingCell bearing={"reversebankright"} difficulty={"red"} />
+            <EmptyCell />
+            <EmptyCell />
           </tr>
         );
       });

@@ -1,7 +1,8 @@
 import React from "react";
 import { shallow } from "enzyme";
-import ManeuverCard from "../ManeuverCard";
-import { ManeuverRow } from "../ManeuverCard";
+
+import { ManeuverCard } from "../ManeuverCard";
+import { ManeuverRow } from "../ManeuverRow";
 
 describe("ManeuverCard", () => {
   let maneuvers;

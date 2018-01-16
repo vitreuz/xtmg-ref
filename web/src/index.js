@@ -2,11 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import ActionBar from "./components/ActionBar/ActionBar";
-import ManeuverCard from "./components/ManeuverCard/ManeuverCard";
+import ManeuverCard from "./components/ManeuverCard";
 import Statline from "./components/Statline/Statline";
 
 import "xwing-miniatures-font/dist/xwing-miniatures.css";
-
 import "./index.css";
 
 const xwingMan = {
@@ -46,7 +45,9 @@ class Ship extends React.Component {
     return (
       <div className="main">
         <ActionBar actions={xwingMan.actions} />
-        <ManeuverCard maneuvers={xwingMan.maneuvers} />
+        <div className="maneuver-card">
+          <ManeuverCard maneuvers={xwingMan.maneuvers} />
+        </div>
         <Statline
           attack={xwingMan.attack}
           agility={xwingMan.agility}

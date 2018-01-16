@@ -6,7 +6,7 @@ import { linkTo } from "@storybook/addon-links";
 
 import ActionBar from "../components/ActionBar/ActionBar";
 import Statline from "../components/Statline/Statline";
-import ManeuverCard from "../components/ManeuverCard/ManeuverCard";
+import ManeuverCard from "../components/ManevuerCard";
 import XWingFont from "../components/Util/XWingFont";
 
 const xwingMan = {
