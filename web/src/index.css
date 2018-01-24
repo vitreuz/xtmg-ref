@@ -1,3 +1,8 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .ship {
   display: flex;
   flex-direction: column;
@@ -5,22 +10,20 @@
 }
 
 .ship-action-bar {
-  font-size: 45px;
+  font-size: 30px;
   margin: auto;
   width: 50%;
 }
 
 .ship-maneuver-card {
-  width: 100%;
   font-size: 30px;
-  margin-right: auto;
-  margin-left: auto;
-  bottom: 0px;
   position: fixed;
-  align-content: center;
+  bottom: 0;
+  width: 100%;
 }
 
 .ship-statline {
-  font-size: 45px;
-  width: 100%;
+  font-size: 30px;
+  align-self: flex-end;
+  width: 75%;
 }

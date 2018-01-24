@@ -1,7 +1,10 @@
 .maneuver-table {
+  margin: 0 auto;
+  padding: 0;
   width: 100%;
   max-width: 16em;
   border-collapse: collapse;
+  box-sizing: border-box;
   table-layout: fixed;
   border: 2px solid;
 }
