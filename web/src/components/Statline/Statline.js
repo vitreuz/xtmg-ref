@@ -6,7 +6,7 @@ import "./statline.css";
 
 function Stat(props) {
   return (
-    <div className="stat" style={{ color: props.color }}>
+    <div className={"stat " + props.statType + "-stat"}>
       {props.value}
       <XWingFont symbol={props.symbol} />
     </div>
@@ -14,25 +14,29 @@ function Stat(props) {
 }
 export function AgilityStat(props) {
   return (
-    <Stat color="#6DBF43" symbol={XWingSymbols.Agility} value={props.value} />
+    <Stat
+      statType="agility"
+      symbol={XWingSymbols.Agility}
+      value={props.value}
+    />
   );
 }
 
 export function AttackStat(props) {
   return (
-    <Stat color="#D7163D" symbol={XWingSymbols.Attack} value={props.value} />
+    <Stat statType="attack" symbol={XWingSymbols.Attack} value={props.value} />
   );
 }
 
 export function HullStat(props) {
   return (
-    <Stat color="#E8E418" symbol={XWingSymbols.Hull} value={props.value} />
+    <Stat statType="hull" symbol={XWingSymbols.Hull} value={props.value} />
   );
 }
 
 export function ShieldStat(props) {
   return (
-    <Stat color="#68AAB8" symbol={XWingSymbols.Shield} value={props.value} />
+    <Stat statType="shield" symbol={XWingSymbols.Shield} value={props.value} />
   );
 }
 

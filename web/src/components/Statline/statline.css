@@ -1,15 +1,26 @@
 .statline {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+  align-items: flex-end;
+  justify-content: space-between;
   /* overflow: hidden; */
 }
 
 .stat {
-  float: left;
   font-size: 1em;
-  padding-top: 5px;
-  padding-left: 6px;
-  padding-right: 5px;
   -webkit-text-stroke: 0.5px black;
+}
+
+.agility-stat {
+  color: #41a320;
+}
+
+.attack-stat {
+  color: #ff000a;
+}
+
+.hull-stat {
+  color: #ffa513;
+}
+.shield-stat {
+  color: #00ffc2;
 }
