@@ -8,6 +8,7 @@ import ActionBar from "../components/ActionBar";
 import Statline from "../components/Statline";
 import ManeuverCard from "../components/ManeuverCard";
 import XWingFont from "../components/Util/XWingFont";
+import AltStyles from "../components/Util/AlternateStyles";
 
 const xwingMan = {
   name: "X-wing",
@@ -46,14 +47,24 @@ storiesOf("ActionBar", module).add("default state", () => (
   <ActionBar actions={xwingMan.actions} />
 ));
 
-storiesOf("Statline", module).add("default state", () => (
-  <Statline
-    agility={xwingMan.agility}
-    attack={xwingMan.attack}
-    hull={xwingMan.hull}
-    shields={xwingMan.shields}
-  />
-));
+storiesOf("Statline", module)
+  .add("horizontal", () => (
+    <Statline
+      agility={xwingMan.agility}
+      attack={xwingMan.attack}
+      hull={xwingMan.hull}
+      shields={xwingMan.shields}
+    />
+  ))
+  .add("vertical", () => (
+    <Statline
+      altStyle={AltStyles.Vertical}
+      agility={xwingMan.agility}
+      attack={xwingMan.attack}
+      hull={xwingMan.hull}
+      shields={xwingMan.shields}
+    />
+  ));
 
 storiesOf("ManeuverCard", module)
   .add("default state", () => <ManeuverCard maneuvers={xwingMan.maneuvers} />)

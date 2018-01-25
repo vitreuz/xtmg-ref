@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+import AltStyle from "../Util/AlternateStyles";
 import XWingFont from "../Util/XWingFont";
 import XWingSymbols from "../Util/XWingSymbols";
 
@@ -43,7 +45,7 @@ export function ShieldStat(props) {
 export class Statline extends React.Component {
   render() {
     return (
-      <div className="statline">
+      <div className={"statline " + this.props.altStyle + "-statline"}>
         <AttackStat value={this.props.attack} />
         <AgilityStat value={this.props.agility} />
         <HullStat value={this.props.hull} />
@@ -52,3 +54,15 @@ export class Statline extends React.Component {
     );
   }
 }
+
+Statline.propTypes = {
+  altStyle: PropTypes.oneOf(Object.values(AltStyle)),
+  attack: PropTypes.number,
+  agility: PropTypes.number,
+  hull: PropTypes.number,
+  shields: PropTypes.number
+};
+
+Statline.defaultProps = {
+  altStyle: AltStyle.Horiztonal
+};

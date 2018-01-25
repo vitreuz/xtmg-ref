@@ -1,8 +1,14 @@
 .statline {
   display: flex;
-  align-items: flex-end;
+}
+
+.horizontal-statline {
   justify-content: space-between;
-  /* overflow: hidden; */
+}
+
+.vertical-statline {
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .stat {
