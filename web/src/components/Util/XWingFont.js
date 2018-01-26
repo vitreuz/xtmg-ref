@@ -5,11 +5,23 @@ import XWingSymbols from "./XWingSymbols";
 
 import "./xwingfont.css";
 import "xwing-miniatures-font/dist/xwing-miniatures.css";
+import XWingShip from "./XWingShip";
 
 export default function XWingFont(props) {
-  return <i className={"xwing-font xwing-miniatures-font-" + props.symbol} />;
+  const { fontType, symbol } = props;
+
+  return (
+    <i
+      className={
+        "xwing-" + fontType + " xwing-miniatures-" + fontType + "-" + symbol
+      }
+    />
+  );
 }
 
 XWingFont.propTypes = {
-  symbol: PropTypes.oneOf(Object.values(XWingSymbols))
+  fontType: PropTypes.oneOf(["font", "ship"]).isRequired,
+  symbol: PropTypes.oneOf(
+    Object.values(XWingSymbols).concat(Object.values(XWingShip))
+  ).isRequired
 };

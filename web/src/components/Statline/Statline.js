@@ -10,7 +10,7 @@ function Stat(props) {
   return (
     <div className={"stat " + props.statType + "-stat"}>
       {props.value}
-      <XWingFont symbol={props.symbol} />
+      <XWingFont fontType={"font"} symbol={props.symbol} />
     </div>
   );
 }

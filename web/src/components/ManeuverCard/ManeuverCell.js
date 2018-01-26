@@ -20,7 +20,7 @@ export function BearingCell(props) {
         "bordered-cell bearing-cell " + props.difficulty + "-bearing-cell"
       }
     >
-      <XWingFont symbol={props.bearing} />
+      <XWingFont fontType={"font"} symbol={props.bearing} />
     </ManeuverCell>
   );
 }

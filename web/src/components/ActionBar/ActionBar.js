@@ -6,7 +6,7 @@ import XWingFont from "../Util/XWingFont";
 export function Action(props) {
   return (
     <div className="action">
-      <XWingFont symbol={props.action} />
+      <XWingFont fontType={"font"} symbol={props.action} />
     </div>
   );
 }
