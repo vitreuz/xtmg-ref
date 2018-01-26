@@ -5,14 +5,29 @@ body {
 
 .ship {
   display: flex;
+}
+
+.ship-left {
+  flex: 1;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+}
+
+.ship-right {
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ship-name {
+  font-size: 45px;
 }
 
 .ship-action-bar {
-  font-size: 30px;
-  margin: auto;
-  width: 50%;
+  font-size: 45px;
+  width: 80%;
 }
 
 .ship-maneuver-card {
@@ -23,7 +38,5 @@ body {
 }
 
 .ship-statline {
-  font-size: 30px;
-  align-self: flex-end;
-  width: 75%;
+  font-size: 45px;
 }

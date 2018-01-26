@@ -6,6 +6,9 @@ import ManeuverCard from "./components/ManeuverCard";
 import Statline from "./components/Statline";
 
 import "./index.css";
+import AltStyle from "./components/Util/AlternateStyles";
+import XWingFont from "./components/Util/XWingFont";
+import XWingSymbols from "./components/Util/XWingSymbols";
 
 const xwingMan = {
   name: "X-wing",
@@ -42,16 +45,21 @@ class Ship extends React.Component {
     return (
       <div>
         <div className="ship">
-          <div className="ship-statline">
-            <Statline
-              attack={xwingMan.attack}
-              agility={xwingMan.agility}
-              hull={xwingMan.hull}
-              shields={xwingMan.shields}
-            />
+          <div className="ship-left">
+            <div className="ship-statline">
+              <Statline
+                altStyle={AltStyle.Vertical}
+                attack={xwingMan.attack}
+                agility={xwingMan.agility}
+                hull={xwingMan.hull}
+                shields={xwingMan.shields}
+              />
+            </div>
           </div>
-          <div className="ship-action-bar">
-            <ActionBar actions={xwingMan.actions} />
+          <div className="ship-right">
+            <div className="ship-action-bar">
+              <ActionBar actions={xwingMan.actions} />
+            </div>
           </div>
         </div>
         <div className="ship-maneuver-card">

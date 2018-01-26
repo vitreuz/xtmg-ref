@@ -44,12 +44,14 @@ export function ShieldStat(props) {
 
 export class Statline extends React.Component {
   render() {
+    const { altStyle, attack, agility, hull, shields } = this.props;
+
     return (
-      <div className={"statline " + this.props.altStyle + "-statline"}>
-        <AttackStat value={this.props.attack} />
-        <AgilityStat value={this.props.agility} />
-        <HullStat value={this.props.hull} />
-        <ShieldStat value={this.props.shields} />
+      <div className={"statline " + altStyle + "-statline"}>
+        <AttackStat value={attack} />
+        <AgilityStat value={agility} />
+        <HullStat value={hull} />
+        <ShieldStat value={shields} />
       </div>
     );
   }
