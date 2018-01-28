@@ -2,31 +2,32 @@
   display: flex;
 }
 
-.horizontal-statline {
+.statline-horizontal {
   justify-content: space-between;
 }
 
-.vertical-statline {
+.statline-vertical {
   flex-direction: column;
   justify-content: space-between;
 }
 
 .stat {
   font-size: 1em;
+  width: 2em;
   -webkit-text-stroke: 0.5px black;
 }
 
-.agility-stat {
+.stat-agility {
   color: #41a320;
 }
 
-.attack-stat {
+.stat-attack {
   color: #ff000a;
 }
 
-.hull-stat {
+.stat-hull {
   color: #ffa513;
 }
-.shield-stat {
+.stat-shield {
   color: #00ffc2;
 }

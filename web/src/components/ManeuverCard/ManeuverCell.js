@@ -14,13 +14,12 @@ export function EmptyCell(props) {
 }
 
 export function BearingCell(props) {
+  const { bearing, difficulty } = props;
   return (
     <ManeuverCell
-      cellType={
-        "bordered-cell bearing-cell " + props.difficulty + "-bearing-cell"
-      }
+      cellType={"bordered-cell bearing-cell bearing-cell-" + difficulty}
     >
-      <XWingFont fontType={"font"} symbol={props.bearing} />
+      <XWingFont fontType={"font"} symbol={bearing} />
     </ManeuverCell>
   );
 }

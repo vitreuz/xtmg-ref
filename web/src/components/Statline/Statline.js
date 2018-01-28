@@ -7,10 +7,11 @@ import XWingSymbols from "../Util/XWingSymbols";
 import "./statline.css";
 
 function Stat(props) {
+  const { statType, symbol, value } = props;
   return (
-    <div className={"stat " + props.statType + "-stat"}>
-      {props.value}
-      <XWingFont fontType={"font"} symbol={props.symbol} />
+    <div className={"stat stat-" + statType}>
+      {value}
+      <XWingFont fontType={"font"} symbol={symbol} />
     </div>
   );
 }
@@ -47,7 +48,7 @@ export class Statline extends React.Component {
     const { altStyle, attack, agility, hull, shields } = this.props;
 
     return (
-      <div className={"statline " + altStyle + "-statline"}>
+      <div className={"statline statline-" + altStyle}>
         <AttackStat value={attack} />
         <AgilityStat value={agility} />
         <HullStat value={hull} />

@@ -24,24 +24,20 @@
   border: 2px solid black;
 }
 
-.bordered-maneuver-cell {
-  border: 1px solid;
-}
-
 .bearing-cell {
   -webkit-text-stroke: 1px black;
   background-color: #cbcbcb;
 }
 
-.white-bearing-cell {
+.bearing-cell-white {
   color: #ffffff;
 }
 
-.green-bearing-cell {
+.bearing-cell-green {
   color: #00c800;
 }
 
-.red-bearing-cell {
+.bearing-cell-red {
   color: #c80000;
 }
 
