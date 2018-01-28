@@ -10,8 +10,10 @@ function Stat(props) {
   const { statType, symbol, value } = props;
   return (
     <div className={"stat stat-" + statType}>
-      {value}
-      <XWingFont fontType={"font"} symbol={symbol} />
+      <div className="stat-symbol">
+        <XWingFont fontType={"font"} symbol={symbol} />
+      </div>
+      <div className="stat-value">{value}</div>
     </div>
   );
 }

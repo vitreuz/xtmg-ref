@@ -13,8 +13,19 @@
 
 .stat {
   font-size: 1em;
-  width: 2em;
+  width: 2.15em;
   -webkit-text-stroke: 0.5px black;
+  margin-bottom: 0.5em;
+}
+
+.stat-symbol {
+  font-size: 1.25em;
+  float: left;
+  line-height: 0.9em;
+}
+
+.stat-value {
+  float: right;
 }
 
 .stat-agility {
@@ -26,8 +37,8 @@
 }
 
 .stat-hull {
-  color: #ffa513;
+  color: #eeea1e;
 }
 .stat-shield {
-  color: #00ffc2;
+  color: #7ed3e5;
 }
