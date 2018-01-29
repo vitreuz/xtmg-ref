@@ -17,14 +17,15 @@ body {
   flex-direction: column;
   justify-content: space-between;
   margin-left: 2%;
-  width: 18%;
   float: left;
 }
 
 .ship-icon {
   font-size: 64px;
 }
+
 .ship-statline {
+  margin: 2%;
   height: 60%;
   font-size: 24px;
 }
