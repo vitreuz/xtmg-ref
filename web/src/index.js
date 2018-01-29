@@ -10,6 +10,7 @@ import "./index.css";
 import AltStyle from "./components/Util/AlternateStyles";
 import XWingFont from "./components/Util/XWingFont";
 import XWingSymbols from "./components/Util/XWingSymbols";
+import { NameBar } from "./components/NameBar/NameBar";
 
 const LukeMan = {
   name: "Luke Skywalker",
@@ -60,23 +61,28 @@ class Ship extends React.Component {
     return (
       <div>
         <div className="ship">
-          <div className="ship-left">
-            <div className="ship-icon">
-              <Icon iconType={"ship"} symbol={xwingMan.xws} />
+          <div className="ship-top">
+            <div className="ship-left">
+              <div className="ship-icon">
+                <Icon iconType={"ship"} symbol={xwingMan.xws} />
+              </div>
+              <div className="ship-statline">
+                <Statline
+                  altStyle={AltStyle.Vertical}
+                  attack={xwingMan.attack}
+                  agility={xwingMan.agility}
+                  hull={xwingMan.hull}
+                  shields={xwingMan.shields}
+                />
+              </div>
             </div>
-            <div className="ship-statline">
-              <Statline
-                altStyle={AltStyle.Vertical}
-                attack={xwingMan.attack}
-                agility={xwingMan.agility}
-                hull={xwingMan.hull}
-                shields={xwingMan.shields}
-              />
-            </div>
-          </div>
-          <div className="ship-right">
-            <div className="ship-action-bar">
-              <ActionBar actions={xwingMan.actions} />
+            <div className="ship-right">
+              <div className="ship-pilot-namebar">
+                <NameBar name={LukeMan.name} unique={LukeMan.unique} />
+              </div>
+              <div className="ship-action-bar">
+                <ActionBar actions={xwingMan.actions} />
+              </div>
             </div>
           </div>
           <div className="ship-maneuver-card">
