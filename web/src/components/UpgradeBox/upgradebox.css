@@ -1,0 +1,21 @@
+.upgradebox {
+  width: 100%;
+  height: 100%;
+  min-height: 4em;
+
+  position: relative;
+
+  background-color: #c4c4c4;
+  border-radius: 10px;
+}
+
+.upgrade-bar {
+  width: 100%;
+  height: 2em;
+
+  position: absolute;
+  bottom: 0;
+
+  background-color: #4f4e4e;
+  border-radius: 0 0 10px 10px;
+}
