@@ -11,6 +11,20 @@ import AltStyle from "./components/Util/AlternateStyles";
 import XWingFont from "./components/Util/XWingFont";
 import XWingSymbols from "./components/Util/XWingSymbols";
 
+const LukeMan = {
+  name: "Luke Skywalker",
+  id: 5,
+  unique: true,
+  ship: "X-wing",
+  skill: 8,
+  points: 28,
+  slots: ["Elite", "Torpedo", "Astromech"],
+  text:
+    "When defending, you may change 1 of your [Focus] results to a [Evade] result.",
+  image: "pilots/Rebel Alliance/X-wing/luke-skywalker.png",
+  faction: "Rebel Alliance",
+  xws: "lukeskywalker"
+};
 const xwingMan = {
   name: "X-wing",
   faction: ["Rebel Alliance"],
@@ -65,9 +79,9 @@ class Ship extends React.Component {
               <ActionBar actions={xwingMan.actions} />
             </div>
           </div>
-        </div>
-        <div className="ship-maneuver-card">
-          <ManeuverCard maneuvers={xwingMan.maneuvers} />
+          <div className="ship-maneuver-card">
+            <ManeuverCard maneuvers={xwingMan.maneuvers} />
+          </div>
         </div>
       </div>
     );

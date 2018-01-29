@@ -24,6 +24,11 @@
   height: 100%;
 }
 
+.icon-ship {
+  height: 100%;
+}
 .icon-ship .xwing-ship {
-  vertical-align: top;
+  display: block;
+  position: relative;
+  top: 0;
 }

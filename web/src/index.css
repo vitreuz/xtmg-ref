@@ -7,9 +7,15 @@ body {
   margin-top: 2%;
   position: fixed;
   width: 100%;
+  top: 0;
+  bottom: 0;
 }
 
 .ship-left {
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   margin-left: 2%;
   width: 18%;
   float: left;
@@ -19,6 +25,7 @@ body {
   font-size: 64px;
 }
 .ship-statline {
+  height: 60%;
   font-size: 24px;
 }
 .ship-right {
@@ -32,8 +39,8 @@ body {
 }
 
 .ship-maneuver-card {
-  height: 277px;
-  font-size: 30px;
+  height: 40%;
+  font-size: 24px;
   position: fixed;
   bottom: 0;
   width: 100%;
