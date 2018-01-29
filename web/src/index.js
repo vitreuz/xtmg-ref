@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import ActionBar from "./components/ActionBar";
+import Icon from "./components/Icon";
 import ManeuverCard from "./components/ManeuverCard";
 import Statline from "./components/Statline";
 
@@ -46,6 +47,9 @@ class Ship extends React.Component {
       <div>
         <div className="ship">
           <div className="ship-left">
+            <div className="ship-icon">
+              <Icon iconType={"ship"} symbol={xwingMan.xws} />
+            </div>
             <div className="ship-statline">
               <Statline
                 altStyle={AltStyle.Vertical}
