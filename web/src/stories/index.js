@@ -5,6 +5,7 @@ import { action } from "@storybook/addon-actions";
 import { linkTo } from "@storybook/addon-links";
 
 import ActionBar from "../components/ActionBar";
+import Icon from "../components/Icon";
 import Statline from "../components/Statline";
 import ManeuverCard from "../components/ManeuverCard";
 import XWingFont from "../components/Util/XWingFont";
@@ -47,6 +48,11 @@ storiesOf("ActionBar", module).add("default state", () => (
   <ActionBar actions={xwingMan.actions} />
 ));
 
+storiesOf("Icon", module)
+  .add("default ship", () => <Icon iconType={"ship"} symbol={xwingMan.xws} />)
+  .add("default upgrade", () => (
+    <Icon iconType={"upgrade"} symbol={"astromech"} />
+  ));
 storiesOf("Statline", module)
   .add("horizontal", () => (
     <Statline

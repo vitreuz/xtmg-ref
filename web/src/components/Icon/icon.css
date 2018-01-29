@@ -1,0 +1,29 @@
+.icon {
+  border-radius: 100%;
+}
+
+.icon-ship-background {
+  height: 1em;
+  width: 1em;
+  background-color: black;
+  color: white;
+  font-size: 1em;
+  text-align: center;
+}
+
+.icon-upgrade-background {
+  height: 1.25em;
+  width: 1.25em;
+  border: 2px solid black;
+  font-size: 1em;
+  text-align: center;
+}
+
+.icon-upgrade {
+  padding-top: 0.1em;
+  height: 100%;
+}
+
+.icon-ship .xwing-ship {
+  vertical-align: top;
+}
