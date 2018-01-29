@@ -11,6 +11,7 @@ import AltStyle from "./components/Util/AlternateStyles";
 import XWingFont from "./components/Util/XWingFont";
 import XWingSymbols from "./components/Util/XWingSymbols";
 import { NameBar } from "./components/NameBar/NameBar";
+import { UpgradeBox } from "./components/UpgradeBox/UpgradeBox";
 
 const LukeMan = {
   name: "Luke Skywalker",
@@ -82,6 +83,9 @@ class Ship extends React.Component {
               </div>
               <div className="ship-action-bar">
                 <ActionBar actions={xwingMan.actions} />
+              </div>
+              <div className="ship-upgradebox">
+                <UpgradeBox />
               </div>
             </div>
           </div>
