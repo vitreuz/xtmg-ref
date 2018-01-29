@@ -7,7 +7,7 @@ import "./xwingfont.css";
 import "xwing-miniatures-font/dist/xwing-miniatures.css";
 import XWingShip from "./XWingShip";
 
-export default function XWingFont(props) {
+function XWingFont(props) {
   const { fontType, symbol } = props;
 
   return (
@@ -25,3 +25,5 @@ XWingFont.propTypes = {
     Object.values(XWingSymbols).concat(Object.values(XWingShip))
   ).isRequired
 };
+
+export default XWingFont;
