@@ -4,17 +4,22 @@
 }
 
 .namebar {
-  background-color: darkgray;
+  height: 100%;
   width: 100%;
-  height: 2em;
+
+  background-color: darkgray;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
   -wbcli: polygon(10% 0%, 100% 0, 100% 100%, 0% 100%);
   clip-path: polygon(10% 0%, 100% 0, 100% 100%, 0% 100%);
 }
 .namebar-text {
-  font-family: GothicBank;
   width: 90%;
-  float: right;
-  text-align: center;
-  line-height: 2em;
+
+  font-family: GothicBank;
   font-size: 90%;
+  text-align: center;
 }

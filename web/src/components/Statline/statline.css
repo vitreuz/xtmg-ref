@@ -8,24 +8,25 @@
 
 .statline-vertical {
   height: 100%;
+
   flex-direction: column;
   justify-content: space-between;
 }
 
 .stat {
-  font-size: 1em;
-  width: 2.15em;
+  position: relative;
   -webkit-text-stroke: 0.5px black;
-  margin-bottom: 0.5em;
 }
 
 .stat-symbol {
-  font-size: 1.25em;
+  height: 100%;
+  font-size: 1.5em;
+  line-height: 100%;
   float: left;
-  line-height: 0.9em;
 }
 
 .stat-value {
+  font-size: 1em;
   float: right;
 }
 

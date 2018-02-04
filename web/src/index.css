@@ -10,20 +10,26 @@ body {
   position: fixed;
   top: 0;
   bottom: 0;
+
+  padding-top: 4%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .ship-top {
-  height: 56%;
-
-  padding-top: 4%;
-  padding-bottom: 4%;
+  width: 100%;
+  height: 60%;
 }
 /* Left of Ship ------------------------------------------------------------- */
 .ship-left {
+  width: 20%;
   height: 100%;
 
-  margin-left: 4%;
   float: left;
+
+  margin-left: 4%;
 
   display: flex;
   flex-direction: column;
@@ -31,20 +37,18 @@ body {
 }
 
 .ship-icon {
-  font-size: 64px;
+  font-size: 60px;
 }
 
 .ship-statline {
-  height: 60%;
+  height: 65%;
 
-  margin-right: 2%;
-
-  font-size: 24px;
+  font-size: 4vh;
 }
 
 /* Right of Ship ------------------------------------------------------------ */
 .ship-right {
-  width: 70%;
+  width: 75%;
   height: 100%;
 
   float: right;
@@ -55,10 +59,13 @@ body {
 }
 
 .ship-pilot-namebar {
+  height: 60px;
+
   font-size: 24px;
 }
 
 .ship-action-bar {
+  margin-left: 10%;
   margin-right: 4%;
 
   font-size: 36px;
@@ -71,6 +78,7 @@ body {
 .ship-upgradebox {
   height: 65%;
 
+  margin-left: 6%;
   margin-right: 4%;
 
   font-size: 24px;
@@ -79,10 +87,7 @@ body {
 /* Bottom of Ship ----------------------------------------------------------- */
 .ship-maneuver-card {
   width: 100%;
-  height: 40%;
-
-  position: fixed;
-  bottom: 0;
+  height: 38%;
 
   font-size: 24px;
 }
