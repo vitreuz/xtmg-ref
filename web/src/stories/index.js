@@ -10,8 +10,24 @@ import Statline from "../components/Statline";
 import ManeuverCard from "../components/ManeuverCard";
 import XWingFont from "../components/Util/XWingFont";
 import AltStyles from "../components/Util/AlternateStyles";
+import { UpgradeBox } from "../components/UpgradeBox/UpgradeBox";
 
-const xwingMan = {
+const lukeskywalker = {
+  name: "Luke Skywalker",
+  id: 5,
+  unique: true,
+  ship: "X-wing",
+  skill: 8,
+  points: 28,
+  slots: ["elite", "torpedo", "astromech"],
+  text:
+    "When defending, you may change 1 of your [Focus] results to a [Evade] result.",
+  image: "pilots/Rebel Alliance/X-wing/luke-skywalker.png",
+  faction: "Rebel Alliance",
+  xws: "lukeskywalker"
+};
+
+const xwing = {
   name: "X-wing",
   faction: ["Rebel Alliance"],
   attack: 3,
@@ -32,6 +48,33 @@ const xwingMan = {
   firing_arcs: ["Front"]
 };
 
+const r2d2 = {
+  name: "R2 Astromech",
+  id: 2,
+  slot: "Astromech",
+  points: 1,
+  text: "You may treat all 1- and 2-speed maneuvers as green maneuvers.",
+  image: "upgrades/Astromech/r2-astromech.png",
+  xws: "r2astromech"
+};
+
+const hullupgrade = {
+  name: "Hull Upgrade",
+  id: 179,
+  slot: "Modification",
+  points: 3,
+  text: "Increase your hull value by 1.",
+  image: "upgrades/Modification/hull-upgrade.png",
+  xws: "hullupgrade",
+  grants: [
+    {
+      type: "stats",
+      name: "hull",
+      value: 1
+    }
+  ]
+};
+
 // storiesOf("Welcome", module).add("to Storybook", () => (
 //   <Welcome showApp={linkTo("Button")} />
 // ));
@@ -45,35 +88,35 @@ const xwingMan = {
 //   ));
 
 storiesOf("ActionBar", module).add("default state", () => (
-  <ActionBar actions={xwingMan.actions} />
+  <ActionBar actions={xwing.actions} />
 ));
 
 storiesOf("Icon", module)
-  .add("default ship", () => <Icon iconType={"ship"} symbol={xwingMan.xws} />)
+  .add("default ship", () => <Icon iconType={"ship"} symbol={xwing.xws} />)
   .add("default upgrade", () => (
     <Icon iconType={"upgrade"} symbol={"astromech"} />
   ));
 storiesOf("Statline", module)
   .add("horizontal", () => (
     <Statline
-      agility={xwingMan.agility}
-      attack={xwingMan.attack}
-      hull={xwingMan.hull}
-      shields={xwingMan.shields}
+      agility={xwing.agility}
+      attack={xwing.attack}
+      hull={xwing.hull}
+      shields={xwing.shields}
     />
   ))
   .add("vertical", () => (
     <Statline
       altStyle={AltStyles.Vertical}
-      agility={xwingMan.agility}
-      attack={xwingMan.attack}
-      hull={xwingMan.hull}
-      shields={xwingMan.shields}
+      agility={xwing.agility}
+      attack={xwing.attack}
+      hull={xwing.hull}
+      shields={xwing.shields}
     />
   ));
 
 storiesOf("ManeuverCard", module)
-  .add("default state", () => <ManeuverCard maneuvers={xwingMan.maneuvers} />)
+  .add("default state", () => <ManeuverCard maneuvers={xwing.maneuvers} />)
   .add("maxed state", () => (
     <ManeuverCard
       maneuvers={[
@@ -84,3 +127,7 @@ storiesOf("ManeuverCard", module)
       ]}
     />
   ));
+
+storiesOf("UpgradeBox", module).add("empty card", () => (
+  <UpgradeBox slots={lukeskywalker.slots} upgrades={[]} />
+));
