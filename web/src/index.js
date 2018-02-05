@@ -61,7 +61,7 @@ const Ships = new Map([
 
 const Upgrades = new Map([
   [
-    "r2d2",
+    "r2astromech",
     {
       name: "R2 Astromech",
       id: 2,
@@ -96,7 +96,10 @@ const Upgrades = new Map([
 const unit = {
   name: "lukeskywalker",
   ship: "xwing",
-  upgrades: new Map([["astromech", "r2astromech"], ["mod", "hullupgrade"]])
+  upgrades: new Map([
+    ["astromech", "r2astromech"],
+    ["modification", "hullupgrade"]
+  ])
 };
 
 // const xwingMan = [
@@ -117,6 +120,8 @@ class Ship extends React.Component {
       key,
       Upgrades.get(value)
     ]);
+
+    console.log(upgrades);
 
     return (
       <div>

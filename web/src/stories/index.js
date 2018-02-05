@@ -48,6 +48,17 @@ const xwing = {
   firing_arcs: ["Front"]
 };
 
+const determination = {
+  name: "Determination",
+  id: 8,
+  slot: "Elite",
+  points: 1,
+  text:
+    "When you are dealt a faceup Damage card with the <strong>Pilot</strong> trait, discard it immediately without resolving its effect.",
+  image: "upgrades/Elite/determination.png",
+  xws: "determination"
+};
+
 const r2d2 = {
   name: "R2 Astromech",
   id: 2,
@@ -128,6 +139,17 @@ storiesOf("ManeuverCard", module)
     />
   ));
 
-storiesOf("UpgradeBox", module).add("empty card", () => (
-  <UpgradeBox slots={lukeskywalker.slots} upgrades={[]} />
-));
+storiesOf("UpgradeBox", module)
+  .add("empty card", () => (
+    <UpgradeBox slots={lukeskywalker.slots} upgrades={[]} />
+  ))
+  .add("with 3 upgrades", () => (
+    <UpgradeBox
+      slots={lukeskywalker.slots}
+      upgrades={[
+        ["astromech", r2d2],
+        ["elite", determination],
+        ["modification", hullupgrade]
+      ]}
+    />
+  ));
