@@ -58,7 +58,7 @@ type Upgrade struct {
 	// The following stats reflect restriction requirments needed to either use
 	// the card or equip it.
 	Energy int                  `json:"energy,omitempty"`
-	Ship   string               `json:"ship,omitempty"`
+	Ship   []string             `json:"ship,omitempty"`
 	Size   []constants.ShipSize `json:"size,omitempty"`
 
 	XWS string `json:"xws"`

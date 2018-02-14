@@ -9,14 +9,19 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/boltdb/bolt"
-
-	"github.com/sirupsen/logrus"
+	"github.com/vitreuz/xtmg-ref/srv/database/constants"
 	"github.com/vitreuz/xtmg-ref/srv/models"
+
+	"github.com/boltdb/bolt"
+	"github.com/davecgh/go-spew/spew"
+	"github.com/sirupsen/logrus"
 )
 
 func init() {
-	switch *flag.String("log-level", "info", "set the log level of the command. Can be 'panic', 'fatal', 'info', or 'debug'.") {
+	logLevel := flag.String("log-level", "info", "set the log level of the command. Can be 'panic', 'fatal', 'info', or 'debug'.")
+	flag.Parse()
+
+	switch *logLevel {
 	case "panic":
 		logrus.SetLevel(logrus.PanicLevel)
 	case "fatal":
@@ -34,55 +39,30 @@ func main() {
 	}
 
 	dataPath := "./xwing-data/data"
-	ships, err := importShips(dataPath)
-	if err != nil {
-		logrus.WithError(err).Fatal("importing ships")
+
+	if err := loadShips(db, dataPath); err != nil {
+		logrus.WithError(err).Fatal("loading ships")
 	}
 
-	if err := storeShips(db, ships); err != nil {
-		logrus.WithError(err).Fatal("writing ships to database")
+	if err := loadPilots(db, dataPath); err != nil {
+		logrus.WithError(err).Fatal("loading pilots")
 	}
 
-	pilots, err := importPilots(dataPath)
-	if err != nil {
-		logrus.WithError(err).Fatal("importing ships")
-	}
-
-	if err := storePilots(db, pilots); err != nil {
-		logrus.WithError(err).Fatal("writing ships to database")
+	if err := loadUpgrades(db, dataPath); err != nil {
+		logrus.WithError(err).Fatal("loading upgrades")
 	}
 }
 
-func importShips(path string) ([]models.Ship, error) {
-	if filepath.Base(path) != "ships.js" {
-		path = filepath.Join(path, "ships.js")
-	}
-
-	logrus.WithField("path", path).Info("Extracting ships...")
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
+func loadShips(db *bolt.DB, path string) error {
 	var ships []models.Ship
-	if err := json.NewDecoder(file).Decode(&ships); err != nil {
-		return nil, err
+
+	if err := importData(filepath.Join(path, "ships.js"), "ships", &ships); err != nil {
+		return err
 	}
-	logrus.WithField("ships", ships).Debug("Extracted ships.")
+	logrus.WithField("ships", spew.Sdump(ships)).Debug("Loaded ships...")
 
-	return ships, nil
-}
-
-func storeShips(db *bolt.DB, ships []models.Ship) error {
-	logrus.WithField("ships", len(ships)).Info("Writing ships to database...")
-
-	return db.Update(func(tx *bolt.Tx) error {
-		logrus.Debug("Creating 'ships' bucket...")
-		b, err := tx.CreateBucketIfNotExists([]byte("ships"))
-		if err != nil {
-			return err
-		}
+	return storeData(db, constants.ShipsBucket, func(b *bolt.Bucket) error {
+		logrus.WithField("ships", len(ships)).Info("Writing ships to database...")
 
 		for _, ship := range ships {
 			logrus.WithField("ship", ship.Name).Debugf("Writing ship number %d...", ship.ID)
@@ -95,41 +75,20 @@ func storeShips(db *bolt.DB, ships []models.Ship) error {
 
 			b.Put(itob(id), buf.Bytes())
 		}
-
 		return nil
 	})
 }
 
-func importPilots(path string) ([]models.Pilot, error) {
-	if filepath.Base(path) != "pilots.js" {
-		path = filepath.Join(path, "pilots.js")
-	}
-
-	logrus.WithField("path", path).Info("Extracting Pilots...")
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
+func loadPilots(db *bolt.DB, path string) error {
 	var pilots []models.Pilot
-	if err := json.NewDecoder(file).Decode(&pilots); err != nil {
-		return nil, err
+
+	if err := importData(filepath.Join(path, "pilots.js"), "pilots", &pilots); err != nil {
+		return err
 	}
-	logrus.WithField("pilots", pilots).Debug("Extracted pilots.")
+	logrus.WithField("pilots", spew.Sdump(pilots)).Debug("Loaded pilots...")
 
-	return pilots, nil
-}
-
-func storePilots(db *bolt.DB, pilots []models.Pilot) error {
-	logrus.WithField("pilots", len(pilots)).Info("Writing pilots to database...")
-
-	return db.Update(func(tx *bolt.Tx) error {
-		logrus.Debug("Creating 'pilots' bucket...")
-		b, err := tx.CreateBucketIfNotExists([]byte("pilots"))
-		if err != nil {
-			return err
-		}
+	return storeData(db, constants.PilotsBucket, func(b *bolt.Bucket) error {
+		logrus.WithField("pilots", len(pilots)).Info("Writing pilots to database...")
 
 		for _, pilot := range pilots {
 			logrus.WithField("pilot", pilot.Name).Debugf("Writing pilot number %d...", pilot.ID)
@@ -142,8 +101,61 @@ func storePilots(db *bolt.DB, pilots []models.Pilot) error {
 
 			b.Put(itob(id), buf.Bytes())
 		}
-
 		return nil
+	})
+}
+
+func loadUpgrades(db *bolt.DB, path string) error {
+	var upgrades []models.Upgrade
+
+	if err := importData(filepath.Join(path, "upgrades.js"), "upgrades", &upgrades); err != nil {
+		return err
+	}
+	logrus.WithField("upgrades", spew.Sdump(upgrades)).Debug("Loaded upgrades...")
+
+	return storeData(db, constants.UpgradesBucket, func(b *bolt.Bucket) error {
+		logrus.WithField("upgrades", len(upgrades)).Info("Writing upgrades to database...")
+
+		for _, upgrade := range upgrades {
+			logrus.WithField("upgrade", upgrade.Name).Debugf("Writing upgrade number %d...", upgrade.ID)
+			id := upgrade.ID
+			buf := new(bytes.Buffer)
+			err := gob.NewEncoder(buf).Encode(upgrade)
+			if err != nil {
+				return err
+			}
+
+			b.Put(itob(id), buf.Bytes())
+		}
+		return nil
+	})
+}
+
+func importData(path, dataType string, v interface{}) error {
+	if filepath.Base(path) != dataType+".js" {
+		path = filepath.Join(path, dataType+"ships.js")
+	}
+
+	logrus.WithField("path", path).Infof("Extracting %s...", dataType)
+	file, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	return json.NewDecoder(file).Decode(v)
+}
+
+func storeData(db *bolt.DB, bucketType string, fn func(bucket *bolt.Bucket) error) error {
+
+	return db.Update(func(tx *bolt.Tx) error {
+		logrus.Debugf("Creating '%s' bucket...", bucketType)
+		b, err := tx.CreateBucketIfNotExists([]byte(bucketType))
+		if err != nil {
+			return err
+		}
+
+		return fn(b)
 	})
 }
 
