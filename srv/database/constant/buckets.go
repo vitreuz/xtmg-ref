@@ -1,4 +1,4 @@
-package constants
+package constant
 
 const (
 	// PilotsBucket is the string representation of the pilots bucket key.
