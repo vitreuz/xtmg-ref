@@ -27,3 +27,10 @@ type UnableToLocateResourceError struct {
 func (e UnableToLocateResourceError) Error() string {
 	return fmt.Sprintf("unable to locate resource %s", e.XWS)
 }
+
+func (db DB) reads(bucket string, readFn func(k, v []byte) error) error {
+	return db.Data.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(bucket))
+		return b.ForEach(readFn)
+	})
+}

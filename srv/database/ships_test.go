@@ -8,8 +8,6 @@ import (
 
 	. "github.com/vitreuz/xtmg-ref/srv/database"
 	"github.com/vitreuz/xtmg-ref/srv/models"
-
-	"github.com/boltdb/bolt"
 )
 
 func TestReadShips(t *testing.T) {
@@ -62,6 +60,17 @@ func TestReadShips(t *testing.T) {
 			return nil
 		}
 	}
+	hasNoError := func() checkOut {
+		return func(ships []models.Ship, err error) error {
+			if err != nil {
+				return fmt.Errorf(
+					"expected no error but got %v",
+					err,
+				)
+			}
+			return nil
+		}
+	}
 
 	tests := [...]struct {
 		name   string
@@ -74,6 +83,7 @@ func TestReadShips(t *testing.T) {
 			check(
 				startsWith("X-wing"),
 				hasShipCount(56),
+				hasNoError(),
 			),
 		}, {
 			"Simple select By Name",
@@ -81,28 +91,25 @@ func TestReadShips(t *testing.T) {
 			check(
 				startsWith("TIE Fighter"),
 				hasShipCount(14),
+				hasNoError(),
 			),
 		}, {
-			"Using xws as name",
+			"Select using xws",
 			query(SelectByName("tief")),
 			check(
 				startsWith("TIE Fighter"),
 				hasShipCount(2),
+				hasNoError(),
 			),
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tempDB := createTempDB(t)
-			defer os.Remove(tempDB)
+			tmpDB := createTempDB(t)
+			defer os.Remove(tmpDB)
+			db := createTestDB(t, tmpDB)
 
-			b, err := bolt.Open(tempDB, 0600, nil)
-			if err != nil {
-				t.Fatalf("setup: opening bolt db: %v", err)
-			}
-
-			db := DB{b}
 			ships, err := db.ReadShips(tt.query)
 			for _, check := range tt.checks {
 				if err := check(ships, err); err != nil {
@@ -173,15 +180,10 @@ func TestReadShip(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tempDB := createTempDB(t)
-			defer os.Remove(tempDB)
+			tmpDB := createTempDB(t)
+			defer os.Remove(tmpDB)
+			db := createTestDB(t, tmpDB)
 
-			b, err := bolt.Open(tempDB, 0600, nil)
-			if err != nil {
-				t.Fatalf("setup: opening bolt db: %v", err)
-			}
-
-			db := DB{b}
 			ship, err := db.ReadShip(tt.ship)
 			for _, check := range tt.checks {
 				if err := check(ship, err); err != nil {
