@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/vitreuz/xtmg-ref/srv/database/constants"
+	"github.com/vitreuz/xtmg-ref/srv/database/constant"
 	"github.com/vitreuz/xtmg-ref/srv/models"
 
 	"github.com/boltdb/bolt"
@@ -61,19 +61,19 @@ func loadShips(db *bolt.DB, path string) error {
 	}
 	logrus.WithField("ships", spew.Sdump(ships)).Debug("Loaded ships...")
 
-	return storeData(db, constants.ShipsBucket, func(b *bolt.Bucket) error {
+	return storeData(db, constant.ShipsBucket, func(b *bolt.Bucket) error {
 		logrus.WithField("ships", len(ships)).Info("Writing ships to database...")
 
 		for _, ship := range ships {
 			logrus.WithField("ship", ship.Name).Debugf("Writing ship number %d...", ship.ID)
-			id := ship.ID
+			xws := ship.XWS
 			buf := new(bytes.Buffer)
 			err := gob.NewEncoder(buf).Encode(ship)
 			if err != nil {
 				return err
 			}
 
-			b.Put(itob(id), buf.Bytes())
+			b.Put([]byte(xws), buf.Bytes())
 		}
 		return nil
 	})
@@ -87,19 +87,19 @@ func loadPilots(db *bolt.DB, path string) error {
 	}
 	logrus.WithField("pilots", spew.Sdump(pilots)).Debug("Loaded pilots...")
 
-	return storeData(db, constants.PilotsBucket, func(b *bolt.Bucket) error {
+	return storeData(db, constant.PilotsBucket, func(b *bolt.Bucket) error {
 		logrus.WithField("pilots", len(pilots)).Info("Writing pilots to database...")
 
 		for _, pilot := range pilots {
 			logrus.WithField("pilot", pilot.Name).Debugf("Writing pilot number %d...", pilot.ID)
-			id := pilot.ID
+			xws := pilot.XWS
 			buf := new(bytes.Buffer)
 			err := gob.NewEncoder(buf).Encode(pilot)
 			if err != nil {
 				return err
 			}
 
-			b.Put(itob(id), buf.Bytes())
+			b.Put([]byte(xws), buf.Bytes())
 		}
 		return nil
 	})
@@ -113,19 +113,19 @@ func loadUpgrades(db *bolt.DB, path string) error {
 	}
 	logrus.WithField("upgrades", spew.Sdump(upgrades)).Debug("Loaded upgrades...")
 
-	return storeData(db, constants.UpgradesBucket, func(b *bolt.Bucket) error {
+	return storeData(db, constant.UpgradesBucket, func(b *bolt.Bucket) error {
 		logrus.WithField("upgrades", len(upgrades)).Info("Writing upgrades to database...")
 
 		for _, upgrade := range upgrades {
 			logrus.WithField("upgrade", upgrade.Name).Debugf("Writing upgrade number %d...", upgrade.ID)
-			id := upgrade.ID
+			xws := upgrade.XWS
 			buf := new(bytes.Buffer)
 			err := gob.NewEncoder(buf).Encode(upgrade)
 			if err != nil {
 				return err
 			}
 
-			b.Put(itob(id), buf.Bytes())
+			b.Put([]byte(xws), buf.Bytes())
 		}
 		return nil
 	})
