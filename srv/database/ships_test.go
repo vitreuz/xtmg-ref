@@ -17,20 +17,11 @@ func TestReadShips(t *testing.T) {
 
 	type checkOut func([]models.Ship, error) error
 	check := func(fns ...checkOut) []checkOut { return fns }
-	query := func(fns ...ShipExcluder) ShipQuery {
-		return ShipQuery{Excluders: fns}
+	query := func(fns ...ShipSelector) ShipQuery {
+		return ShipQuery{SelectBy: fns}
 	}
 
-	// hasError := func(wantErr error) checkOut {
-	// 	return func(ships []models.Ship, err error) error {
-	// 		if err == nil || wantErr != err {
-	// 			return fmt.Errorf("expected error %v, got %v", wantErr, err)
-	// 		}
-	// 		return nil
-	// 	}
-	// }
-
-	startsWith := func(expectedName string) checkOut {
+	expectFirstShip := func(expectedName string) checkOut {
 		return func(ships []models.Ship, err error) error {
 			if len(ships) < 1 {
 				return fmt.Errorf(
@@ -47,7 +38,7 @@ func TestReadShips(t *testing.T) {
 			return nil
 		}
 	}
-	hasShipCount := func(expectedCount int) checkOut {
+	expectShipCount := func(expectedCount int) checkOut {
 		return func(ships []models.Ship, err error) error {
 			if count := len(ships); count != expectedCount {
 				if count > 0 {
@@ -78,27 +69,27 @@ func TestReadShips(t *testing.T) {
 		checks []checkOut
 	}{
 		{
-			"Simple Scenario",
+			"Simple scenario",
 			query(),
 			check(
-				startsWith("X-wing"),
-				hasShipCount(56),
+				expectFirstShip("X-wing"),
+				expectShipCount(56),
 				hasNoError(),
 			),
 		}, {
 			"Simple select By Name",
 			query(SelectByName("tie")),
 			check(
-				startsWith("TIE Fighter"),
-				hasShipCount(14),
+				expectFirstShip("TIE Fighter"),
+				expectShipCount(14),
 				hasNoError(),
 			),
 		}, {
 			"Select using xws",
 			query(SelectByName("tief")),
 			check(
-				startsWith("TIE Fighter"),
-				hasShipCount(2),
+				expectFirstShip("TIE Fighter"),
+				expectShipCount(2),
 				hasNoError(),
 			),
 		},
@@ -164,7 +155,7 @@ func TestReadShip(t *testing.T) {
 		checks []checkOut
 	}{
 		{
-			"Simple Scenario",
+			"Simple scenario",
 			"xwing",
 			check(
 				expectShip("X-wing"),

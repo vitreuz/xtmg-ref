@@ -15,37 +15,32 @@ import (
 func (db DB) ReadShips(query ShipQuery) ([]models.Ship, error) {
 	ships := []models.Ship{}
 
-	err := db.Data.View(func(tx *bolt.Tx) error {
-		// Assign the bucket cursor for iteration.
-		b := tx.Bucket([]byte(constant.ShipsBucket))
-		c := b.Cursor()
-
-		// Iterate and decode ships, then filter by query filters.
-		for k, v := c.First(); k != nil; k, v = c.Next() {
-			var ship models.Ship
-			if err := decodeResource(v, &ship); err != nil {
-				return err
-			}
-
-			skip := false
-			for _, excluder := range query.Excluders {
-				if excluder(ship) {
-					skip = true
-				}
-			}
-
-			if !skip {
-				ships = append(ships, ship)
-			}
+	err := db.reads(constant.ShipsBucket, func(k, v []byte) error {
+		var ship models.Ship
+		if err := decodeResource(v, &ship); err != nil {
+			return err
 		}
 
-		sorters := append(query.Sort, SortByID())
-		orderShipsBy(sorters...).Sort(ships)
+		ships = selectBy(ships, ship, query.SelectBy...)
 		return nil
 	})
 
+	sorters := append(query.Sort, SortByID())
+	orderShipsBy(sorters...).Sort(ships)
 	return ships, err
 }
+
+func selectBy(ships []models.Ship, ship models.Ship, selectors ...ShipSelector) []models.Ship {
+	for _, s := range selectors {
+		if !s(ship) {
+			return ships
+		}
+	}
+
+	return append(ships, ship)
+}
+
+type ShipSelector func(models.Ship) bool
 
 func (db DB) ReadShip(xws string) (models.Ship, error) {
 	var ship models.Ship
@@ -64,17 +59,15 @@ func (db DB) ReadShip(xws string) (models.Ship, error) {
 }
 
 type ShipQuery struct {
-	Excluders []ShipExcluder
-	Sort      []ShipSortFunc
+	SelectBy []ShipSelector
+	Sort     []ShipSortFunc
 }
 
-type ShipExcluder func(models.Ship) bool
-
-func SelectByName(name string) ShipExcluder {
+func SelectByName(name string) ShipSelector {
 	name = strings.ToLower(name)
 	return func(ship models.Ship) bool {
-		return (!strings.Contains(strings.ToLower(ship.Name), name) &&
-			!strings.Contains(ship.XWS, name))
+		return (strings.Contains(strings.ToLower(ship.Name), name) ||
+			strings.Contains(ship.XWS, name))
 	}
 }
 
