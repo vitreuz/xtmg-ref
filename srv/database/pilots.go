@@ -1,7 +1,6 @@
 package database
 
 import (
-	"log"
 	"sort"
 
 	"github.com/vitreuz/xtmg-ref/srv/database/constant"
@@ -17,21 +16,16 @@ func (db DB) ReadPilots() ([]models.Pilot, error) {
 			return err
 		}
 
-		log.Println(pilot.Name)
 		pilots = append(pilots, pilot)
 		return nil
 	})
 
-	sort.Sort(ByID(pilots))
+	sort.Sort(PilotByID(pilots))
 	return pilots, err
 }
 
-type Resource interface {
-	ID() int
-}
+type PilotByID []models.Pilot
 
-type ByID []models.Pilot
-
-func (id ByID) Len() int           { return len(id) }
-func (id ByID) Swap(i, j int)      { id[i], id[j] = id[j], id[i] }
-func (id ByID) Less(i, j int) bool { return id[i].ID < id[j].ID }
+func (id PilotByID) Len() int           { return len(id) }
+func (id PilotByID) Swap(i, j int)      { id[i], id[j] = id[j], id[i] }
+func (id PilotByID) Less(i, j int) bool { return id[i].ID < id[j].ID }

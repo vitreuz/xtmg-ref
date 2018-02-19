@@ -64,6 +64,7 @@ func loadShips(db *bolt.DB, path string) error {
 
 		for _, ship := range ships {
 			logrus.WithField("ship", ship.Name).Debugf("Writing ship number %d...", ship.ID)
+
 			xws := ship.XWS
 			buf := new(bytes.Buffer)
 			err := gob.NewEncoder(buf).Encode(ship)
@@ -90,8 +91,8 @@ func loadPilots(db *bolt.DB, path string) error {
 		for _, pilot := range pilots {
 			logrus.WithField("pilot", pilot.Name).Debugf("Writing pilot number %d...", pilot.ID)
 
-			// Unlike the other resources, pilots must be sorted by ID because
-			// he xws spec isn't guaranteed to be unique unless we specify a
+			// Unlike the pilots, pilots must be sorted by ID because he xws
+			// spec isn't guaranteed to be unique unless we specify a
 			// combination of (faction, ship, pilot). It's more complicated than
 			// necessary to specify the combination.
 			id := pilot.ID
@@ -119,14 +120,17 @@ func loadUpgrades(db *bolt.DB, path string) error {
 
 		for _, upgrade := range upgrades {
 			logrus.WithField("upgrade", upgrade.Name).Debugf("Writing upgrade number %d...", upgrade.ID)
-			xws := upgrade.XWS
+
+			// Similar to pilots, upgrade cannot be sorted by XWS because
+			// two-sided cards have identical XWS IDs.
+			id := upgrade.ID
 			buf := new(bytes.Buffer)
 			err := gob.NewEncoder(buf).Encode(upgrade)
 			if err != nil {
 				return err
 			}
 
-			b.Put([]byte(xws), buf.Bytes())
+			b.Put(itob(id), buf.Bytes())
 		}
 		return nil
 	})
