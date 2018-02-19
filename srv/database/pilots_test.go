@@ -9,6 +9,9 @@ import (
 )
 
 func TestReadPilots(t *testing.T) {
+	if !IS_DB_SET {
+		t.Skip("data not set")
+	}
 
 	type checkOut func([]models.Pilot, error) error
 	checks := func(fns ...checkOut) []checkOut { return fns }
@@ -43,6 +46,17 @@ func TestReadPilots(t *testing.T) {
 			return nil
 		}
 	}
+	hasNoError := func() checkOut {
+		return func(pilots []models.Pilot, err error) error {
+			if err != nil {
+				return fmt.Errorf(
+					"expected no error but got %v",
+					err,
+				)
+			}
+			return nil
+		}
+	}
 
 	tests := [...]struct {
 		name   string
@@ -53,6 +67,7 @@ func TestReadPilots(t *testing.T) {
 			checks(
 				startsWith("Wedge Antilles"),
 				hasPilotCount(287),
+				hasNoError(),
 			),
 		},
 	}
