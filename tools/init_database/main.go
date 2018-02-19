@@ -13,7 +13,6 @@ import (
 	"github.com/vitreuz/xtmg-ref/srv/models"
 
 	"github.com/boltdb/bolt"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/sirupsen/logrus"
 )
 
@@ -59,7 +58,6 @@ func loadShips(db *bolt.DB, path string) error {
 	if err := importData(filepath.Join(path, "ships.js"), "ships", &ships); err != nil {
 		return err
 	}
-	logrus.WithField("ships", spew.Sdump(ships)).Debug("Loaded ships...")
 
 	return storeData(db, constant.ShipsBucket, func(b *bolt.Bucket) error {
 		logrus.WithField("ships", len(ships)).Info("Writing ships to database...")
@@ -85,21 +83,25 @@ func loadPilots(db *bolt.DB, path string) error {
 	if err := importData(filepath.Join(path, "pilots.js"), "pilots", &pilots); err != nil {
 		return err
 	}
-	logrus.WithField("pilots", spew.Sdump(pilots)).Debug("Loaded pilots...")
 
 	return storeData(db, constant.PilotsBucket, func(b *bolt.Bucket) error {
 		logrus.WithField("pilots", len(pilots)).Info("Writing pilots to database...")
 
 		for _, pilot := range pilots {
 			logrus.WithField("pilot", pilot.Name).Debugf("Writing pilot number %d...", pilot.ID)
-			xws := pilot.XWS
+
+			// Unlike the other resources, pilots must be sorted by ID because
+			// he xws spec isn't guaranteed to be unique unless we specify a
+			// combination of (faction, ship, pilot). It's more complicated than
+			// necessary to specify the combination.
+			id := pilot.ID
 			buf := new(bytes.Buffer)
 			err := gob.NewEncoder(buf).Encode(pilot)
 			if err != nil {
 				return err
 			}
 
-			b.Put([]byte(xws), buf.Bytes())
+			b.Put(itob(id), buf.Bytes())
 		}
 		return nil
 	})
@@ -111,7 +113,6 @@ func loadUpgrades(db *bolt.DB, path string) error {
 	if err := importData(filepath.Join(path, "upgrades.js"), "upgrades", &upgrades); err != nil {
 		return err
 	}
-	logrus.WithField("upgrades", spew.Sdump(upgrades)).Debug("Loaded upgrades...")
 
 	return storeData(db, constant.UpgradesBucket, func(b *bolt.Bucket) error {
 		logrus.WithField("upgrades", len(upgrades)).Info("Writing upgrades to database...")

@@ -12,9 +12,9 @@ func (p *Pilot) UnmarshalJSON(v []byte) error {
 	aux := struct {
 		Skill  interface{} `json:"skill"`
 		Points interface{} `json:"points"`
-		alias
+		*alias
 	}{
-		alias: alias(*p),
+		alias: (*alias)(p),
 	}
 
 	if err := json.Unmarshal(v, &aux); err != nil {

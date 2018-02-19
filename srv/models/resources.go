@@ -4,17 +4,17 @@ import "github.com/vitreuz/xtmg-ref/srv/models/constant"
 
 // Ship is a base instance of a ship type.
 type Ship struct {
-	ID         int                  `json:"id"`
-	Name       string               `json:"name"`
-	Faction    []constant.Faction   `json:"faction"`
-	Attack     int                  `json:"attack"`
-	Agiliy     int                  `json:"agiliy"`
-	Hull       int                  `json:"hull"`
-	Shields    int                  `json:"shields"`
-	Actions    []constant.Action    `json:"actions"`
-	Maneuvers  [][]int              `json:"maneuvers"`
-	Size       constant.ShipSize    `json:"size"`
-	FiringArcs []constant.FiringArc `json:"firing_arcs"`
+	ID         int                     `json:"id"`
+	Name       string                  `json:"name"`
+	Faction    []constant.PilotFaction `json:"faction"`
+	Attack     int                     `json:"attack"`
+	Agiliy     int                     `json:"agiliy"`
+	Hull       int                     `json:"hull"`
+	Shields    int                     `json:"shields"`
+	Actions    []constant.Action       `json:"actions"`
+	Maneuvers  [][]int                 `json:"maneuvers"`
+	Size       constant.ShipSize       `json:"size"`
+	FiringArcs []constant.FiringArc    `json:"firing_arcs"`
 
 	XWS string `json:"xws"`
 }
@@ -29,9 +29,25 @@ type Pilot struct {
 	Points  int                    `json:"points"`
 	Slots   []constant.UpgradeType `json:"slots"`
 	Text    string                 `json:"text"`
-	Faction constant.Faction       `json:"faction"`
+	Faction constant.PilotFaction  `json:"faction"`
+
+	ShipOverride pilotOverride `json:"ship_override,omitempty"`
+	Grants       []pilotGrant  `json:"grants,omitempty"`
 
 	XWS string `json:"xws"`
+}
+
+type pilotOverride struct {
+	Attack  int `json:"attack"`
+	Agiliy  int `json:"agiliy"`
+	Hull    int `json:"hull"`
+	Shields int `json:"shields"`
+}
+
+type pilotGrant struct {
+	Type string               `json:"type"`
+	Name string               `json:"name"`
+	Slot constant.UpgradeType `json:"slot"`
 }
 
 // Upgrade is an instance of an upgrade. It includes possibly unused values that
@@ -53,7 +69,7 @@ type Upgrade struct {
 	Effect string `json:"effect,omitempty"`
 
 	// Grants are used to apply additionaly stats and/or effects on a ship.
-	Grants []grant `json:"grants,omitempty"`
+	Grants []upgrade_grant `json:"grants,omitempty"`
 
 	// The following stats reflect restriction requirments needed to either use
 	// the card or equip it.
@@ -64,7 +80,7 @@ type Upgrade struct {
 	XWS string `json:"xws"`
 }
 
-type grant struct {
+type upgrade_grant struct {
 	Type  string `json:"type"`
 	Name  string `json:"name"`
 	Value int    `json:"value,omitempty,"`
@@ -72,14 +88,14 @@ type grant struct {
 
 // Squadron is an instance of a group of units typically used to create lists.
 type Squadron struct {
-	ID          int              `json:"id,omitempty"`
-	Version     string           `json:"version"`
-	Name        string           `json:"name,omitempty"`
-	Points      int              `json:"points,omitempty"`
-	Faction     constant.Faction `json:"faction"`
-	Description string           `json:"description,omitempty"`
-	Obstacles   []string         `json:"obstacles,omitempty"`
-	Pilots      []Unit           `json:"pilots"`
+	ID          int                      `json:"id,omitempty"`
+	Version     string                   `json:"version"`
+	Name        string                   `json:"name,omitempty"`
+	Points      int                      `json:"points,omitempty"`
+	Faction     constant.SquadronFaction `json:"faction"`
+	Description string                   `json:"description,omitempty"`
+	Obstacles   []string                 `json:"obstacles,omitempty"`
+	Pilots      []Unit                   `json:"pilots"`
 }
 
 // Unit is single game unit. It is represented by a valid combination of a
