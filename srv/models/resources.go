@@ -69,7 +69,7 @@ type Upgrade struct {
 	Effect string `json:"effect,omitempty"`
 
 	// Grants are used to apply additionaly stats and/or effects on a ship.
-	Grants []upgrade_grant `json:"grants,omitempty"`
+	Grants []upgradeGrant `json:"grants,omitempty"`
 
 	// The following stats reflect restriction requirments needed to either use
 	// the card or equip it.
@@ -80,7 +80,7 @@ type Upgrade struct {
 	XWS string `json:"xws"`
 }
 
-type upgrade_grant struct {
+type upgradeGrant struct {
 	Type  string `json:"type"`
 	Name  string `json:"name"`
 	Value int    `json:"value,omitempty,"`
