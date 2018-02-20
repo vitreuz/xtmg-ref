@@ -5,21 +5,27 @@ import (
 
 	"github.com/sirupsen/logrus"
 
+	"github.com/vitreuz/xtmg-ref/srv/database"
 	"github.com/vitreuz/xtmg-ref/srv/models"
 )
 
-//go:generate counterfieter . ShipDatabase
+//go:generate counterfeiter . ShipDatabase
 type ShipDatabase interface {
-	ReadShips() ([]models.Ship, error)
+	ReadShips(database.ShipQuery) ([]models.Ship, error)
 }
 
-//go:generate counterfieter . ShipActor
+//go:generate counterfeiter . ShipActor
 type ShipActor interface {
 	ListShips([]models.Ship) ([]models.Ship, error)
 }
 
+type Ships struct {
+	Ships []models.Ship `json:"ships"`
+}
+
 func (rh RouteHandlers) ListShips(w http.ResponseWriter, r *http.Request) {
-	ships, err := rh.db.ReadShips()
+	q := database.ShipQuery{}
+	ships, err := rh.db.ReadShips(q)
 	if err != nil {
 		logrus.WithError(err).Error("reading ReadShips")
 		return
@@ -31,5 +37,5 @@ func (rh RouteHandlers) ListShips(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	WriteBody(w, ships)
+	WriteBody(w, Ships{ships})
 }
