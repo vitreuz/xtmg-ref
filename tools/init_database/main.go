@@ -65,14 +65,14 @@ func loadShips(db *bolt.DB, path string) error {
 		for _, ship := range ships {
 			logrus.WithField("ship", ship.Name).Debugf("Writing ship number %d...", ship.ID)
 
-			xws := ship.XWS
+			id := ship.ID
 			buf := new(bytes.Buffer)
 			err := gob.NewEncoder(buf).Encode(ship)
 			if err != nil {
 				return err
 			}
 
-			b.Put([]byte(xws), buf.Bytes())
+			b.Put(itob(id), buf.Bytes())
 		}
 		return nil
 	})

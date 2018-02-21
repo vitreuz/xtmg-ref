@@ -2,6 +2,7 @@ package database
 
 import (
 	"bytes"
+	"encoding/binary"
 	"encoding/gob"
 	"fmt"
 
@@ -21,11 +22,11 @@ func decodeResource(data []byte, v interface{}) error {
 }
 
 type UnableToLocateResourceError struct {
-	XWS string
+	ID int
 }
 
 func (e UnableToLocateResourceError) Error() string {
-	return fmt.Sprintf("unable to locate resource %s", e.XWS)
+	return fmt.Sprintf("unable to locate resource %d", e.ID)
 }
 
 func (db DB) reads(bucket string, readFn func(k, v []byte) error) error {
@@ -33,4 +34,10 @@ func (db DB) reads(bucket string, readFn func(k, v []byte) error) error {
 		b := tx.Bucket([]byte(bucket))
 		return b.ForEach(readFn)
 	})
+}
+
+func (db DB) itob(v int) []byte {
+	b := make([]byte, 8)
+	binary.BigEndian.PutUint64(b, uint64(v))
+	return b
 }

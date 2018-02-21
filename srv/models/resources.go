@@ -4,17 +4,17 @@ import "github.com/vitreuz/xtmg-ref/srv/models/constant"
 
 // Ship is a base instance of a ship type.
 type Ship struct {
-	ID         int                     `json:"id"`
-	Name       string                  `json:"name"`
-	Faction    []constant.PilotFaction `json:"faction"`
-	Attack     int                     `json:"attack"`
-	Agiliy     int                     `json:"agiliy"`
-	Hull       int                     `json:"hull"`
-	Shields    int                     `json:"shields"`
-	Actions    []constant.Action       `json:"actions"`
-	Maneuvers  [][]int                 `json:"maneuvers"`
-	Size       constant.ShipSize       `json:"size"`
-	FiringArcs []constant.FiringArc    `json:"firing_arcs"`
+	ID         int                    `json:"id"`
+	Name       string                 `json:"name"`
+	Faction    []constant.UnitFaction `json:"faction"`
+	Attack     int                    `json:"attack"`
+	Agiliy     int                    `json:"agiliy"`
+	Hull       int                    `json:"hull"`
+	Shields    int                    `json:"shields"`
+	Actions    []constant.Action      `json:"actions"`
+	Maneuvers  [][]int                `json:"maneuvers"`
+	Size       constant.ShipSize      `json:"size"`
+	FiringArcs []constant.FiringArc   `json:"firing_arcs"`
 
 	XWS string `json:"xws"`
 }
@@ -29,7 +29,7 @@ type Pilot struct {
 	Points  int                    `json:"points"`
 	Slots   []constant.UpgradeType `json:"slots"`
 	Text    string                 `json:"text"`
-	Faction constant.PilotFaction  `json:"faction"`
+	Faction constant.UnitFaction   `json:"faction"`
 
 	ShipOverride pilotOverride `json:"ship_override,omitempty"`
 	Grants       []pilotGrant  `json:"grants,omitempty"`
@@ -73,9 +73,10 @@ type Upgrade struct {
 
 	// The following stats reflect restriction requirments needed to either use
 	// the card or equip it.
-	Energy int                 `json:"energy,omitempty"`
-	Ship   []string            `json:"ship,omitempty"`
-	Size   []constant.ShipSize `json:"size,omitempty"`
+	Energy  int                  `json:"energy,omitempty"`
+	Faction constant.UnitFaction `json:"faction,omitempty"`
+	Ship    []string             `json:"ship,omitempty"`
+	Size    []constant.ShipSize  `json:"size,omitempty"`
 
 	XWS string `json:"xws"`
 }

@@ -17,9 +17,7 @@ func TestReadShips(t *testing.T) {
 
 	type checkOut func([]models.Ship, error) error
 	check := func(fns ...checkOut) []checkOut { return fns }
-	query := func(fns ...ShipSelector) ShipQuery {
-		return ShipQuery{SelectBy: fns}
-	}
+	filter := func(fns ...ShipFilter) []ShipFilter { return fns }
 
 	expectFirstShip := func(expectedName string) checkOut {
 		return func(ships []models.Ship, err error) error {
@@ -64,13 +62,13 @@ func TestReadShips(t *testing.T) {
 	}
 
 	tests := [...]struct {
-		name   string
-		query  ShipQuery
-		checks []checkOut
+		name    string
+		filters []ShipFilter
+		checks  []checkOut
 	}{
 		{
 			"Simple scenario",
-			query(),
+			filter(),
 			check(
 				expectFirstShip("X-wing"),
 				expectShipCount(56),
@@ -78,7 +76,7 @@ func TestReadShips(t *testing.T) {
 			),
 		}, {
 			"Simple select By Name",
-			query(SelectByName("tie")),
+			filter(SelectShipByName("tie")),
 			check(
 				expectFirstShip("TIE Fighter"),
 				expectShipCount(14),
@@ -86,7 +84,7 @@ func TestReadShips(t *testing.T) {
 			),
 		}, {
 			"Select using xws",
-			query(SelectByName("tief")),
+			filter(SelectShipByName("tief")),
 			check(
 				expectFirstShip("TIE Fighter"),
 				expectShipCount(2),
@@ -101,10 +99,10 @@ func TestReadShips(t *testing.T) {
 			defer os.Remove(tmpDB)
 			db := createTestDB(t, tmpDB)
 
-			ships, err := db.ReadShips(tt.query)
+			ships, err := db.ReadShips(tt.filters...)
 			for _, check := range tt.checks {
-				if err := check(ships, err); err != nil {
-					t.Error(err)
+				if checkErr := check(ships, err); checkErr != nil {
+					t.Error(checkErr)
 				}
 			}
 
@@ -151,18 +149,18 @@ func TestReadShip(t *testing.T) {
 
 	tests := [...]struct {
 		name   string
-		ship   string
+		ship   int
 		checks []checkOut
 	}{
 		{
 			"Simple scenario",
-			"xwing",
+			0,
 			check(
 				expectShip("X-wing"),
 			),
 		}, {
 			"Unable to find resource",
-			"some-fake-ship",
+			999,
 			check(
 				expectError(UnableToLocateResourceError{}),
 			),
