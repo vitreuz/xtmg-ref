@@ -3,7 +3,7 @@ package router
 import (
 	"net/http"
 
-	"github.com/vitreuz/xtmg-ref/srv/actor"
+	"github.com/vitreuz/xtmg-ref/srv/compute"
 	"github.com/vitreuz/xtmg-ref/srv/database"
 	"github.com/vitreuz/xtmg-ref/srv/router/routes_v1"
 
@@ -20,11 +20,14 @@ type Routes []Route
 
 var routes = Routes{}
 
-func NewRouter() *mux.Router {
+func NewRouter(dbPath string) *mux.Router {
 	router := mux.NewRouter()
 
-	db := database.Open()
-	actor := actor.NewActor()
+	db, err := database.Open(dbPath)
+	if err != nil {
+		panic(err)
+	}
+	actor := compute.NewActor()
 
 	routes := initializeRoutes(db, actor)
 	for _, route := range routes {
@@ -38,10 +41,10 @@ func NewRouter() *mux.Router {
 }
 
 func initializeRoutes(db v1.Database, actor v1.Actor) Routes {
-	rh := v1.NewRouteHandler(db, actor)
+	v1 := v1.NewRouteHandler(db, actor)
 
 	return Routes{
-		{Name: "ListShips", Method: "GET", Pattern: "/v1/ships", HandlerFunc: rh.ListShips},
+		{Name: "ListShips", Method: "GET", Pattern: "/v1/ships", HandlerFunc: v1.ListShips},
 	}
 
 }

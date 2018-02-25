@@ -12,8 +12,13 @@ type DB struct {
 	Data *bolt.DB
 }
 
-func Open() *DB {
-	return nil
+func Open(path string) (*DB, error) {
+	b, err := bolt.Open(path, 0655, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return &DB{Data: b}, nil
 }
 
 func decodeResource(data []byte, v interface{}) error {

@@ -8,8 +8,6 @@ import (
 	"testing"
 
 	. "github.com/vitreuz/xtmg-ref/srv/database"
-
-	"github.com/boltdb/bolt"
 )
 
 var (
@@ -56,12 +54,10 @@ func createTempDB(t *testing.T) string {
 }
 
 func createTestDB(t *testing.T, path string) *DB {
-	b, err := bolt.Open(path, 0600, nil)
+	db, err := Open(path)
 	if err != nil {
-		t.Fatalf("setup: opening bolt db: %v", err)
+		t.Fatalf("opening database: %+v", err)
 	}
 
-	return &DB{
-		Data: b,
-	}
+	return db
 }
