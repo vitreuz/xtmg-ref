@@ -2,8 +2,8 @@ package v1
 
 import (
 	"net/http"
-
-	"github.com/vitreuz/xtmg-ref/srv/database"
+	"net/url"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 
@@ -12,7 +12,7 @@ import (
 
 //go:generate counterfeiter . ShipDatabase
 type ShipDatabase interface {
-	ReadShips(...database.ShipFilter) ([]models.Ship, error)
+	ReadShips(...models.Filter) ([]models.Ship, error)
 }
 
 //go:generate counterfeiter . ShipActor
@@ -27,7 +27,7 @@ type Ships struct {
 func (rh RouteHandlers) ListShips(w http.ResponseWriter, r *http.Request) {
 	queries := r.URL.Query()
 
-	ships, err := rh.db.ReadShips()
+	ships, err := rh.db.ReadShips(filters(queries)...)
 	if err != nil {
 		logrus.WithError(err).Error("reading ReadShips")
 		return
@@ -40,4 +40,21 @@ func (rh RouteHandlers) ListShips(w http.ResponseWriter, r *http.Request) {
 	}
 
 	WriteBody(w, Ships{ships})
+}
+
+func filters(q url.Values) []models.Filter {
+	filters := []models.Filter{}
+	for _, filter := range q["select"] {
+		values := strings.Split(filter, ":")
+		filters = append(filters, models.Filter{"select", values[0], values[1]})
+	}
+	for _, filter := range q["exclude"] {
+		values := strings.Split(filter, ":")
+		filters = append(filters, models.Filter{"exclude", values[0], values[1]})
+	}
+
+	return filters
+}
+
+func (rh RouteHandlers) FetchShip(w http.ResponseWriter, r *http.Request) {
 }

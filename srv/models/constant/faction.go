@@ -1,5 +1,7 @@
 package constant
 
+import "strings"
+
 type SquadronFaction string
 
 const (
@@ -29,4 +31,9 @@ func (pf UnitFaction) ToSquadronFaction() SquadronFaction {
 	}
 
 	panic("invalid faction type")
+}
+
+func (f UnitFaction) Simplify() string {
+	simple := strings.ToLower(string(f))
+	return strings.Replace(simple, " ", "_", -1)
 }

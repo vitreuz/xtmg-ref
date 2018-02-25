@@ -106,3 +106,7 @@ type Unit struct {
 	Ship     string   `json:"ship"`
 	Upgrades []string `json:"upgrades,omitempty"`
 }
+
+type Warning struct {
+	Error error `json:"error,omitempty"`
+}

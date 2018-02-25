@@ -9,7 +9,7 @@ import (
 
 // ReadShips lists all ships that satisfy the provided queries. The default
 // order is by Ship.ID.
-func (db DB) ReadShips(filters ...ShipFilter) ([]models.Ship, error) {
+func (db DB) ReadShips(filters ...models.Filter) ([]models.Ship, error) {
 	ships := []models.Ship{}
 
 	err := db.reads(constant.ShipsBucket, func(k, v []byte) error {
@@ -18,7 +18,7 @@ func (db DB) ReadShips(filters ...ShipFilter) ([]models.Ship, error) {
 			return err
 		}
 
-		ships = filterShips(ships, ship, filters...)
+		ships, _ = ship.AppendByFilters(ships, filters...)
 		return nil
 	})
 
@@ -39,35 +39,4 @@ func (db DB) ReadShip(id int) (models.Ship, error) {
 	})
 
 	return ship, err
-}
-
-func filterShips(ships []models.Ship, ship models.Ship, filters ...ShipFilter) []models.Ship {
-	if len(filters) == 0 {
-		return append(ships, ship)
-	}
-
-	for _, filter := range filters {
-		ships = filter(ships, ship)
-	}
-	return ships
-}
-
-type ShipFilter func([]models.Ship, models.Ship) []models.Ship
-
-func SelectShipByID(id int) ShipFilter {
-	return func(ships []models.Ship, ship models.Ship) []models.Ship {
-		if ship.SelectByID(id) {
-			return append(ships, ship)
-		}
-		return ships
-	}
-}
-
-func SelectShipByName(name string) ShipFilter {
-	return func(ships []models.Ship, ship models.Ship) []models.Ship {
-		if ship.SelectByName(name) || ship.SelectByXWS(name) {
-			return append(ships, ship)
-		}
-		return ships
-	}
 }

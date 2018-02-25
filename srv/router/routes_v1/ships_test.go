@@ -19,15 +19,15 @@ type FakeShipDatabase struct {
 
 var databaseShipRet = []models.Ship{
 	{
-		Name:      "fake-ship 1",
-		Maneuvers: [][]int{{0, 0, 0}, {1, 1, 1}, {1, 1, 1}},
+		Name: "fake-ship 1",
 	}, {
-		Name:      "fake-ship 2",
-		Maneuvers: [][]int{{0, 0, 0}, {1, 1, 1}, {1, 1, 1}},
+		Name: "fake-ship 2",
 	},
 }
 
-func (f FakeShipDatabase) ReadShips() ([]models.Ship, error) { return f.Ships, f.Err }
+func (f FakeShipDatabase) ReadShips(...models.Filter) ([]models.Ship, error) {
+	return f.Ships, f.Err
+}
 
 type FakeShipActor struct {
 	ArgShips []models.Ship
@@ -38,15 +38,13 @@ type FakeShipActor struct {
 
 var actorShipRet = []models.Ship{
 	{
-		Name:      "fake-ship 1",
-		Maneuvers: [][]int{{1}},
+		Name: "fake-ship 1",
 	}, {
-		Name:      "fake-ship 2",
-		Maneuvers: [][]int{{1}},
+		Name: "fake-ship 2",
 	},
 }
 
-func (f *FakeShipActor) ListShips(s []models.Ship) ([]models.Ship, error) {
+func (f *FakeShipActor) ListShips(s []models.Ship, b ...string) ([]models.Ship, error) {
 	f.ArgShips = s
 	return f.RetShips, f.Err
 }

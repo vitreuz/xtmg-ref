@@ -17,7 +17,21 @@ func TestReadShips(t *testing.T) {
 
 	type checkOut func([]models.Ship, error) error
 	check := func(fns ...checkOut) []checkOut { return fns }
-	filter := func(fns ...ShipFilter) []ShipFilter { return fns }
+
+	type filterFn func() models.Filter
+	SelectShipByName := func(name string) filterFn {
+		return func() models.Filter {
+			return models.Filter{"select", "name", name}
+		}
+	}
+	filter := func(fns ...filterFn) []models.Filter {
+		filters := []models.Filter{}
+		for _, fn := range fns {
+			filters = append(filters, fn())
+		}
+
+		return filters
+	}
 
 	expectFirstShip := func(expectedName string) checkOut {
 		return func(ships []models.Ship, err error) error {
@@ -63,7 +77,7 @@ func TestReadShips(t *testing.T) {
 
 	tests := [...]struct {
 		name    string
-		filters []ShipFilter
+		filters []models.Filter
 		checks  []checkOut
 	}{
 		{
