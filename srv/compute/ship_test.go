@@ -37,7 +37,7 @@ func TestListShip(t *testing.T) {
 				if !reflect.DeepEqual(ships[i], expectedShips[i]) {
 					errs = append(errs, fmt.Errorf(
 						"expected ship %d to be\n%+v\nbut got\n%+v",
-						i, expectedShips[i], ships[i],
+						i+1, expectedShips[i], ships[i],
 					))
 				}
 			}
@@ -46,31 +46,56 @@ func TestListShip(t *testing.T) {
 		}
 	}
 
-	args := func(ships ...models.Ship) []models.Ship { return ships }
-	defaultArgs := []models.Ship{
-		{
-			Name: "fake-ship-1",
-			Maneuvers: [][]int{
-				{},
-				{0, 1, 1, 1, 0},
-				{1, 2, 2, 2, 1},
-				{0, 1, 2, 1, 0, 3},
-				{0, 3, 1, 3, 0, 3},
+	defaultShips := func() []models.Ship {
+		return []models.Ship{
+			{
+				Name: "fake-ship-1",
+				Maneuvers: [][]int{
+					{},
+					{0, 1, 1, 1, 0},
+					{1, 2, 2, 2, 1},
+					{0, 1, 2, 1, 0, 3},
+					{0, 3, 1, 3, 0, 3},
+				},
+			}, {
+				Name: "fake-ship-2",
+				Maneuvers: [][]int{
+					{},
+					{0, 3, 3, 3, 0},
+					{3, 3, 3, 3, 3},
+					{0, 3, 3, 3, 0, 3},
+					{0, 3, 3, 3, 0, 3},
+				},
 			},
-		},
+		}
 	}
+	sortBys := func(sortBy ...string) []string { return sortBy }
 
 	tests := [...]struct {
 		name   string
 		ships  []models.Ship
+		sortBy []string
 		checks []checkOut
 	}{
 		{
 			"Simple scenario",
-			args(defaultArgs...),
+			defaultShips(),
+			nil,
 			check(
 				expectNoError(),
 				expectShips([]models.Ship{
+					{Name: "fake-ship-1", Maneuvers: [][]int{{28}}},
+					{Name: "fake-ship-2", Maneuvers: [][]int{{14}}},
+				}),
+			),
+		}, {
+			"Sort by maneuvers",
+			defaultShips(),
+			sortBys("maneuvers"),
+			check(
+				expectNoError(),
+				expectShips([]models.Ship{
+					{Name: "fake-ship-2", Maneuvers: [][]int{{14}}},
 					{Name: "fake-ship-1", Maneuvers: [][]int{{28}}},
 				}),
 			),
@@ -81,7 +106,7 @@ func TestListShip(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			actor := NewActor()
 
-			ships, err := actor.ListShips(tt.ships)
+			ships, err := actor.ListShips(tt.ships, tt.sortBy...)
 			for _, check := range tt.checks {
 				for _, checkErr := range check(ships, err) {
 					if checkErr != nil {

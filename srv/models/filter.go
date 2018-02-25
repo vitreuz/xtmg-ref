@@ -42,7 +42,7 @@ func (s Ship) SelectByFiringArc(firingArc constant.FiringArc) bool {
 func (s Ship) SelectByStat(stat constant.Stat, value int) bool {
 	switch stat {
 	case constant.AgilityStat:
-		return s.Agiliy >= value
+		return s.Agility >= value
 	case constant.AttackStat:
 		return s.Attack >= value
 	case constant.HullStat:

@@ -8,7 +8,7 @@ type Ship struct {
 	Name       string                 `json:"name"`
 	Faction    []constant.UnitFaction `json:"faction"`
 	Attack     int                    `json:"attack"`
-	Agiliy     int                    `json:"agiliy"`
+	Agility    int                    `json:"agility"`
 	Hull       int                    `json:"hull"`
 	Shields    int                    `json:"shields"`
 	Actions    []constant.Action      `json:"actions"`
