@@ -7,8 +7,6 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/vitreuz/xtmg-ref/srv/database"
-
 	"github.com/davecgh/go-spew/spew"
 	"github.com/vitreuz/xtmg-ref/srv/models"
 	. "github.com/vitreuz/xtmg-ref/srv/router/routes_v1"
@@ -29,7 +27,7 @@ var databaseShipRet = []models.Ship{
 	},
 }
 
-func (f FakeShipDatabase) ReadShips(database.ShipQuery) ([]models.Ship, error) { return f.Ships, f.Err }
+func (f FakeShipDatabase) ReadShips() ([]models.Ship, error) { return f.Ships, f.Err }
 
 type FakeShipActor struct {
 	ArgShips []models.Ship

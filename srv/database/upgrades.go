@@ -1,7 +1,6 @@
 package database
 
 import (
-	"log"
 	"sort"
 
 	"github.com/vitreuz/xtmg-ref/srv/database/constant"
@@ -17,7 +16,6 @@ func (db DB) ReadUpgrades() ([]models.Upgrade, error) {
 			return err
 		}
 
-		log.Println(upgrade.Name)
 		upgrades = append(upgrades, upgrade)
 		return nil
 	})

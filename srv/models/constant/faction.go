@@ -8,17 +8,17 @@ const (
 	FactionScum     SquadronFaction = "scum"
 )
 
-type PilotFaction string
+type UnitFaction string
 
 const (
-	FactionRebelAllicance PilotFaction = "Rebel Alliance"
-	FactionResistance     PilotFaction = "Resistance"
-	FactionGalacticEmpire PilotFaction = "Galactic Empire"
-	FactionFirstOrder     PilotFaction = "First Order"
-	FactionScumAndVillany PilotFaction = "Scum and Villainy"
+	FactionRebelAllicance UnitFaction = "Rebel Alliance"
+	FactionResistance     UnitFaction = "Resistance"
+	FactionGalacticEmpire UnitFaction = "Galactic Empire"
+	FactionFirstOrder     UnitFaction = "First Order"
+	FactionScumAndVillany UnitFaction = "Scum and Villainy"
 )
 
-func (pf PilotFaction) ToSquadronFaction() SquadronFaction {
+func (pf UnitFaction) ToSquadronFaction() SquadronFaction {
 	switch pf {
 	case FactionRebelAllicance, FactionResistance:
 		return FactionRebel
