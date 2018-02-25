@@ -61,5 +61,6 @@ typings/
 .vscode
 
 # Output files
+xtmg-ref
 xwing.db
 xwing.db.lock
