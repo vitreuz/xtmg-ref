@@ -46,11 +46,11 @@ func filters(q url.Values) []models.Filter {
 	filters := []models.Filter{}
 	for _, filter := range q["select"] {
 		values := strings.Split(filter, ":")
-		filters = append(filters, models.Filter{"select", values[0], values[1]})
+		filters = append(filters, models.SelectFilter(values[0], values[1]))
 	}
 	for _, filter := range q["exclude"] {
 		values := strings.Split(filter, ":")
-		filters = append(filters, models.Filter{"exclude", values[0], values[1]})
+		filters = append(filters, models.ExcludeFilter(values[0], values[1]))
 	}
 
 	return filters

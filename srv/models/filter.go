@@ -4,12 +4,30 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/vitreuz/xtmg-ref/srv/models/constant"
 )
 
-type Filter [3]string
+type Filter struct {
+	method constant.FilterMethod
+	field  string
+	value  string
+}
+
+func SelectFilter(field, value string) Filter {
+	return Filter{method: constant.FilterSelect, field: field, value: value}
+}
+
+func ExcludeFilter(field, value string) Filter {
+	return Filter{method: constant.FilterExclude, field: field, value: value}
+}
 
 func (f Filter) isSelect() bool {
-	return f[0] == "select"
+	return f.method == constant.FilterSelect
+}
+
+func (f Filter) isExclude() bool {
+	return f.method == constant.FilterExclude
 }
 
 type UnknownFilter string
@@ -34,7 +52,7 @@ func (s Ship) AppendByFilters(ships []Ship, filters ...Filter) ([]Ship, []Warnin
 		if filter.isSelect() && !selected {
 			return ships, warnings
 		}
-		if !filter.isSelect() && selected {
+		if filter.isExclude() && selected {
 			return ships, warnings
 		}
 	}
@@ -43,26 +61,26 @@ func (s Ship) AppendByFilters(ships []Ship, filters ...Filter) ([]Ship, []Warnin
 }
 
 func (s Ship) selectBy(filter Filter) (bool, error) {
-	switch filterBy := filter[1]; filterBy {
+	switch filterBy := filter.field; filterBy {
 	case "name":
-		return s.selectByNameOrXWS(filter[2]), nil
+		return s.selectByNameOrXWS(filter.value), nil
 	case "faction":
-		return s.selectByFaction(filter[2]), nil
+		return s.selectByFaction(filter.value), nil
 	case "attack", "agility", "hull", "shields":
-		return s.selectByStat(filterBy, filter[2])
+		return s.selectByStat(filterBy, filter.value)
 	case "action":
-		return s.selectByAction(filter[2]), nil
+		return s.selectByAction(filter.value), nil
 	case "maneuvers":
-		return s.selectByManuevers(filter[2])
+		return s.selectByManuevers(filter.value)
 	case "size":
-		return string(s.Size) == filter[2], nil
+		return string(s.Size) == filter.value, nil
 	case "firing_arcs":
-		return s.selectByFiringArc(filter[2]), nil
+		return s.selectByFiringArc(filter.value), nil
 	case "xws":
-		return strings.Contains(s.XWS, filter[2]), nil
+		return strings.Contains(s.XWS, filter.value), nil
 	}
 
-	return filter.isSelect(), UnknownFilter(filter[1])
+	return filter.isSelect(), UnknownFilter(filter.field)
 }
 
 func (s Ship) selectByNameOrXWS(name string) bool {

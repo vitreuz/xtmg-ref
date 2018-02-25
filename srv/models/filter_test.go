@@ -78,182 +78,182 @@ func TestShipAppendbyFilters(t *testing.T) {
 			"bad filter",
 			Ship{Name: "some-name"},
 			filter(
-				Filter{"select", "foo", "bar"},
+				SelectFilter("foo", "bar"),
 			),
 			check(expectSelected(), expectWarning(warning(UnknownFilter("")))),
 		}, {
 			"Select by name (success)",
 			Ship{Name: "some-name"},
 			filter(
-				Filter{"select", "name", "some"},
+				SelectFilter("name", "some"),
 			),
 			check(expectSelected(), expectNoWarnings()),
 		}, {
 			"Select by name (failure)",
 			Ship{Name: "some-name"},
 			filter(
-				Filter{"select", "name", "foo"},
+				SelectFilter("name", "foo"),
 			),
 			check(expectExcluded(), expectNoWarnings()),
 		}, {
 			"Select by name-xws (success)",
 			Ship{Name: "some-name", XWS: "bar"},
 			filter(
-				Filter{"select", "name", "bar"},
+				SelectFilter("name", "bar"),
 			),
 			check(expectSelected(), expectNoWarnings()),
 		}, {
 			"Select by name-xws (failure)",
 			Ship{Name: "some-name", XWS: "bar"},
 			filter(
-				Filter{"select", "name", "foo"},
+				SelectFilter("name", "foo"),
 			),
 			check(expectExcluded(), expectNoWarnings()),
 		}, {
 			"Select by faction (success)",
 			Ship{Name: "some-name", Faction: []constant.UnitFaction{constant.FactionRebelAllicance}},
 			filter(
-				Filter{"select", "faction", "rebel"},
+				SelectFilter("faction", "rebel"),
 			),
 			check(expectSelected(), expectNoWarnings()),
 		}, {
 			"Select by faction (failure)",
 			Ship{Name: "some-name", Faction: []constant.UnitFaction{constant.FactionRebelAllicance}},
 			filter(
-				Filter{"select", "faction", "imp"},
+				SelectFilter("faction", "imp"),
 			),
 			check(expectExcluded(), expectNoWarnings()),
 		}, {
 			"Select by stat (error)",
 			Ship{Name: "some-name"},
 			filter(
-				Filter{"select", "attack", "u"},
+				SelectFilter("attacK", "u"),
 			),
 			check(expectSelected(), expectWarning(warning(errors.New("")))),
 		}, {
 			"Select by stat (success)",
 			Ship{Name: "some-name", Attack: 3},
 			filter(
-				Filter{"select", "attack", "3"},
+				SelectFilter("attack", "3"),
 			),
 			check(expectSelected(), expectNoWarnings()),
 		}, {
 			"Select by stat (failure)",
 			Ship{Name: "some-name", Agility: 3},
 			filter(
-				Filter{"select", "agility", "4"},
+				SelectFilter("agility", "4"),
 			),
 			check(expectExcluded(), expectNoWarnings()),
 		}, {
 			"Exclude by stat (success)",
 			Ship{Name: "some-name", Hull: 3},
 			filter(
-				Filter{"exclude", "hull", "2"},
+				ExcludeFilter("hull", "2"),
 			),
 			check(expectExcluded(), expectNoWarnings()),
 		}, {
 			"Exclude by stat (failure)",
 			Ship{Name: "some-name", Shields: 3},
 			filter(
-				Filter{"exclude", "shields", "4"},
+				ExcludeFilter("shields", "4"),
 			),
 			check(expectSelected(), expectNoWarnings()),
 		}, {
 			"Select by action (success)",
 			Ship{Name: "some-name", Actions: []constant.Action{constant.ActionFocus}},
 			filter(
-				Filter{"select", "action", "focus"},
+				SelectFilter("action", "focus"),
 			),
 			check(expectSelected(), expectNoWarnings()),
 		}, {
 			"Select by action (failure)",
 			Ship{Name: "some-name", Actions: []constant.Action{constant.ActionFocus}},
 			filter(
-				Filter{"select", "action", "barrelroll"},
+				SelectFilter("action", "barrelroll"),
 			),
 			check(expectExcluded(), expectNoWarnings()),
 		}, {
 			"Select by maneuver (success)",
 			Ship{Name: "some-name", Maneuvers: [][]int{{0, 1, 1, 1}}},
 			filter(
-				Filter{"select", "maneuvers", "0"},
+				SelectFilter("maneuvers", "0"),
 			),
 			check(expectSelected(), expectNoWarnings()),
 		}, {
 			"Select by maneuver (failure)",
 			Ship{Name: "some-name", Maneuvers: [][]int{{0, 1, 1, 1}}},
 			filter(
-				Filter{"select", "maneuvers", "100"},
+				SelectFilter("maneuvers", "100"),
 			),
 			check(expectExcluded(), expectNoWarnings()),
 		}, {
 			"Exclude by maneuver (success)",
 			Ship{Name: "some-name", Maneuvers: [][]int{{0, 1, 1, 1}}},
 			filter(
-				Filter{"exclude", "maneuvers", "0"},
+				ExcludeFilter("maneuvers", "0"),
 			),
 			check(expectExcluded(), expectNoWarnings()),
 		}, {
 			"Exclude by maneuver (failure)",
 			Ship{Name: "some-name", Maneuvers: [][]int{{0, 1, 1, 1}}},
 			filter(
-				Filter{"exclude", "maneuvers", "100"},
+				ExcludeFilter("maneuvers", "100"),
 			),
 			check(expectSelected(), expectNoWarnings()),
 		}, {
 			"Select by size (success)",
 			Ship{Name: "some-name", Size: constant.SizeSmall},
 			filter(
-				Filter{"select", "size", "small"},
+				SelectFilter("size", "small"),
 			),
 			check(expectSelected(), expectNoWarnings()),
 		}, {
 			"Select by size (failure)",
 			Ship{Name: "some-name", Size: constant.SizeSmall},
 			filter(
-				Filter{"select", "size", "large"},
+				SelectFilter("size", "large"),
 			),
 			check(expectExcluded(), expectNoWarnings()),
 		}, {
 			"Exclude by size (success)",
 			Ship{Name: "some-name", Size: constant.SizeSmall},
 			filter(
-				Filter{"exclude", "size", "small"},
+				ExcludeFilter("size", "small"),
 			),
 			check(expectExcluded(), expectNoWarnings()),
 		}, {
 			"Exclude by size (failure)",
 			Ship{Name: "some-name", Size: constant.SizeSmall},
 			filter(
-				Filter{"exclude", "size", "large"},
+				ExcludeFilter("size", "large"),
 			),
 			check(expectSelected(), expectNoWarnings()),
 		}, {
 			"Select by firing arc (success)",
 			Ship{Name: "some-name", FiringArcs: []constant.FiringArc{constant.FiringArcAux180}},
 			filter(
-				Filter{"select", "firing_arcs", "auxiliary_180"},
+				SelectFilter("firing_arcs", "auxiliary_180"),
 			),
 			check(expectSelected(), expectNoWarnings()),
 		}, {
 			"Select by firing arc (failure)",
 			Ship{Name: "some-name", FiringArcs: []constant.FiringArc{constant.FiringArcBullseye}},
 			filter(
-				Filter{"select", "firing_arcs", "front"},
+				SelectFilter("firing_arcs", "front"),
 			),
 			check(expectExcluded(), expectNoWarnings()),
 		}, {
 			"Select by xws (success)",
 			Ship{Name: "some-name", XWS: "boom"},
 			filter(
-				Filter{"select", "xws", "boo"},
+				SelectFilter("xws", "boo"),
 			),
 			check(expectSelected(), expectNoWarnings()),
 		}, {
 			"Select by xws (failure)",
 			Ship{Name: "some-name", XWS: "boom"},
 			filter(
-				Filter{"select", "xws", "bar"},
+				SelectFilter("xws", "bar"),
 			),
 			check(expectExcluded(), expectNoWarnings()),
 		},
