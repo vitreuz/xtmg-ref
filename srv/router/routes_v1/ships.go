@@ -5,14 +5,17 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/vitreuz/xtmg-ref/srv/models"
+
+	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 )
 
 //go:generate counterfeiter . ShipDatabase
 type ShipDatabase interface {
 	ReadShips(...models.Filter) ([]models.Ship, error)
+	ReadShipsByFaction(string, ...models.Filter) ([]models.Ship, error)
+	ReadShipByXWS(string) (models.Ship, error)
 }
 
 //go:generate counterfeiter . ShipActor
@@ -42,6 +45,37 @@ func (rh RouteHandlers) ListShips(w http.ResponseWriter, r *http.Request) {
 	WriteBody(w, Ships{ships})
 }
 
+func (rh RouteHandlers) ListFactionShips(w http.ResponseWriter, r *http.Request) {
+	faction := mux.Vars(r)["faction"]
+	queries := r.URL.Query()
+
+	ships, err := rh.db.ReadShipsByFaction(faction, filters(queries)...)
+	if err != nil {
+		logrus.WithError(err).Error("reading ReadShips")
+		return
+	}
+
+	ships, err = rh.actor.ListShips(ships, queries["sort"]...)
+	if err != nil {
+		logrus.WithError(err).Error("from ListShips")
+		return
+	}
+
+	WriteBody(w, Ships{ships})
+}
+
+func (rh RouteHandlers) FetchShip(w http.ResponseWriter, r *http.Request) {
+	xws := mux.Vars(r)["ship_xws"]
+
+	ship, err := rh.db.ReadShipByXWS(xws)
+	if err != nil {
+		logrus.WithError(err).Error("reading ReadShipsByXWS")
+		return
+	}
+
+	WriteBody(w, ship)
+}
+
 func filters(q url.Values) []models.Filter {
 	filters := []models.Filter{}
 	for _, filter := range q["select"] {
@@ -54,7 +88,4 @@ func filters(q url.Values) []models.Filter {
 	}
 
 	return filters
-}
-
-func (rh RouteHandlers) FetchShip(w http.ResponseWriter, r *http.Request) {
 }

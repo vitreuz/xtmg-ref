@@ -44,7 +44,10 @@ func initializeRoutes(db v1.Database, actor v1.Actor) Routes {
 	v1 := v1.NewRouteHandler(db, actor)
 
 	return Routes{
-		{Name: "ListShips", Method: "GET", Pattern: "/v1/ships", HandlerFunc: v1.ListShips},
+		{Name: "ListShips", Method: "GET", Pattern: "/v1/{faction}/ships", HandlerFunc: v1.ListFactionShips},
+		{Name: "FetchShip", Method: "GET", Pattern: "/v1/{faction}/ships/{ship_xws}", HandlerFunc: v1.FetchShip},
+		{Name: "ListShipPilots", Method: "GET", Pattern: "/v1/{faction}/ships/{ship_xws}/pilots", HandlerFunc: v1.ListFactionShipPilots},
+		{Name: "FetchShipPilot", Method: "GET", Pattern: "/v1/{faction}/ships/{ship_xws}/pilots/{pilot_xws}", HandlerFunc: v1.FetchFactionShipPilot},
 	}
 
 }

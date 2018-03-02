@@ -7,50 +7,63 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/vitreuz/xtmg-ref/srv/models"
 	. "github.com/vitreuz/xtmg-ref/srv/router/routes_v1"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
-type FakeShipDatabase struct {
+type readShipsMethod struct {
 	Ships []models.Ship
 	Err   error
 }
-
-var databaseShipRet = []models.Ship{
-	{
-		Name: "fake-ship 1",
-	}, {
-		Name: "fake-ship 2",
-	},
+type FakeShipDatabase struct {
+	ReadShipsMethod readShipsMethod
 }
 
+type setReadShips func(readShipsMethod) readShipsMethod
+
+func fakeDatabase(fns ...setReadShips) *FakeShipDatabase {
+	f := &FakeShipDatabase{
+		ReadShipsMethod: readShipsMethod{},
+	}
+
+	for _, fn := range fns {
+		f.ReadShipsMethod = fn(f.ReadShipsMethod)
+	}
+
+	return f
+}
+
+func addReturnShips(ships ...models.Ship) setReadShips {
+	return func(m readShipsMethod) readShipsMethod {
+		m.Ships = append(m.Ships, ships...)
+		return m
+	}
+}
+func addReturnErr
+
 func (f FakeShipDatabase) ReadShips(...models.Filter) ([]models.Ship, error) {
-	return f.Ships, f.Err
+	return f.ReadShipsMethod.Ships, f.ReadShipsMethod.Err
 }
 
 type FakeShipActor struct {
-	ArgShips []models.Ship
+	ListShipsMethod struct {
+		ArgShips []models.Ship
 
-	RetShips []models.Ship
-	Err      error
-}
-
-var actorShipRet = []models.Ship{
-	{
-		Name: "fake-ship 1",
-	}, {
-		Name: "fake-ship 2",
-	},
+		RetShips []models.Ship
+		Err      error
+	}
 }
 
 func (f *FakeShipActor) ListShips(s []models.Ship, b ...string) ([]models.Ship, error) {
-	f.ArgShips = s
-	return f.RetShips, f.Err
+	f.ListShipsMethod.ArgShips = s
+	return f.ListShipsMethod.RetShips, f.ListShipsMethod.Err
 }
 
 func TestListShips(t *testing.T) {
-	fakeDatabase := func() *FakeShipDatabase { return &FakeShipDatabase{Ships: databaseShipRet} }
+
+	fakeDatabase := func() *FakeShipDatabase { return &FakeShipDatabase{{databaseShipRet}} }
 	fakeActor := func() *FakeShipActor { return &FakeShipActor{RetShips: actorShipRet} }
 
 	type checkActorFunc func(*FakeShipActor) []error

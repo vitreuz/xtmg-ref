@@ -21,7 +21,7 @@ func TestReadShips(t *testing.T) {
 	type filterFn func() models.Filter
 	SelectShipByName := func(name string) filterFn {
 		return func() models.Filter {
-			return models.Filter{"select", "name", name}
+			return models.SelectFilter("name", name)
 		}
 	}
 	filter := func(fns ...filterFn) []models.Filter {
@@ -124,7 +124,7 @@ func TestReadShips(t *testing.T) {
 	}
 }
 
-func TestReadShip(t *testing.T) {
+func TestReadShipByXWS(t *testing.T) {
 	if !IS_DB_SET {
 		t.Skip("data not set")
 	}
@@ -163,20 +163,26 @@ func TestReadShip(t *testing.T) {
 
 	tests := [...]struct {
 		name   string
-		ship   int
+		ship   string
 		checks []checkOut
 	}{
 		{
 			"Simple scenario",
-			0,
+			"xwing",
 			check(
 				expectShip("X-wing"),
 			),
 		}, {
 			"Unable to find resource",
-			999,
+			"some-fake-ship",
 			check(
 				expectError(UnableToLocateResourceError{}),
+			),
+		}, {
+			"Search twice",
+			"xwing",
+			check(
+				expectShip("X-wing"),
 			),
 		},
 	}
@@ -187,7 +193,21 @@ func TestReadShip(t *testing.T) {
 			defer os.Remove(tmpDB)
 			db := createTestDB(t, tmpDB)
 
-			ship, err := db.ReadShip(tt.ship)
+			ship, err := db.ReadShipByXWS(tt.ship)
+			for _, check := range tt.checks {
+				if err := check(ship, err); err != nil {
+					t.Error(err)
+				}
+			}
+		})
+	}
+
+	tmpDB := createTempDB(t)
+	defer os.Remove(tmpDB)
+	db := createTestDB(t, tmpDB)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ship, err := db.ReadShipByXWS(tt.ship)
 			for _, check := range tt.checks {
 				if err := check(ship, err); err != nil {
 					t.Error(err)

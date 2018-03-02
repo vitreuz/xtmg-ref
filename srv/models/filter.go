@@ -77,7 +77,7 @@ func (s Ship) selectBy(filter Filter) (bool, error) {
 	case "firing_arcs":
 		return s.selectByFiringArc(filter.value), nil
 	case "xws":
-		return strings.Contains(s.XWS, filter.value), nil
+		return s.XWS == filter.value, nil
 	}
 
 	return filter.isSelect(), UnknownFilter(filter.field)
@@ -144,5 +144,88 @@ func (s Ship) selectByFiringArc(arc string) bool {
 			return true
 		}
 	}
+	return false
+}
+
+func (p Pilot) AppendByFilters(pilots []Pilot, filters ...Filter) ([]Pilot, []Warning) {
+	if len(filters) == 0 {
+		return append(pilots, p), nil
+	}
+
+	warnings := []Warning{}
+	for _, filter := range filters {
+		selected, err := p.selectBy(filter)
+		if err != nil {
+			warnings = append(warnings, Warning{Error: err})
+			continue
+		}
+
+		if filter.isSelect() && !selected {
+			return pilots, warnings
+		}
+		if filter.isExclude() && selected {
+			return pilots, warnings
+		}
+	}
+
+	return append(pilots, p), warnings
+}
+
+func (p Pilot) selectBy(filter Filter) (bool, error) {
+	switch filterBy := filter.field; filterBy {
+	case "name":
+		return p.selectByNameOrXWS(filter.value), nil
+	case "ship":
+		return p.Ship == filter.value, nil
+	case "skill", "points":
+		return p.selectByStat(filterBy, filter.value)
+	case "slots":
+		return p.selectBySlot(filter.value), nil
+	case "faction":
+		return p.selectByFaction(filter.value), nil
+	case "grants":
+	case "xws":
+		return p.XWS == filter.value, nil
+	}
+
+	return filter.isSelect(), UnknownFilter(filter.field)
+}
+
+func (p Pilot) selectByNameOrXWS(name string) bool {
+	return strings.Contains(p.Name, name) || strings.Contains(p.XWS, name)
+}
+
+func (p Pilot) selectByStat(field, value string) (bool, error) {
+	intVal, err := strconv.Atoi(value)
+	if err != nil {
+		return false, err
+	}
+
+	switch field {
+	case "skill":
+		return p.Skill >= intVal, nil
+	case "points":
+		return p.Points >= intVal, nil
+	}
+	return false, nil
+}
+
+func (p Pilot) selectBySlot(slot string) bool {
+	for _, pSlot := range p.Slots {
+		if string(pSlot) == slot {
+			return true
+		}
+	}
+	return false
+}
+
+func (p Pilot) selectByFaction(faction string) bool {
+	if strings.Contains(p.Faction.Simplify(), faction) {
+		return true
+	}
+	if strings.Contains(string(p.Faction.ToSquadronFaction()), faction) {
+		return true
+	}
+
 	return false
 }

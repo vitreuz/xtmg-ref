@@ -246,14 +246,14 @@ func TestShipAppendbyFilters(t *testing.T) {
 			"Select by xws (success)",
 			Ship{Name: "some-name", XWS: "boom"},
 			filter(
-				SelectFilter("xws", "boo"),
+				SelectFilter("xws", "boom"),
 			),
 			check(expectSelected(), expectNoWarnings()),
 		}, {
 			"Select by xws (failure)",
 			Ship{Name: "some-name", XWS: "boom"},
 			filter(
-				SelectFilter("xws", "bar"),
+				SelectFilter("xws", "boo"),
 			),
 			check(expectExcluded(), expectNoWarnings()),
 		},
@@ -263,6 +263,138 @@ func TestShipAppendbyFilters(t *testing.T) {
 			ships, warnings := tt.ship.AppendByFilters([]Ship{}, tt.filters...)
 			for _, check := range tt.checks {
 				for _, checkErr := range check(ships, warnings) {
+					if checkErr != nil {
+						t.Error(checkErr)
+					}
+				}
+			}
+		})
+	}
+}
+
+func TestPilotAppendByFilters(t *testing.T) {
+	type checkOut func([]Pilot, []Warning) []error
+	check := func(fns ...checkOut) []checkOut { return fns }
+
+	expectSelected := func() checkOut {
+		return func(pilots []Pilot, warnings []Warning) []error {
+			if len(pilots) != 1 {
+				return []error{errors.New(
+					"expected pilots to be selected, but it wasn't",
+				)}
+			}
+			return nil
+		}
+	}
+	expectExcluded := func() checkOut {
+		return func(pilots []Pilot, warnings []Warning) []error {
+			if len(pilots) != 0 {
+				return []error{errors.New(
+					"expected pilots to be excluded, but it wasn't",
+				)}
+			}
+			return nil
+		}
+	}
+	expectNoWarnings := func() checkOut {
+		return func(pilots []Pilot, warnings []Warning) []error {
+			if len(warnings) != 0 {
+				for _, warning := range warnings {
+					return []error{fmt.Errorf(
+						"expected to not have any warnings but got %+v",
+						warning,
+					)}
+				}
+			}
+			return nil
+		}
+
+	}
+	expectWarning := func(warning Warning) checkOut {
+		return func(pilots []Pilot, warnings []Warning) []error {
+			errs := []error{}
+			if len(warnings) != 1 {
+				errs = append(errs, fmt.Errorf(
+					"expected to have warning %+v, but got none",
+					warning,
+				))
+			}
+			return errs
+		}
+	}
+
+	filter := func(filters ...Filter) []Filter { return filters }
+	warning := func(err error) Warning { return Warning{Error: err} }
+
+	tests := [...]struct {
+		name    string
+		pilot   Pilot
+		filters []Filter
+		checks  []checkOut
+	}{
+		{
+			"No filters",
+			Pilot{Name: "fake-pilot-1"},
+			nil,
+			check(expectSelected(), expectNoWarnings()),
+		}, {
+			"Bad filter",
+			Pilot{Name: "fake-pilot-1"},
+			filter(SelectFilter("bad", "bar")),
+			check(expectSelected(), expectWarning(warning(UnknownFilter("")))),
+		}, {
+			"Select by name (success)",
+			Pilot{Name: "fake-pilot-1"},
+			filter(SelectFilter("name", "fake")),
+			check(expectSelected(), expectNoWarnings()),
+		}, {
+			"Select by name (failure)",
+			Pilot{Name: "fake-pilot-1"},
+			filter(SelectFilter("name", "bar")),
+			check(expectExcluded(), expectNoWarnings()),
+		}, {
+			"Select by name-xws (success)",
+			Pilot{Name: "fake-pilot-1", XWS: "bar"},
+			filter(SelectFilter("name", "bar")),
+			check(expectSelected(), expectNoWarnings()),
+		}, {
+			"Select by ship (success)",
+			Pilot{Name: "fake-pilot-1", Ship: "fake-ship"},
+			filter(SelectFilter("ship", "fake-ship")),
+			check(expectSelected(), expectNoWarnings()),
+		}, {
+			"Select by ship (failure)",
+			Pilot{Name: "fake-pilot-1"},
+			filter(SelectFilter("ship", "bar")),
+			check(expectExcluded(), expectNoWarnings()),
+		}, {
+			"Select by stat (success)",
+			Pilot{Name: "fake-pilot-1", Skill: 9},
+			filter(SelectFilter("skill", "9")),
+			check(expectSelected(), expectNoWarnings()),
+		}, {
+			"Select by stat (failure)",
+			Pilot{Name: "fake-pilot-1", Points: 20},
+			filter(SelectFilter("points", "25")),
+			check(expectExcluded(), expectNoWarnings()),
+		}, {
+			"Exclude by stat (success)",
+			Pilot{Name: "fake-pilot-1", Points: 25},
+			filter(ExcludeFilter("points", "20")),
+			check(expectExcluded(), expectNoWarnings()),
+		}, {
+			"Exclude by stat (failure)",
+			Pilot{Name: "fake-pilot-1", Skill: 5},
+			filter(ExcludeFilter("skill", "7")),
+			check(expectSelected(), expectNoWarnings()),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			pilots, warnings := tt.pilot.AppendByFilters([]Pilot{}, tt.filters...)
+			for _, check := range tt.checks {
+				for _, checkErr := range check(pilots, warnings) {
 					if checkErr != nil {
 						t.Error(checkErr)
 					}

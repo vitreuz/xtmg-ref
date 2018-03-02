@@ -9,6 +9,7 @@ import (
 
 type Database interface {
 	ShipDatabase
+	PilotDatabase
 }
 
 type Actor interface {

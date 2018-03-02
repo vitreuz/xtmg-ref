@@ -31,17 +31,17 @@ type Pilot struct {
 	Text    string                 `json:"text"`
 	Faction constant.UnitFaction   `json:"faction"`
 
-	ShipOverride pilotOverride `json:"ship_override,omitempty"`
-	Grants       []pilotGrant  `json:"grants,omitempty"`
+	ShipOverride *pilotOverride `json:"ship_override,omitempty"`
+	Grants       []pilotGrant   `json:"grants,omitempty"`
 
 	XWS string `json:"xws"`
 }
 
 type pilotOverride struct {
-	Attack  int `json:"attack"`
-	Agiliy  int `json:"agiliy"`
-	Hull    int `json:"hull"`
-	Shields int `json:"shields"`
+	Attack  int `json:"attack,omitempty"`
+	Agiliy  int `json:"agiliy,omitempty"`
+	Hull    int `json:"hull,omitempty"`
+	Shields int `json:"shields,omitempty"`
 }
 
 type pilotGrant struct {

@@ -25,7 +25,28 @@ func (db DB) ReadShips(filters ...models.Filter) ([]models.Ship, error) {
 	return ships, err
 }
 
-func (db DB) ReadShip(id int) (models.Ship, error) {
+func (db DB) ReadShipsByFaction(faction string, filters ...models.Filter) ([]models.Ship, error) {
+	return db.ReadShips(append(filters, models.SelectFilter("faction", faction))...)
+}
+
+func (db DB) ReadShipByXWS(xws string) (models.Ship, error) {
+	if id, ok := db.shipCache[xws]; ok {
+		return db.readShip(id)
+	}
+
+	ships, err := db.ReadShips(models.SelectFilter("xws", xws))
+	if err != nil {
+		return models.Ship{}, err
+	}
+	if len(ships) != 1 {
+		return models.Ship{}, UnableToLocateResourceError{XWS: xws}
+	}
+
+	db.shipCache[xws] = ships[0].ID
+	return ships[0], nil
+}
+
+func (db DB) readShip(id int) (models.Ship, error) {
 	var ship models.Ship
 
 	err := db.Data.View(func(tx *bolt.Tx) error {

@@ -11,15 +11,22 @@ import (
 
 type DB struct {
 	Data *bolt.DB
+
+	shipCache  map[string]int
+	pilotCache map[string]int
 }
 
 func Open(path string) (*DB, error) {
+
 	b, err := bolt.Open(path, 0655, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return &DB{Data: b}, nil
+	return &DB{
+		Data:      b,
+		shipCache: map[string]int{}, pilotCache: map[string]int{},
+	}, nil
 }
 
 func decodeResource(data []byte, v interface{}) error {
@@ -27,11 +34,23 @@ func decodeResource(data []byte, v interface{}) error {
 }
 
 type UnableToLocateResourceError struct {
-	ID int
+	ID  int
+	XWS string
 }
 
 func (e UnableToLocateResourceError) Error() string {
+	if e.XWS != "" {
+		return fmt.Sprintf("unable to locate resource %s", e.XWS)
+	}
 	return fmt.Sprintf("unable to locate resource %d", e.ID)
+}
+
+type ImpreciseIdentifierError struct {
+	XWS string
+}
+
+func (e ImpreciseIdentifierError) Error() string {
+	return fmt.Sprintf("%s is too imprecise for resource", e.XWS)
 }
 
 func (db DB) reads(bucket string, readFn func(k, v []byte) error) error {
