@@ -12,8 +12,9 @@ import (
 type DB struct {
 	Data *bolt.DB
 
-	shipCache  map[string]int
-	pilotCache map[string]int
+	shipCache    map[string]int
+	pilotCache   map[string]int
+	upgradeCache map[string]int
 }
 
 func Open(path string) (*DB, error) {
@@ -25,7 +26,7 @@ func Open(path string) (*DB, error) {
 
 	return &DB{
 		Data:      b,
-		shipCache: map[string]int{}, pilotCache: map[string]int{},
+		shipCache: map[string]int{}, pilotCache: map[string]int{}, upgradeCache: map[string]int{},
 	}, nil
 }
 

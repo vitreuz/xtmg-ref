@@ -48,6 +48,8 @@ func initializeRoutes(db v1.Database, actor v1.Actor) Routes {
 		{Name: "FetchShip", Method: "GET", Pattern: "/v1/{faction}/ships/{ship_xws}", HandlerFunc: v1.FetchShip},
 		{Name: "ListShipPilots", Method: "GET", Pattern: "/v1/{faction}/ships/{ship_xws}/pilots", HandlerFunc: v1.ListFactionShipPilots},
 		{Name: "FetchShipPilot", Method: "GET", Pattern: "/v1/{faction}/ships/{ship_xws}/pilots/{pilot_xws}", HandlerFunc: v1.FetchFactionShipPilot},
+		{Name: "ListUpgrades", Method: "GET", Pattern: "/v1/upgrades", HandlerFunc: v1.ListUpgrades},
+		{Name: "FetchUpgrade", Method: "GET", Pattern: "/v1/upgrades/{upgrade_xws}", HandlerFunc: v1.FetchUpgrade},
 	}
 
 }

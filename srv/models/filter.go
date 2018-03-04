@@ -229,3 +229,66 @@ func (p Pilot) selectByFaction(faction string) bool {
 
 	return false
 }
+
+func (u Upgrade) AppendByFilters(upgrades []Upgrade, filters ...Filter) ([]Upgrade, []Warning) {
+	if len(filters) == 0 {
+		return append(upgrades, u), nil
+	}
+
+	warnings := []Warning{}
+	for _, filter := range filters {
+		selected, err := u.selectBy(filter)
+		if err != nil {
+			warnings = append(warnings, Warning{Error: err})
+			continue
+		}
+
+		if filter.isSelect() && !selected {
+			return upgrades, warnings
+		}
+		if filter.isExclude() && selected {
+			return upgrades, warnings
+		}
+	}
+
+	return append(upgrades, u), warnings
+}
+
+func (u Upgrade) selectBy(filter Filter) (bool, error) {
+	switch filterBy := filter.field; filterBy {
+	case "name":
+		return u.selectByNameOrXWS(filter.value), nil
+	case "unique":
+		return u.Unique, nil
+	case "limited":
+		return u.Limited, nil
+	case "slot":
+		return string(u.Slot) == filter.value, nil
+	case "points":
+		return u.selectByStat(filterBy, filter.value)
+	case "ship":
+	case "faction":
+	case "grants":
+	case "xws":
+		return u.XWS == filter.value, nil
+	}
+
+	return filter.isSelect(), UnknownFilter(filter.field)
+}
+
+func (u Upgrade) selectByNameOrXWS(name string) bool {
+	return strings.Contains(u.Name, name) || strings.Contains(u.XWS, name)
+}
+
+func (u Upgrade) selectByStat(field, value string) (bool, error) {
+	intVal, err := strconv.Atoi(value)
+	if err != nil {
+		return false, err
+	}
+
+	switch field {
+	case "points":
+		return u.Points >= intVal, nil
+	}
+	return false, nil
+}
