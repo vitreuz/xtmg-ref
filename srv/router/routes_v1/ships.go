@@ -13,7 +13,7 @@ import (
 
 //go:generate counterfeiter . ShipDatabase
 type ShipDatabase interface {
-	ReadShips(...models.Filter) ([]models.Ship, error)
+	ReadShips(filters ...models.Filter) (ships []models.Ship, err error)
 	ReadShipsByFaction(string, ...models.Filter) ([]models.Ship, error)
 	ReadShipByXWS(string) (models.Ship, error)
 }

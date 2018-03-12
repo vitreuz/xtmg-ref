@@ -8,6 +8,7 @@ import (
 )
 
 type Database interface {
+	GameDatabase
 	ShipDatabase
 	PilotDatabase
 	UpgradeDatabase
@@ -31,7 +32,7 @@ type metadata struct {
 }
 
 var Metadata = metadata{
-	APIVersion: "v1",
+	APIVersion: "v1-unstable",
 }
 
 type body struct {
