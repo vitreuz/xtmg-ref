@@ -2,12 +2,13 @@ package database
 
 import (
 	"bytes"
-	"encoding/binary"
 	"encoding/gob"
 	"fmt"
 
 	"github.com/boltdb/bolt"
 )
+
+//go:generate table-mocks $GOFILE -s Resource
 
 type DB struct {
 	Data *bolt.DB
@@ -52,17 +53,4 @@ type ImpreciseIdentifierError struct {
 
 func (e ImpreciseIdentifierError) Error() string {
 	return fmt.Sprintf("%s is too imprecise for resource", e.XWS)
-}
-
-func (db DB) reads(bucket string, readFn func(k, v []byte) error) error {
-	return db.Data.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte(bucket))
-		return b.ForEach(readFn)
-	})
-}
-
-func (db DB) itob(v int) []byte {
-	b := make([]byte, 8)
-	binary.BigEndian.PutUint64(b, uint64(v))
-	return b
 }
