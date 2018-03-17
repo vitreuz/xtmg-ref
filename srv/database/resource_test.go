@@ -22,7 +22,7 @@ func checkResources(fns ...checkResource) []checkResource { return fns }
 
 func expectFirstShip(expect models.Ship) checkResource {
 	return func(mock *fake.Resource) []error {
-		data, _ := mock.AppendByFilterGetArgs()
+		data, _ := mock.FilterDecodeGetArgs()
 
 		var actual models.Ship
 		if err := gob.NewDecoder(bytes.NewBuffer(data)).Decode(&actual); err != nil {
@@ -43,7 +43,7 @@ func expectFirstShip(expect models.Ship) checkResource {
 
 func expectFirstPilot(expect models.Pilot) checkResource {
 	return func(mock *fake.Resource) []error {
-		data, _ := mock.AppendByFilterGetArgs()
+		data, _ := mock.FilterDecodeGetArgs()
 
 		var actual models.Pilot
 		if err := gob.NewDecoder(bytes.NewBuffer(data)).Decode(&actual); err != nil {
@@ -64,7 +64,7 @@ func expectFirstPilot(expect models.Pilot) checkResource {
 
 func expectFirstUpgrade(expect models.Upgrade) checkResource {
 	return func(mock *fake.Resource) []error {
-		data, _ := mock.AppendByFilterGetArgs()
+		data, _ := mock.FilterDecodeGetArgs()
 
 		var actual models.Upgrade
 		if err := gob.NewDecoder(bytes.NewBuffer(data)).Decode(&actual); err != nil {
@@ -85,10 +85,10 @@ func expectFirstUpgrade(expect models.Upgrade) checkResource {
 
 func expectResourceCount(expect int) checkResource {
 	return func(mock *fake.Resource) []error {
-		actual := mock.AppendByFilterCalls
+		actual := mock.FilterDecodeCalls
 		if actual != expect {
 			return []error{fmt.Errorf(
-				"expectd to have %d resources but got %d", actual, expect,
+				"expectd to have %d resources but got %d", expect, actual,
 			)}
 		}
 		return nil
@@ -145,7 +145,7 @@ func TestDB_ReadResources(t *testing.T) {
 				expectFirstUpgrade(models.Upgrade{
 					Name: "Ion Cannon Turret",
 				}),
-				expectResourceCount(287),
+				expectResourceCount(358),
 			),
 			checks(),
 		},

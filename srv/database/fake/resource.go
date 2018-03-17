@@ -9,19 +9,13 @@ import (
 )
 
 type Resource struct {
-	appendByFilterMethod map[int]ResourceAppendByFilterMethod
-	appendByFilterMutex  sync.RWMutex
-	AppendByFilterCalls  int
-
 	decodeMethod map[int]ResourceDecodeMethod
 	decodeMutex  sync.RWMutex
 	DecodeCalls  int
-}
 
-type ResourceAppendByFilterMethod struct {
-	Data      []byte
-	Filters   []database.Filter
-	ErrResult error
+	filterDecodeMethod map[int]ResourceFilterDecodeMethod
+	filterDecodeMutex  sync.RWMutex
+	FilterDecodeCalls  int
 }
 
 type ResourceDecodeMethod struct {
@@ -29,54 +23,16 @@ type ResourceDecodeMethod struct {
 	ErrResult error
 }
 
+type ResourceFilterDecodeMethod struct {
+	Data      []byte
+	Filters   []database.Filter
+	ErrResult error
+}
+
 func NewResource() *Resource {
 	fake := &Resource{}
-	fake.appendByFilterMethod = make(map[int]ResourceAppendByFilterMethod)
 	fake.decodeMethod = make(map[int]ResourceDecodeMethod)
-
-	return fake
-}
-
-func (fake *Resource) AppendByFilter(data []byte, filters ...database.Filter) (errResult error) {
-	fake.appendByFilterMutex.Lock()
-	fakeMethod := fake.appendByFilterMethod[fake.AppendByFilterCalls]
-	fakeMethod.Data = data
-	fakeMethod.Filters = filters
-	fake.appendByFilterMethod[fake.AppendByFilterCalls] = fakeMethod
-	fake.AppendByFilterCalls++
-	fake.appendByFilterMutex.Unlock()
-
-	return fakeMethod.ErrResult
-}
-
-func (fake *Resource) AppendByFilterReturns(errResult error) *Resource {
-	fake.appendByFilterMutex.Lock()
-	fakeMethod := fake.appendByFilterMethod[0]
-	fakeMethod.ErrResult = errResult
-	fake.appendByFilterMethod[0] = fakeMethod
-	fake.appendByFilterMutex.Unlock()
-
-	return fake
-}
-
-func (fake *Resource) AppendByFilterGetArgs() (data []byte, filters []database.Filter) {
-	fake.appendByFilterMutex.RLock()
-	data = fake.appendByFilterMethod[0].Data
-	filters = fake.appendByFilterMethod[0].Filters
-	fake.appendByFilterMutex.RUnlock()
-
-	return data, filters
-}
-
-type ResourceAppendByFilterFunc func(ResourceAppendByFilterMethod) ResourceAppendByFilterMethod
-
-func (fake *Resource) AppendByFilterForCall(call int, fns ...ResourceAppendByFilterFunc) *Resource {
-	fake.appendByFilterMutex.Lock()
-	for _, fn := range fns {
-		fakeMethod := fake.appendByFilterMethod[call]
-		fake.appendByFilterMethod[call] = fn(fakeMethod)
-	}
-	fake.appendByFilterMutex.Unlock()
+	fake.filterDecodeMethod = make(map[int]ResourceFilterDecodeMethod)
 
 	return fake
 }
@@ -119,6 +75,50 @@ func (fake *Resource) DecodeForCall(call int, fns ...ResourceDecodeFunc) *Resour
 		fake.decodeMethod[call] = fn(fakeMethod)
 	}
 	fake.decodeMutex.Unlock()
+
+	return fake
+}
+
+func (fake *Resource) FilterDecode(data []byte, filters ...database.Filter) (errResult error) {
+	fake.filterDecodeMutex.Lock()
+	fakeMethod := fake.filterDecodeMethod[fake.FilterDecodeCalls]
+	fakeMethod.Data = data
+	fakeMethod.Filters = filters
+	fake.filterDecodeMethod[fake.FilterDecodeCalls] = fakeMethod
+	fake.FilterDecodeCalls++
+	fake.filterDecodeMutex.Unlock()
+
+	return fakeMethod.ErrResult
+}
+
+func (fake *Resource) FilterDecodeReturns(errResult error) *Resource {
+	fake.filterDecodeMutex.Lock()
+	fakeMethod := fake.filterDecodeMethod[0]
+	fakeMethod.ErrResult = errResult
+	fake.filterDecodeMethod[0] = fakeMethod
+	fake.filterDecodeMutex.Unlock()
+
+	return fake
+}
+
+func (fake *Resource) FilterDecodeGetArgs() (data []byte, filters []database.Filter) {
+	fake.filterDecodeMutex.RLock()
+	data = fake.filterDecodeMethod[0].Data
+	filters = fake.filterDecodeMethod[0].Filters
+	fake.filterDecodeMutex.RUnlock()
+
+	return data, filters
+}
+
+type ResourceFilterDecodeFunc func(ResourceFilterDecodeMethod) ResourceFilterDecodeMethod
+
+func (fake *Resource) FilterDecodeForCall(call int, fns ...ResourceFilterDecodeFunc) *Resource {
+	fake.filterDecodeMutex.Lock()
+	for _, fn := range fns {
+		fakeMethod := fake.filterDecodeMethod[call]
+		fake.filterDecodeMethod[call] = fn(fakeMethod)
+	}
+	fake.filterDecodeMutex.Unlock()
 
 	return fake
 }

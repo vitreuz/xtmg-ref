@@ -7,8 +7,8 @@ import (
 )
 
 type Resource interface {
-	AppendByFilter(data []byte, filters ...Filter) error
 	Decode(data []byte) error
+	FilterDecode(data []byte, filters ...Filter) error
 }
 
 type Filter struct {
@@ -20,7 +20,7 @@ type Filter struct {
 func (db DB) ReadResources(bucket string, resource Resource, filters ...Filter) error {
 	return db.Data.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
-		return b.ForEach(func(k, v []byte) error { return resource.AppendByFilter(v, filters...) })
+		return b.ForEach(func(k, v []byte) error { return resource.FilterDecode(v, filters...) })
 	})
 }
 
