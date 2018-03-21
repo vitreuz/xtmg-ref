@@ -2,13 +2,16 @@ package v1
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/sirupsen/logrus"
 )
 
+//go:generate table-mocks $GOFILE -s Database
+
 type Database interface {
-	GameDatabase
+	GamesDatabase
 	ShipDatabase
 	PilotDatabase
 	UpgradeDatabase
@@ -50,5 +53,6 @@ func WriteBody(w http.ResponseWriter, v interface{}) {
 
 	if err := json.NewEncoder(w).Encode(body); err != nil {
 		logrus.WithError(err).Error("json encoding")
+		http.Error(w, fmt.Sprintf("json encoding %T: %v", v, err), http.StatusInternalServerError)
 	}
 }

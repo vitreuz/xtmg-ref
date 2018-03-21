@@ -4,11 +4,13 @@ import (
 	"encoding/binary"
 
 	"github.com/boltdb/bolt"
+	"github.com/vitreuz/xtmg-ref/srv/models"
 )
 
+//go:generate table-mocks $GOFILE -s Resource
+
 type Resource interface {
-	Decode(data []byte) error
-	FilterDecode(data []byte, filters ...Filter) error
+	FilterDecode(data []byte, filters ...models.Filter) error
 }
 
 type Filter struct {
@@ -17,7 +19,7 @@ type Filter struct {
 	value  string
 }
 
-func (db DB) ReadResources(bucket string, resource Resource, filters ...Filter) error {
+func (db DB) ReadResources(bucket string, resource Resource, filters ...models.Filter) error {
 	return db.Data.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
 		return b.ForEach(func(k, v []byte) error { return resource.FilterDecode(v, filters...) })
@@ -27,7 +29,7 @@ func (db DB) ReadResources(bucket string, resource Resource, filters ...Filter) 
 func (db DB) ReadResource(bucket string, id int, resource Resource) error {
 	return db.Data.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
-		return resource.Decode(b.Get(db.itob(id)))
+		return resource.FilterDecode(b.Get(db.itob(id)))
 	})
 }
 

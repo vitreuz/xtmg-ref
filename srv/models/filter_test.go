@@ -3,6 +3,8 @@ package models
 import (
 	"errors"
 	"fmt"
+	"net/url"
+	"reflect"
 	"testing"
 
 	"github.com/vitreuz/xtmg-ref/srv/models/constant"
@@ -399,6 +401,66 @@ func TestPilotAppendByFilters(t *testing.T) {
 						t.Error(checkErr)
 					}
 				}
+			}
+		})
+	}
+}
+
+func TestNewFilters(t *testing.T) {
+	type urlValue struct {
+		key   string
+		value []string
+	}
+	u := func(key string, values ...string) urlValue { return urlValue{key, values} }
+	urlValues := func(tableValue ...urlValue) url.Values {
+		values := make(url.Values)
+		for _, tableValue := range tableValue {
+			values[tableValue.key] = tableValue.value
+		}
+		return values
+	}
+
+	tests := []struct {
+		name    string
+		values  url.Values
+		want    []Filter
+		wantErr bool
+	}{
+		{
+			"when values is empty",
+			urlValues(),
+			[]Filter{},
+			false,
+		}, {
+			"when a single string value is provided",
+			urlValues(
+				u("some-key", "select:some-value"),
+			),
+			[]Filter{
+				{constant.FilterSelect, "some-key", "some-value"},
+			},
+			false,
+		}, {
+			"when a bad value is provided",
+			urlValues(
+				u("some-key", "some-bad-value"),
+			),
+			[]Filter{},
+			true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := NewFilters(tt.values)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NewFilters() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if len(tt.want) == 0 && len(got) != 0 {
+				t.Errorf("NewFilters() len = %d, want %d", len(got), len(tt.want))
+			}
+			if len(tt.want) != 0 && !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewFilters() = %v, want %v", got, tt.want)
 			}
 		})
 	}

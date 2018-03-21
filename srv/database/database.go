@@ -5,6 +5,8 @@ import (
 	"encoding/gob"
 	"fmt"
 
+	"github.com/vitreuz/xtmg-ref/srv/database/constant"
+
 	"github.com/boltdb/bolt"
 )
 
@@ -24,11 +26,21 @@ func Open(path string) (*DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	if err := seedBolt(b); err != nil {
+		return nil, err
+	}
 
 	return &DB{
 		Data:      b,
 		shipCache: map[string]int{}, pilotCache: map[string]int{}, upgradeCache: map[string]int{},
 	}, nil
+}
+
+func seedBolt(db *bolt.DB) error {
+	return db.Update(func(tx *bolt.Tx) error {
+		_, err := tx.CreateBucketIfNotExists([]byte(constant.GamesBucket))
+		return err
+	})
 }
 
 func decodeResource(data []byte, v interface{}) error {

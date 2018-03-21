@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -12,6 +13,41 @@ type Filter struct {
 	method constant.FilterMethod
 	field  string
 	value  string
+}
+
+func NewFilters(values url.Values) ([]Filter, error) {
+	var filters []Filter
+
+	for field, methodValues := range values {
+		for _, methodValue := range methodValues {
+			method, value, err := parseURLValue(methodValue)
+			if err != nil {
+				return nil, err
+			}
+			filters = append(filters, Filter{method, field, value})
+		}
+	}
+
+	return filters, nil
+}
+
+func parseURLValue(urlValue string) (constant.FilterMethod, string, error) {
+	split := strings.Split(urlValue, ":")
+	if len(split) < 2 {
+		return "", "", InvalidFilterValue(urlValue)
+	}
+
+	return constant.FilterMethod(split[0]), split[1], nil
+}
+
+type InvalidFilterValue string
+
+func (e InvalidFilterValue) Error() string {
+	return fmt.Sprintf("invalid filter value: %s", string(e))
+}
+
+func (w InvalidFilterValue) Warning() string {
+	return w.Error()
 }
 
 func SelectFilter(field, value string) Filter {

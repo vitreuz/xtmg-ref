@@ -3,83 +3,35 @@
 package fake
 
 import (
+	"github.com/vitreuz/xtmg-ref/srv/models"
 	"sync"
-
-	"github.com/vitreuz/xtmg-ref/srv/database"
 )
 
 type Resource struct {
-	decodeMethod map[int]ResourceDecodeMethod
-	decodeMutex  sync.RWMutex
-	DecodeCalls  int
-
 	filterDecodeMethod map[int]ResourceFilterDecodeMethod
 	filterDecodeMutex  sync.RWMutex
 	FilterDecodeCalls  int
 }
 
-type ResourceDecodeMethod struct {
+type ResourceFilterDecodeMethod struct {
 	Data      []byte
+	Filters   []models.Filter
 	ErrResult error
 }
 
-type ResourceFilterDecodeMethod struct {
-	Data      []byte
-	Filters   []database.Filter
-	ErrResult error
+type ResourceFilterDecodeCall struct {
+	call int
+	fake *Resource
 }
 
 func NewResource() *Resource {
 	fake := &Resource{}
-	fake.decodeMethod = make(map[int]ResourceDecodeMethod)
 	fake.filterDecodeMethod = make(map[int]ResourceFilterDecodeMethod)
 
 	return fake
 }
 
-func (fake *Resource) Decode(data []byte) (errResult error) {
-	fake.decodeMutex.Lock()
-	fakeMethod := fake.decodeMethod[fake.DecodeCalls]
-	fakeMethod.Data = data
-	fake.decodeMethod[fake.DecodeCalls] = fakeMethod
-	fake.DecodeCalls++
-	fake.decodeMutex.Unlock()
-
-	return fakeMethod.ErrResult
-}
-
-func (fake *Resource) DecodeReturns(errResult error) *Resource {
-	fake.decodeMutex.Lock()
-	fakeMethod := fake.decodeMethod[0]
-	fakeMethod.ErrResult = errResult
-	fake.decodeMethod[0] = fakeMethod
-	fake.decodeMutex.Unlock()
-
-	return fake
-}
-
-func (fake *Resource) DecodeGetArgs() (data []byte) {
-	fake.decodeMutex.RLock()
-	data = fake.decodeMethod[0].Data
-	fake.decodeMutex.RUnlock()
-
-	return data
-}
-
-type ResourceDecodeFunc func(ResourceDecodeMethod) ResourceDecodeMethod
-
-func (fake *Resource) DecodeForCall(call int, fns ...ResourceDecodeFunc) *Resource {
-	fake.decodeMutex.Lock()
-	for _, fn := range fns {
-		fakeMethod := fake.decodeMethod[call]
-		fake.decodeMethod[call] = fn(fakeMethod)
-	}
-	fake.decodeMutex.Unlock()
-
-	return fake
-}
-
-func (fake *Resource) FilterDecode(data []byte, filters ...database.Filter) (errResult error) {
+func (fake *Resource) FilterDecode(data []byte, filters ...models.Filter) (errResult error) {
 	fake.filterDecodeMutex.Lock()
 	fakeMethod := fake.filterDecodeMethod[fake.FilterDecodeCalls]
 	fakeMethod.Data = data
@@ -101,7 +53,7 @@ func (fake *Resource) FilterDecodeReturns(errResult error) *Resource {
 	return fake
 }
 
-func (fake *Resource) FilterDecodeGetArgs() (data []byte, filters []database.Filter) {
+func (fake *Resource) FilterDecodeGetArgs() (data []byte, filters []models.Filter) {
 	fake.filterDecodeMutex.RLock()
 	data = fake.filterDecodeMethod[0].Data
 	filters = fake.filterDecodeMethod[0].Filters
@@ -110,15 +62,27 @@ func (fake *Resource) FilterDecodeGetArgs() (data []byte, filters []database.Fil
 	return data, filters
 }
 
-type ResourceFilterDecodeFunc func(ResourceFilterDecodeMethod) ResourceFilterDecodeMethod
-
-func (fake *Resource) FilterDecodeForCall(call int, fns ...ResourceFilterDecodeFunc) *Resource {
+func (fake *Resource) FilterDecodeForCall(call int) *ResourceFilterDecodeCall {
 	fake.filterDecodeMutex.Lock()
-	for _, fn := range fns {
-		fakeMethod := fake.filterDecodeMethod[call]
-		fake.filterDecodeMethod[call] = fn(fakeMethod)
-	}
-	fake.filterDecodeMutex.Unlock()
 
-	return fake
+	return &ResourceFilterDecodeCall{call: call, fake: fake}
 }
+
+func (on *ResourceFilterDecodeCall) Returns(errResult error) *Resource {
+	fakeMethod := on.fake.filterDecodeMethod[on.call]
+	fakeMethod.ErrResult = errResult
+	on.fake.filterDecodeMethod[on.call] = fakeMethod
+	on.fake.filterDecodeMutex.Unlock()
+
+	return on.fake
+}
+
+func (on *ResourceFilterDecodeCall) GetArgs() (data []byte, filters []models.Filter, called bool) {
+	_, called = on.fake.filterDecodeMethod[on.call]
+	data = on.fake.filterDecodeMethod[on.call].Data
+	filters = on.fake.filterDecodeMethod[on.call].Filters
+	on.fake.filterDecodeMutex.Unlock()
+
+	return data, filters, called
+}
+

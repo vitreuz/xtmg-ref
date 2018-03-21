@@ -1,6 +1,8 @@
 package constant
 
 const (
+	GamesBucket = "games"
+
 	// PilotsBucket is the string representation of the pilots bucket key.
 	PilotsBucket = "pilots"
 
