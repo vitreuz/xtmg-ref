@@ -5,6 +5,8 @@ import ActionBar from "./components/ActionBar";
 import Icon from "./components/Icon";
 import ManeuverCard from "./components/ManeuverCard";
 import Statline from "./components/Statline";
+import Games from "./components/Games";
+import App from "./components/App";
 
 import "./index.css";
 import AltStyle from "./components/Util/AlternateStyles";
@@ -113,19 +115,16 @@ const unit = {
 
 class Ship extends React.Component {
   render() {
-    const pilot = Pilots.get(unit.name);
-    const ship = Ships.get(unit.ship);
+    // const pilot = Pilots.get(unit.name);
+    // const ship = Ships.get(unit.ship);
 
-    const upgrades = Array.from(unit.upgrades).map(([key, value]) => [
-      key,
-      Upgrades.get(value)
-    ]);
+    // const upgrades = Array.from(unit.upgrades).map(([key, value]) => [
+    //   key,
+    //   Upgrades.get(value)
+    // ]);
 
-    console.log(upgrades);
-
-    return (
-      <div>
-        <div className="ship">
+    return <App />;
+    /* <div className="ship">
           <div className="ship-top">
             <div className="ship-left">
               <div className="ship-icon">
@@ -156,9 +155,7 @@ class Ship extends React.Component {
           <div className="ship-maneuver-card">
             <ManeuverCard maneuvers={ship.maneuvers} />
           </div>
-        </div>
-      </div>
-    );
+        </div> */
   }
 }
 
