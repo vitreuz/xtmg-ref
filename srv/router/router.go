@@ -8,6 +8,7 @@ import (
 	"github.com/vitreuz/xtmg-ref/srv/router/routes_v1"
 
 	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 )
 
 type Route struct {
@@ -35,7 +36,7 @@ func NewRouter(dbPath string) *mux.Router {
 			Methods(route.Method).
 			Path(route.Pattern).
 			Name(route.Name).
-			Handler(route.HandlerFunc)
+			Handler(LogMiddleWare(route))
 	}
 	return router
 }
@@ -58,4 +59,18 @@ func initializeRoutes(db v1.Database, actor v1.Actor) Routes {
 		{Name: "FetchHotACPlayer", Method: "GET", Pattern: "/v1/games/{game_uuid}/players/{player_uuid}"},
 	}
 
+}
+
+func LogMiddleWare(route Route) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		log.WithFields(log.Fields{
+			"method":  route.Method,
+			"pattern": r.URL.Path,
+			"params":  r.URL.Query(),
+		}).Info("REQ: ", route.Name)
+
+		route.HandlerFunc(w, r)
+
+		log.WithFields(log.Fields{}).Info("RES: ", route.Name)
+	}
 }

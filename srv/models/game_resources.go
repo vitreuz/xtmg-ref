@@ -6,7 +6,8 @@ import (
 )
 
 type Game struct {
-	ID string `json:"id"`
+	ID       string `json:"id"`
+	IsActive bool   `json:"is_active"`
 }
 
 type Games struct {
