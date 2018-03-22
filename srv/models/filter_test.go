@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
-	"reflect"
 	"testing"
 
 	"github.com/vitreuz/xtmg-ref/srv/models/constant"
@@ -432,23 +431,58 @@ func TestNewFilters(t *testing.T) {
 			[]Filter{},
 			false,
 		}, {
-			"when a single string value is provided",
+			"when a field-value filter is provided",
 			urlValues(
-				u("some-key", "select:some-value"),
+				u("select[some-field]", "some-value"),
 			),
 			[]Filter{
-				{constant.FilterSelect, "some-key", "some-value"},
+				{constant.FilterSelect, "some-field", "some-value"},
 			},
 			false,
 		}, {
-			"when a bad value is provided",
+			"when multiple field different value filters are provided",
 			urlValues(
-				u("some-key", "some-bad-value"),
+				u("select[some-field]", "some-value", "some-other-value"),
+				u("exclude[some-other-field]", "some-value"),
 			),
-			[]Filter{},
-			true,
+			[]Filter{
+				{constant.FilterExclude, "some-other-field", "some-value"},
+				{constant.FilterSelect, "some-field", "some-value"},
+				{constant.FilterSelect, "some-field", "some-other-value"},
+			},
+			false,
+		}, {
+			"when a boolean field filter is provided",
+			urlValues(
+				u("exclude", "some-bool-field"),
+			),
+			[]Filter{
+				{constant.FilterExclude, "some-bool-field", ""},
+			},
+			false,
+		}, {
+			"when multiple identical boolean field filters are provided",
+			urlValues(
+				u("exclude", "some-bool-field"),
+				u("exclude", "some-bool-field"),
+			),
+			[]Filter{
+				{constant.FilterExclude, "some-bool-field", ""},
+			},
+			false,
 		},
 	}
+
+	in := func(v Filter, us []Filter) bool {
+		for _, u := range us {
+			if u == v {
+				return true
+			}
+		}
+
+		return false
+	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := NewFilters(tt.values)
@@ -459,8 +493,12 @@ func TestNewFilters(t *testing.T) {
 			if len(tt.want) == 0 && len(got) != 0 {
 				t.Errorf("NewFilters() len = %d, want %d", len(got), len(tt.want))
 			}
-			if len(tt.want) != 0 && !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewFilters() = %v, want %v", got, tt.want)
+			if len(tt.want) != 0 {
+				for _, g := range got {
+					if !in(g, tt.want) {
+						t.Errorf("NewFilters() = %v, want %v", got, tt.want)
+					}
+				}
 			}
 		})
 	}
