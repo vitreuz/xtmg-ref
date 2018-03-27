@@ -21,9 +21,29 @@ function get(endpoint, callback, params = "") {
     .catch(error => console.error(error));
 }
 
-export function ListGames(callback, params = "") {
+function post(endpoint, body) {
+  return fetch(endpoint, {
+    body: JSON.stringify(body),
+    headers: {
+      "content-type": "application/json"
+    },
+    method: "POST",
+    cache: "no-cache"
+  })
+    .then(status)
+    .then(json)
+    .catch(error => console.error(error));
+}
+
+function ListGames(callback, params = "") {
   get("/v1/games", data => data.data.games, params).then(callback);
 }
 
-const Client = { ListGames };
+function CreateGame(body, callback) {
+  post("/v1/games", body)
+    .then(game => game.data)
+    .then(callback);
+}
+
+const Client = { ListGames, CreateGame };
 export default Client;

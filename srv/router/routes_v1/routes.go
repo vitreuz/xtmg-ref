@@ -19,6 +19,7 @@ type Database interface {
 
 type Actor interface {
 	ShipActor
+	GamesActor
 }
 
 type RouteHandlers struct {

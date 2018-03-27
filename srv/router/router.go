@@ -51,7 +51,7 @@ func initializeRoutes(db v1.Database, actor v1.Actor) Routes {
 		{Name: "FetchShipPilot", Method: "GET", Pattern: "/v1/{faction}/ships/{ship_xws}/pilots/{pilot_xws}", HandlerFunc: v1.FetchFactionShipPilot},
 		{Name: "ListUpgrades", Method: "GET", Pattern: "/v1/upgrades", HandlerFunc: v1.ListUpgrades},
 		{Name: "FetchUpgrade", Method: "GET", Pattern: "/v1/upgrades/{upgrade_xws}", HandlerFunc: v1.FetchUpgrade},
-		{Name: "CreateHotACGame", Method: "POST", Pattern: "/v1/games"},
+		{Name: "CreateHotACGame", Method: "POST", Pattern: "/v1/games", HandlerFunc: v1.CreateGame},
 		{Name: "ListHotACGames", Method: "GET", Pattern: "/v1/games", HandlerFunc: v1.ListGames},
 		{Name: "FetchHotACGame", Method: "GET", Pattern: "/v1/games/{game_uuid}"},
 		{Name: "CreateHotACPlayer", Method: "POST", Pattern: "/v1/games/{game_uuid}/players"},

@@ -9,8 +9,12 @@ import (
 
 //go:generate table-mocks $GOFILE -s Resource
 
-type Resource interface {
+type ResourceDecoder interface {
 	FilterDecode(data []byte, filters ...models.Filter) error
+}
+
+type ResourceEncoder interface {
+	Encode(id string) ([]byte, error)
 }
 
 type Filter struct {
@@ -19,17 +23,29 @@ type Filter struct {
 	value  string
 }
 
-func (db DB) ReadResources(bucket string, resource Resource, filters ...models.Filter) error {
+func (db DB) ReadResources(bucket string, resource ResourceDecoder, filters ...models.Filter) error {
 	return db.Data.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
 		return b.ForEach(func(k, v []byte) error { return resource.FilterDecode(v, filters...) })
 	})
 }
 
-func (db DB) ReadResource(bucket string, id int, resource Resource) error {
+func (db DB) ReadResource(bucket string, id int, resource ResourceDecoder) error {
 	return db.Data.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
 		return resource.FilterDecode(b.Get(db.itob(id)))
+	})
+}
+
+func (db DB) CreateResource(bucket string, id string, resource ResourceEncoder) error {
+	return db.Data.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(bucket))
+
+		data, err := resource.Encode(id)
+		if err != nil {
+			return err
+		}
+		return b.Put([]byte(id), data)
 	})
 }
 
