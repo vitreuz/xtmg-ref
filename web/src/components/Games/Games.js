@@ -12,20 +12,26 @@ export default class Games extends React.Component {
       createGameName: ""
     };
 
-    Client.ListGames(games => this.setState({ games: games }));
-
     this.createGame = this.createGame.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.toggleCreateGame = this.toggleCreateGame.bind(this);
+  }
+
+  componentDidMount() {
+    Client.ListGames(games => this.setState({ games: games }));
   }
 
   listGames(games) {
     if (!games) {
       return;
     }
-    return games.map(game => (
-      <li className="game-item">
-        <Game name={game.name} key={game.id} />
+    return games.map((game, i) => (
+      <li className="game-item" key={i}>
+        <Game
+          name={game.name}
+          id={game.id}
+          onActivate={this.props.onActivate}
+        />
       </li>
     ));
   }
@@ -46,10 +52,9 @@ export default class Games extends React.Component {
   }
 
   createGame() {
-    Client.CreateGame({ name: this.state.createGameName }, game =>
-      alert(game.name)
-    );
+    Client.CreateGame({ name: this.state.createGameName });
     Client.ListGames(games => this.setState({ games: games }));
+    this.forceUpdate();
 
     this.toggleCreateGame();
   }
@@ -61,7 +66,7 @@ export default class Games extends React.Component {
           {this.listGames(this.state.games)}
           <li className="game-item">
             <button className="game-new-button" onClick={this.toggleCreateGame}>
-              + New Game
+              New Game
             </button>
           </li>
         </ul>
@@ -90,12 +95,29 @@ export default class Games extends React.Component {
   }
 }
 
-function Game(props) {
-  const { name } = props;
+class Game extends React.Component {
+  activateGame(id) {
+    Client.UpdateGame(id, { is_active: true }, game =>
+      this.props.onActivate(game)
+    );
+  }
 
-  return (
-    <button className="game">
-      <div className="game-name">{name}</div>
-    </button>
-  );
+  render() {
+    const { id, name } = this.props;
+
+    return (
+      <div className="game">
+        <div className="game-name">{name}</div>
+        <button
+          onClick={() => {
+            if (window.confirm(`Activate ${this.props.name}?`)) {
+              this.activateGame(id);
+            }
+          }}
+        >
+          Continue
+        </button>
+      </div>
+    );
+  }
 }

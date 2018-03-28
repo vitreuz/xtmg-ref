@@ -161,4 +161,4 @@ class Ship extends React.Component {
 
 // =============================================================================
 
-ReactDOM.render(<Ship />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById("root"));

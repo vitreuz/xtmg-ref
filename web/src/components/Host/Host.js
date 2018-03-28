@@ -9,13 +9,47 @@ export default class Host extends React.Component {
       activeGame: null
     };
 
-    Client.ListGames(games => this.setState({ games: games }), "select=active");
+    this.setActiveGame = this.setActiveGame.bind(this);
+  }
+
+  componentDidMount() {
+    Client.ListGames(games => {
+      games ? this.setState({ activeGame: games[0] }) : null;
+    }, "select=active");
+  }
+
+  setActiveGame(game) {
+    this.setState({ activeGame: game });
+  }
+
+  disactivateGame() {
+    Client.UpdateGame(this.state.activeGame.id, { is_active: false });
+    this.setState({ activeGame: null });
   }
 
   render() {
     return (
       <div className="host">
-        {this.state.activeGame ? "Not Implemented" : <Games />}
+        {this.state.activeGame ? (
+          <div>
+            Active game {this.state.activeGame.name}
+            <button
+              onClick={() => {
+                if (
+                  window.confirm(
+                    `Really disactivate ${this.state.activeGame.name}?`
+                  )
+                ) {
+                  this.disactivateGame();
+                }
+              }}
+            >
+              Disactivate
+            </button>
+          </div>
+        ) : (
+          <Games onActivate={this.setActiveGame} />
+        )}
       </div>
     );
   }

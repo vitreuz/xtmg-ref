@@ -25,7 +25,18 @@ func (db DB) CreateGame(game *models.Game) error {
 	if err != nil {
 		return err
 	}
+	game.ID = id.String()
 
-	return db.CreateResource(constant.GamesBucket, id.String(), game)
+	return db.WriteResource(constant.GamesBucket, game)
+}
 
+func (db DB) ReadGame(id string) (*models.Game, error) {
+	game := new(models.Game)
+
+	err := db.ReadResource(constant.GamesBucket, id, game)
+	return game, err
+}
+
+func (db DB) UpdateGame(game *models.Game) error {
+	return db.WriteResource(constant.GamesBucket, game)
 }

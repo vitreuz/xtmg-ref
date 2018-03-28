@@ -10,14 +10,13 @@ function json(response) {
   return response.json();
 }
 
-function get(endpoint, callback, params = "") {
+function get(endpoint, params = "") {
   if (params.length > 0) {
     endpoint = endpoint + "?" + params;
   }
   return fetch(endpoint)
     .then(status)
     .then(json)
-    .then(callback)
     .catch(error => console.error(error));
 }
 
@@ -35,8 +34,24 @@ function post(endpoint, body) {
     .catch(error => console.error(error));
 }
 
+function put(endpoint, body) {
+  return fetch(endpoint, {
+    body: JSON.stringify(body),
+    headers: {
+      "content-type": "application/json"
+    },
+    method: "PUT",
+    cache: "no-cache"
+  })
+    .then(status)
+    .then(json)
+    .catch(error => console.error(error));
+}
+
 function ListGames(callback, params = "") {
-  get("/v1/games", data => data.data.games, params).then(callback);
+  get("/v1/games", params)
+    .then(data => data.data.games)
+    .then(callback);
 }
 
 function CreateGame(body, callback) {
@@ -45,5 +60,11 @@ function CreateGame(body, callback) {
     .then(callback);
 }
 
-const Client = { ListGames, CreateGame };
+function UpdateGame(id, body, callback) {
+  put(`/v1/games/${id}`, body)
+    .then(game => game.data)
+    .then(callback);
+}
+
+const Client = { CreateGame, ListGames, UpdateGame };
 export default Client;

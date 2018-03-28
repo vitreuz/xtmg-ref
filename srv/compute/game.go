@@ -11,6 +11,17 @@ type GameRequest struct {
 	Name string `json:"name"`
 }
 
+type putGame struct {
+	*models.Game
+	HideID string `json:"id"`
+}
+
+func (Actor) AggregateGame(game *models.Game, r io.Reader) error {
+	alias := putGame{Game: game}
+
+	return json.NewDecoder(r).Decode(&alias)
+}
+
 func (Actor) UnmarshalGame(r io.Reader) (*models.Game, error) {
 	var req GameRequest
 
