@@ -6,19 +6,13 @@ export default class Games extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      games: [],
       createGameDialog: false,
-
       createGameName: ""
     };
 
     this.createGame = this.createGame.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.toggleCreateGame = this.toggleCreateGame.bind(this);
-  }
-
-  componentDidMount() {
-    Client.ListGames(games => this.setState({ games: games }));
   }
 
   listGames(games) {
@@ -52,18 +46,24 @@ export default class Games extends React.Component {
   }
 
   createGame() {
-    Client.CreateGame({ name: this.state.createGameName });
-    Client.ListGames(games => this.setState({ games: games }));
-    this.forceUpdate();
+    let body = { name: this.state.createGameName };
+    this.props.onNewGame(body);
 
     this.toggleCreateGame();
   }
 
+  newGame(callback) {
+    const body = { name: this.state.createGameName };
+    callback(body);
+  }
+
   render() {
+    const { games } = this.props;
+
     return (
       <div className="games">
         <ul className="games-list">
-          {this.listGames(this.state.games)}
+          {this.listGames(games)}
           <li className="game-item">
             <button className="game-new-button" onClick={this.toggleCreateGame}>
               New Game

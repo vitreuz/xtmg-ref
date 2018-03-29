@@ -64,11 +64,17 @@ func initializeRoutes(db v1.Database, actor v1.Actor) Routes {
 
 func LogMiddleWare(route Route) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.WithFields(log.Fields{
+		entry := log.WithFields(log.Fields{
 			"method":  route.Method,
 			"pattern": r.URL.Path,
 			"params":  r.URL.Query(),
-		}).Info("REQ: ", route.Name)
+		})
+
+		if vars := mux.Vars(r); len(vars) > 0 {
+			entry.WithField("vars", vars)
+		}
+
+		entry.Info("REQ: ", route.Name)
 
 		route.HandlerFunc(w, r)
 
