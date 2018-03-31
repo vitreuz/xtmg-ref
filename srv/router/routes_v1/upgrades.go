@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-
 	"github.com/sirupsen/logrus"
 
 	"github.com/vitreuz/xtmg-ref/srv/models"
@@ -15,30 +14,37 @@ type UpgradeDatabase interface {
 	ReadUpgradeByXWS(string) (models.Upgrade, error)
 }
 
+type UpgradeActor interface {
+}
+
 type Upgrades struct {
 	Upgrades []models.Upgrade `json:"upgrades"`
 }
 
-func (rh RouteHandlers) ListUpgrades(w http.ResponseWriter, r *http.Request) {
-	queries := r.URL.Query()
+func ListUpgrades(actor UpgradeActor, database UpgradeDatabase) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		queries := r.URL.Query()
 
-	upgrades, err := rh.db.ReadUpgrades(filters(queries)...)
-	if err != nil {
-		logrus.WithError(err).Error("reading upgrades")
-		return
+		upgrades, err := database.ReadUpgrades(filters(queries)...)
+		if err != nil {
+			logrus.WithError(err).Error("reading upgrades")
+			return
+		}
+
+		WriteBody(w, Upgrades{upgrades})
 	}
-
-	WriteBody(w, Upgrades{upgrades})
 }
 
-func (rh RouteHandlers) FetchUpgrade(w http.ResponseWriter, r *http.Request) {
-	upgradeXWS := mux.Vars(r)["upgrade_xws"]
+func FetchUpgrade(actor UpgradeActor, database UpgradeDatabase) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		upgradeXWS := mux.Vars(r)["upgrade_xws"]
 
-	upgrade, err := rh.db.ReadUpgradeByXWS(upgradeXWS)
-	if err != nil {
-		logrus.WithError(err).Error("reading upgrade")
-		return
+		upgrade, err := database.ReadUpgradeByXWS(upgradeXWS)
+		if err != nil {
+			logrus.WithError(err).Error("reading upgrade")
+			return
+		}
+
+		WriteBody(w, upgrade)
 	}
-
-	WriteBody(w, upgrade)
 }

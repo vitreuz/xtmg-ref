@@ -30,7 +30,7 @@ func NewRouter(dbPath string) *mux.Router {
 	}
 	actor := compute.NewActor()
 
-	routes := initializeRoutes(db, actor)
+	routes := initializeRoutes(actor, db)
 	for _, route := range routes {
 		router.
 			Methods(route.Method).
@@ -41,22 +41,21 @@ func NewRouter(dbPath string) *mux.Router {
 	return router
 }
 
-func initializeRoutes(db v1.Database, actor v1.Actor) Routes {
-	v1 := v1.NewRouteHandler(db, actor)
-
+func initializeRoutes(a *compute.Actor, d *database.DB) Routes {
 	return Routes{
-		{Name: "ListShips", Method: "GET", Pattern: "/v1/{faction}/ships", HandlerFunc: v1.ListFactionShips},
-		{Name: "FetchShip", Method: "GET", Pattern: "/v1/{faction}/ships/{ship_xws}", HandlerFunc: v1.FetchShip},
-		{Name: "ListShipPilots", Method: "GET", Pattern: "/v1/{faction}/ships/{ship_xws}/pilots", HandlerFunc: v1.ListFactionShipPilots},
-		{Name: "FetchShipPilot", Method: "GET", Pattern: "/v1/{faction}/ships/{ship_xws}/pilots/{pilot_xws}", HandlerFunc: v1.FetchFactionShipPilot},
-		{Name: "ListUpgrades", Method: "GET", Pattern: "/v1/upgrades", HandlerFunc: v1.ListUpgrades},
-		{Name: "FetchUpgrade", Method: "GET", Pattern: "/v1/upgrades/{upgrade_xws}", HandlerFunc: v1.FetchUpgrade},
-		{Name: "CreateHotACGame", Method: "POST", Pattern: "/v1/games", HandlerFunc: v1.CreateGame},
-		{Name: "ListHotACGames", Method: "GET", Pattern: "/v1/games", HandlerFunc: v1.ListGames},
+		{Name: "ListShips", Method: "GET", Pattern: "/v1/{faction}/ships", HandlerFunc: v1.ListFactionShips(a, d)},
+		{Name: "FetchShip", Method: "GET", Pattern: "/v1/{faction}/ships/{ship_xws}", HandlerFunc: v1.FetchShip(a, d)},
+		{Name: "ListShipPilots", Method: "GET", Pattern: "/v1/{faction}/ships/{ship_xws}/pilots", HandlerFunc: v1.ListFactionShipPilots(a, d)},
+		{Name: "FetchShipPilot", Method: "GET", Pattern: "/v1/{faction}/ships/{ship_xws}/pilots/{pilot_xws}", HandlerFunc: v1.FetchFactionShipPilot(a, d)},
+		{Name: "ListUpgrades", Method: "GET", Pattern: "/v1/upgrades", HandlerFunc: v1.ListUpgrades(a, d)},
+		{Name: "FetchUpgrade", Method: "GET", Pattern: "/v1/upgrades/{upgrade_xws}", HandlerFunc: v1.FetchUpgrade(a, d)},
+		{Name: "CreateHotACGame", Method: "POST", Pattern: "/v1/games", HandlerFunc: v1.CreateGame(a, d)},
+		{Name: "ListHotACGames", Method: "GET", Pattern: "/v1/games", HandlerFunc: v1.ListGames(a, d)},
 		{Name: "FetchHotACGame", Method: "GET", Pattern: "/v1/games/{game_uuid}"},
-		{Name: "UpdateHotACGame", Method: "PUT", Pattern: "/v1/games/{game_uuid}", HandlerFunc: v1.UpdateGame},
-		{Name: "CreateHotACPlayer", Method: "POST", Pattern: "/v1/games/{game_uuid}/players"},
+		{Name: "UpdateHotACGame", Method: "PUT", Pattern: "/v1/games/{game_uuid}", HandlerFunc: v1.UpdateGame(a, d)},
+		{Name: "CreateHotACPlayer", Method: "POST", Pattern: "/v1/games/{game_uuid}/players", HandlerFunc: v1.CreateGame(a, d)},
 		{Name: "ListHotACPlayer", Method: "GET", Pattern: "/v1/games/{game_uuid}/players"},
+		{Name: "ListHotACPlayer", Method: "GET", Pattern: "/v1/players"},
 		{Name: "FetchHotACPlayer", Method: "GET", Pattern: "/v1/games/{game_uuid}/players/{player_uuid}"},
 	}
 

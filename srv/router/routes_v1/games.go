@@ -11,68 +11,76 @@ import (
 	"github.com/vitreuz/xtmg-ref/srv/models"
 )
 
-type GamesDatabase interface {
+type GameDatabase interface {
 	CreateGame(*models.Game) error
 	ReadGame(id string) (*models.Game, error)
 	ReadGames(url.Values) (*models.Games, error)
 	UpdateGame(*models.Game) error
 }
 
-type GamesActor interface {
+type GameActor interface {
 	AggregateGame(*models.Game, io.Reader) error
 	UnmarshalGame(io.Reader) (*models.Game, error)
 }
 
-func (rh RouteHandlers) ListGames(w http.ResponseWriter, r *http.Request) {
-	queries := r.URL.Query()
+func ListGames(actor GameActor, database GameDatabase) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		queries := r.URL.Query()
 
-	games, err := rh.db.ReadGames(queries)
-	if err != nil {
-		logrus.WithError(err).Error("reading games")
-		http.Error(w, "error reading game", http.StatusInternalServerError)
-		return
+		games, err := database.ReadGames(queries)
+		if err != nil {
+			logrus.WithError(err).Error("reading games")
+			http.Error(w, "error reading game", http.StatusInternalServerError)
+			return
+		}
+
+		WriteBody(w, games)
 	}
-
-	WriteBody(w, games)
 }
 
-func (rh RouteHandlers) CreateGame(w http.ResponseWriter, r *http.Request) {
-	game, err := rh.actor.UnmarshalGame(r.Body)
-	if err != nil {
-		logrus.WithError(err).Error("unmarshal game")
-		http.Error(w, "error unmarshal game", http.StatusInternalServerError)
-		return
-	}
+func CreateGame(actor GameActor, database GameDatabase) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-	if err = rh.db.CreateGame(game); err != nil {
-		logrus.WithError(err).Error("create game")
-		http.Error(w, "create game", http.StatusInternalServerError)
-		return
-	}
+		game, err := actor.UnmarshalGame(r.Body)
+		if err != nil {
+			logrus.WithError(err).Error("unmarshal game")
+			http.Error(w, "error unmarshal game", http.StatusInternalServerError)
+			return
+		}
 
-	WriteBody(w, game)
+		if err = database.CreateGame(game); err != nil {
+			logrus.WithError(err).Error("create game")
+			http.Error(w, "create game", http.StatusInternalServerError)
+			return
+		}
+
+		WriteBody(w, game)
+	}
 }
 
-func (rh RouteHandlers) UpdateGame(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["game_uuid"]
-	game, err := rh.db.ReadGame(id)
-	if err != nil {
-		logrus.WithError(err).Error("read game")
-		http.Error(w, "read game", http.StatusInternalServerError)
-		return
-	}
+func UpdateGame(actor GameActor, database GameDatabase) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-	if err := rh.actor.AggregateGame(game, r.Body); err != nil {
-		logrus.WithError(err).Error("update game")
-		http.Error(w, "update game", http.StatusInternalServerError)
-		return
-	}
+		id := mux.Vars(r)["game_uuid"]
+		game, err := database.ReadGame(id)
+		if err != nil {
+			logrus.WithError(err).Error("read game")
+			http.Error(w, "read game", http.StatusInternalServerError)
+			return
+		}
 
-	if err := rh.db.UpdateGame(game); err != nil {
-		logrus.WithError(err).Error("update game")
-		http.Error(w, "update game", http.StatusInternalServerError)
-		return
-	}
+		if err := actor.AggregateGame(game, r.Body); err != nil {
+			logrus.WithError(err).Error("update game")
+			http.Error(w, "update game", http.StatusInternalServerError)
+			return
+		}
 
-	WriteBody(w, game)
+		if err := database.UpdateGame(game); err != nil {
+			logrus.WithError(err).Error("update game")
+			http.Error(w, "update game", http.StatusInternalServerError)
+			return
+		}
+
+		WriteBody(w, game)
+	}
 }

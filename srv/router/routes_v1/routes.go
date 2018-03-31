@@ -11,24 +11,19 @@ import (
 //go:generate table-mocks $GOFILE -s Database
 
 type Database interface {
-	GamesDatabase
+	GameDatabase
 	ShipDatabase
 	PilotDatabase
+	PlayerDatabase
 	UpgradeDatabase
 }
 
 type Actor interface {
+	GameActor
 	ShipActor
-	GamesActor
-}
-
-type RouteHandlers struct {
-	db    Database
-	actor Actor
-}
-
-func NewRouteHandler(database Database, actor Actor) *RouteHandlers {
-	return &RouteHandlers{db: database, actor: actor}
+	PilotActor
+	PlayerActor
+	UpgradeActor
 }
 
 type metadata struct {
