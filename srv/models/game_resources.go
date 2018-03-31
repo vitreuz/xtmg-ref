@@ -3,7 +3,6 @@ package models
 import (
 	"bytes"
 	"encoding/gob"
-	"log"
 )
 
 type Game struct {
@@ -43,7 +42,6 @@ func (gs *Games) FilterDecode(data []byte, filters ...Filter) error {
 	if err := gob.NewDecoder(bytes.NewBuffer(data)).Decode(&game); err != nil {
 		return err
 	}
-	log.Println(game)
 
 	gs.appendByFilter(game, filters...)
 	return nil

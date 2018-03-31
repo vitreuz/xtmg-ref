@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"log"
 	"net/url"
 	"strconv"
 	"strings"
@@ -18,7 +17,6 @@ type Filter struct {
 
 func NewFilters(params url.Values) ([]Filter, error) {
 	var filters []Filter
-	log.Println(params)
 
 	for key, values := range params {
 		method, field := parseURLKey(key)
