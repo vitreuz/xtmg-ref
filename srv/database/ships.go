@@ -1,6 +1,8 @@
 package database
 
 import (
+	"strconv"
+
 	"github.com/vitreuz/xtmg-ref/srv/database/constant"
 	"github.com/vitreuz/xtmg-ref/srv/models"
 
@@ -39,7 +41,7 @@ func (db DB) ReadShipByXWS(xws string) (models.Ship, error) {
 		return models.Ship{}, err
 	}
 	if len(ships) != 1 {
-		return models.Ship{}, UnableToLocateResourceError{XWS: xws}
+		return models.Ship{}, UnableToLocateResourceError(xws)
 	}
 
 	db.shipCache[xws] = ships[0].ID
@@ -54,7 +56,7 @@ func (db DB) readShip(id int) (models.Ship, error) {
 
 		v := b.Get(db.itob(id))
 		if len(v) < 1 {
-			return UnableToLocateResourceError{ID: id}
+			return UnableToLocateResourceError(strconv.Itoa(id))
 		}
 		return decodeResource(v, &ship)
 	})

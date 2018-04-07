@@ -9,6 +9,10 @@ import (
 // hanldeError writes to the DebugLogger and to the response. It returns true if
 // the error should be fatal for the request.
 func handleError(w http.ResponseWriter, err error) bool {
+	if err == nil {
+		return false
+	}
+
 	log.WithError(err).Error()
 	http.Error(w, err.Error(), http.StatusInternalServerError)
 

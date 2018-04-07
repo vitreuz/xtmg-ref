@@ -1,6 +1,7 @@
 package database
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/boltdb/bolt"
@@ -69,7 +70,7 @@ func (db DB) ReadPilotByShipFactionXWS(shipXWS, faction, pilotXWS string) (model
 		return models.Pilot{}, err
 	}
 	if len(pilots) < 1 {
-		return models.Pilot{}, UnableToLocateResourceError{XWS: pilotXWS}
+		return models.Pilot{}, UnableToLocateResourceError(pilotXWS)
 	}
 	if len(pilots) > 1 {
 		return models.Pilot{}, ImpreciseIdentifierError{XWS: pilotXWS}
@@ -87,7 +88,7 @@ func (db DB) readPilot(id int) (models.Pilot, error) {
 
 		v := b.Get(db.itob(id))
 		if len(v) < 1 {
-			return UnableToLocateResourceError{ID: id}
+			return UnableToLocateResourceError(strconv.Itoa(id))
 		}
 		return decodeResource(v, &pilot)
 	})

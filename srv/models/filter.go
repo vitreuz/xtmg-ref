@@ -33,6 +33,10 @@ func NewFilters(params url.Values) ([]Filter, error) {
 	return filters, nil
 }
 
+func NewSelectFilter(field, value string) Filter {
+	return Filter{method: constant.FilterSelect, field: field, value: value}
+}
+
 func parseURLKey(key string) (constant.FilterMethod, string) {
 	bracket := strings.Index(key, "[")
 	if bracket == -1 {

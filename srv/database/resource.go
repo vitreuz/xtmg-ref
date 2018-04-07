@@ -24,6 +24,37 @@ type Filter struct {
 	value  string
 }
 
+type tx struct {
+	*bolt.Tx
+}
+
+func fromTx(b *bolt.Tx) tx { return tx{b} }
+
+func (tx tx) readResource(bucket string, id string, resource ResourceDecoder) error {
+	b := tx.Bucket([]byte(bucket))
+
+	v := b.Get([]byte(id))
+	if v == nil {
+		return UnableToLocateResourceError(id)
+	}
+	return resource.FilterDecode(v)
+}
+
+func (tx tx) readResources(bucket string, resource ResourceDecoder, filters ...models.Filter) error {
+	b := tx.Bucket([]byte(bucket))
+	return b.ForEach(func(k, v []byte) error { return resource.FilterDecode(v, filters...) })
+}
+
+func (tx tx) writeResource(bucket string, resource ResourceEncoder) error {
+	b := tx.Bucket([]byte(bucket))
+
+	data, err := resource.Encode()
+	if err != nil {
+		return err
+	}
+	return b.Put(resource.IDBytes(), data)
+}
+
 func (db DB) ReadResources(bucket string, resource ResourceDecoder, filters ...models.Filter) error {
 	return db.Data.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
@@ -34,7 +65,12 @@ func (db DB) ReadResources(bucket string, resource ResourceDecoder, filters ...m
 func (db DB) ReadResource(bucket string, id string, resource ResourceDecoder) error {
 	return db.Data.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
-		return resource.FilterDecode(b.Get([]byte(id)))
+
+		v := b.Get([]byte(id))
+		if v == nil {
+			return UnableToLocateResourceError(id)
+		}
+		return resource.FilterDecode(v)
 	})
 }
 

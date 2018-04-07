@@ -1,6 +1,8 @@
 package database
 
 import (
+	"strconv"
+
 	"github.com/boltdb/bolt"
 	"github.com/vitreuz/xtmg-ref/srv/database/constant"
 	"github.com/vitreuz/xtmg-ref/srv/models"
@@ -32,7 +34,7 @@ func (db DB) ReadUpgradeByXWS(xws string) (models.Upgrade, error) {
 		return models.Upgrade{}, err
 	}
 	if len(upgrades) != 1 {
-		return models.Upgrade{}, UnableToLocateResourceError{XWS: xws}
+		return models.Upgrade{}, UnableToLocateResourceError(xws)
 	}
 
 	db.upgradeCache[xws] = upgrades[0].ID
@@ -47,7 +49,7 @@ func (db DB) readUpgrade(id int) (models.Upgrade, error) {
 
 		v := b.Get(db.itob(id))
 		if len(v) < 1 {
-			return UnableToLocateResourceError{ID: id}
+			return UnableToLocateResourceError(strconv.Itoa(id))
 		}
 		return decodeResource(v, &upgrade)
 	})

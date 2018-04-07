@@ -38,8 +38,16 @@ func Open(path string) (*DB, error) {
 
 func seedBolt(db *bolt.DB) error {
 	return db.Update(func(tx *bolt.Tx) error {
-		_, err := tx.CreateBucketIfNotExists([]byte(constant.GamesBucket))
-		return err
+		for _, bucket := range []string{
+			constant.GamesBucket,
+			constant.PlayersBucket,
+		} {
+			if _, err := tx.CreateBucketIfNotExists([]byte(bucket)); err != nil {
+				return err
+			}
+		}
+
+		return nil
 	})
 }
 
@@ -47,16 +55,10 @@ func decodeResource(data []byte, v interface{}) error {
 	return gob.NewDecoder(bytes.NewBuffer(data)).Decode(v)
 }
 
-type UnableToLocateResourceError struct {
-	ID  int
-	XWS string
-}
+type UnableToLocateResourceError string
 
 func (e UnableToLocateResourceError) Error() string {
-	if e.XWS != "" {
-		return fmt.Sprintf("unable to locate resource %s", e.XWS)
-	}
-	return fmt.Sprintf("unable to locate resource %d", e.ID)
+	return fmt.Sprintf("unable to locate resource %s", string(e))
 }
 
 type ImpreciseIdentifierError struct {

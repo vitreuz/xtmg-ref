@@ -66,5 +66,17 @@ function UpdateGame(id, body, callback) {
     .then(callback);
 }
 
-const Client = { CreateGame, ListGames, UpdateGame };
+function CreatePlayer(gameID, body) {
+  return post(
+    `/v1/games/3dc2b9be-6ba9-4ca9-9e24-296c7bb5940f/players`,
+    body
+  ).then(player => player.data);
+}
+
+const Client = {
+  CreateGame,
+  ListGames,
+  UpdateGame,
+  CreatePlayer
+};
 export default Client;

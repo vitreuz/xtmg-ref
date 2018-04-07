@@ -81,7 +81,7 @@ export default class Games extends React.Component {
           show={this.state.createGameDialog}
         >
           <form className="game-create-form" onSubmit={e => e.preventDefault()}>
-            Name:
+            Name:{" "}
             <input
               type="text"
               name="createGameName"
