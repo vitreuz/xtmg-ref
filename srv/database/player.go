@@ -2,6 +2,7 @@ package database
 
 import (
 	"errors"
+	"net/url"
 
 	"github.com/boltdb/bolt"
 	"github.com/google/uuid"
@@ -35,4 +36,16 @@ func (db DB) CreatePlayer(player *models.Player) (*models.Player, error) {
 	})
 
 	return player, err
+}
+
+func (db DB) ReadPlayers(values url.Values) (*models.Players, error) {
+	players := new(models.Players)
+
+	filters, err := models.NewFilters(values)
+	if err != nil {
+		return nil, err
+	}
+	err = db.ReadResources(constant.PlayersBucket, players, filters...)
+
+	return players, err
 }

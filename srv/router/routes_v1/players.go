@@ -3,6 +3,7 @@ package v1
 import (
 	"io"
 	"net/http"
+	"net/url"
 
 	"github.com/gorilla/mux"
 
@@ -16,6 +17,7 @@ type PlayerActor interface {
 }
 
 type PlayerDatabase interface {
+	ReadPlayers(url.Values) (*models.Players, error)
 	CreatePlayer(*models.Player) (*models.Player, error)
 }
 
@@ -36,5 +38,18 @@ func CreatePlayer(decoder PlayerActor, database PlayerDatabase) http.HandlerFunc
 		}
 
 		WriteBody(w, player)
+	}
+}
+
+func ListPlayers(_ PlayerActor, database PlayerDatabase) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		queries := r.URL.Query()
+
+		players, err := database.ReadPlayers(queries)
+		if fatal := handleError(w, err); fatal {
+			return
+		}
+
+		WriteBody(w, players)
 	}
 }

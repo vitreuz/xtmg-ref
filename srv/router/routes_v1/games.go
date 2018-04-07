@@ -60,8 +60,8 @@ func CreateGame(actor GameActor, database GameDatabase) http.HandlerFunc {
 
 func UpdateGame(actor GameActor, database GameDatabase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		id := mux.Vars(r)["game_uuid"]
+
 		game, err := database.ReadGame(id)
 		if err != nil {
 			logrus.WithError(err).Error("read game")

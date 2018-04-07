@@ -22,6 +22,21 @@ type Player struct {
 	GameID string `json:"game_id"`
 }
 
+type Players struct {
+	Players []Player `json:"players"`
+}
+
+func (p *Players) FilterDecode(data []byte, filters ...Filter) error {
+	var player Player
+
+	if err := gob.NewDecoder(bytes.NewBuffer(data)).Decode(&player); err != nil {
+		return err
+	}
+
+	p.Players = append(p.Players, player)
+	return nil
+}
+
 func NewPlayer(name, callsign, shipXWS, gameID string) *Player {
 	ship := Ship{XWS: shipXWS}
 

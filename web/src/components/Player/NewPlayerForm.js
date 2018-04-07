@@ -43,7 +43,6 @@ export default class NewPlayerForm extends React.Component {
   }
 
   render() {
-    const { onCancel } = this.props;
     const { name, callsign, ship_xws } = this.state;
     const canSubmit =
       name.length > 0 && callsign.length > 0 && ship_xws.length > 0;

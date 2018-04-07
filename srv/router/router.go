@@ -54,7 +54,7 @@ func initializeRoutes(a *compute.Actor, d *database.DB) Routes {
 		{Name: "FetchHotACGame", Method: "GET", Pattern: "/v1/games/{game_uuid}"},
 		{Name: "UpdateHotACGame", Method: "PUT", Pattern: "/v1/games/{game_uuid}", HandlerFunc: v1.UpdateGame(a, d)},
 		{Name: "CreateHotACPlayer", Method: "POST", Pattern: "/v1/games/{game_uuid}/players", HandlerFunc: v1.CreatePlayer(a, d)},
-		{Name: "ListHotACPlayer", Method: "GET", Pattern: "/v1/games/{game_uuid}/players"},
+		{Name: "ListHotACPlayer", Method: "GET", Pattern: "/v1/games/{game_uuid}/players", HandlerFunc: v1.ListPlayers(a, d)},
 		{Name: "ListHotACPlayer", Method: "GET", Pattern: "/v1/players"},
 		{Name: "FetchHotACPlayer", Method: "GET", Pattern: "/v1/games/{game_uuid}/players/{player_uuid}"},
 	}

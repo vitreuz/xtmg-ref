@@ -65,18 +65,21 @@ function UpdateGame(id, body, callback) {
     .then(game => game.data)
     .then(callback);
 }
+function ListPlayers(gameID, params = "") {
+  return get(`/v1/games/${gameID}/players`, params).then(
+    data => data.data.players
+  );
+}
 
 function CreatePlayer(gameID, body) {
-  return post(
-    `/v1/games/3dc2b9be-6ba9-4ca9-9e24-296c7bb5940f/players`,
-    body
-  ).then(player => player.data);
+  return post(`/v1/games/${gameID}/players`, body).then(player => player.data);
 }
 
 const Client = {
   CreateGame,
   ListGames,
   UpdateGame,
-  CreatePlayer
+  CreatePlayer,
+  ListPlayers
 };
 export default Client;
