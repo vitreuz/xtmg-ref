@@ -4,6 +4,7 @@ import Client from "../../api/Client";
 import Modal from "../Modal";
 
 import NewPlayerForm from "./NewPlayerForm";
+import PlayerList from "./PlayerList";
 
 export default class Player extends React.Component {
   constructor(props) {
@@ -102,7 +103,7 @@ class PlayerGame extends React.Component {
         ) : (
           <PlayerList
             onChoose={onChoose}
-            onSubmit={onSubmit}
+            onNewPlayer={onSubmit}
             players={players}
           />
         )}
@@ -122,7 +123,7 @@ class PlayerLobby extends React.Component {
   }
 }
 
-class PlayerList extends React.Component {
+class _PlayerList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export default class Modal extends React.Component {
   render() {
@@ -14,6 +15,9 @@ export default class Modal extends React.Component {
     );
   }
 }
+Modal.propTypes = {
+  show: PropTypes.bool.isRequired
+};
 
 // reference modal styles
 // // The gray background
