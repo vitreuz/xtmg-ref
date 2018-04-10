@@ -1,17 +1,6 @@
-export enum UpgradeSlot {
-  BarrelRoll,
-  Boost,
-  CloakDecloak,
-  Coordinate,
-  Evade,
-  Focus,
-  Jam,
-  Recover,
-  Reinforce,
-  Reload,
-  RotateArc,
-  SLAM,
-  TargetLock
+export enum UpgradeSlotType {
+  Astromech,
+  Turret
 }
 
 export interface Upgrade {
@@ -21,7 +10,7 @@ export interface Upgrade {
   image: string;
   text: string;
   points: number;
-  slot: keyof typeof UpgradeSlot;
+  slot: UpgradeSlotType;
   attack?: number;
   range?: string;
 }
