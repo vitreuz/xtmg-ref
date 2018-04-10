@@ -1,25 +1,36 @@
-import React from 'react';
+import React from "react";
 
-import { shallow, mount } from 'enzyme';
-import UpgradeSlot from '../UpgradeSlot';
+import { shallow, mount } from "enzyme";
+import UpgradeSlot from "../UpgradeSlot";
 
-import { UpgradeSlotType } from '../../../client/Upgrade';
-import { UpgradeItem } from '../../upgrade_shop/UpgradeItem';
+import { UpgradeSlotType } from "../../../client/Upgrade";
+
+import UpgradeBase from "../../upgrade_base";
 
 const astromechSlot = UpgradeSlotType.Astromech;
+const r2d2Upgrade = {
+  name: "R2-D2",
+  id: 3,
+  unique: true,
+  slot: "Astromech",
+  points: 4,
+  text:
+    "After executing a green maneuver, you may recover 1 shield (up to your shield value).",
+  image: "upgrades/Astromech/r2-d2.png",
+  xws: "r2d2"
+};
 
-describe('UpgradeSlot', () => {
+describe("UpgradeSlot", () => {
   let type = 0;
-  let isEmpty = false;
+  let upgrade = {};
 
-  describe('render', () => {
-    describe('when the slot is empty', () => {
+  describe("render", () => {
+    describe("when the slot is empty", () => {
       beforeEach(() => {
         type = astromechSlot;
-        isEmpty = true;
       });
 
-      it('the upgrade slot only has the icon and slot name displayed', () => {
+      it("the upgrade slot only has the icon and slot name displayed", () => {
         const wrapper = shallow(<UpgradeSlot type={type} />);
 
         expect(wrapper).toMatchElement(
@@ -33,20 +44,20 @@ describe('UpgradeSlot', () => {
       });
     });
 
-    describe('when the slot is not empty', () => {
+    describe("when the slot is not empty", () => {
       beforeEach(() => {
         type = astromechSlot;
-        isEmpty = false;
+        upgrade = r2d2Upgrade;
       });
 
-      it('displays the upgrade icon and the upgrade item', () => {
-        const wrapper = shallow(<UpgradeSlot type={type} />);
+      it("displays the upgrade icon and the upgrade item", () => {
+        const wrapper = shallow(<UpgradeSlot type={type} upgrade={upgrade} />);
 
         expect(wrapper).toMatchElement(
           <div>
             <button>
               <span>{/*TODO: icon*/}</span>
-              <UpgradeItem />
+              <UpgradeBase />
             </button>
           </div>
         );
