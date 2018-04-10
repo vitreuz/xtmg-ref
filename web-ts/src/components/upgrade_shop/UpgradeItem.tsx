@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Upgrade, UpgradeSlot } from '../../Client/Upgrade';
+import { Upgrade } from '../../client/Upgrade';
 
 export interface UpgradeItemProps {
   upgrade: Upgrade;
@@ -16,8 +16,6 @@ export function UpgradeItem({
   const textHTML = { __html: upgrade.text };
   const canPurchase = current_xp - upgrade.points >= 0;
   const handleClick = () => onPurchase(upgrade.id);
-  console.log(upgrade.slot);
-  console.log(UpgradeSlot[upgrade.slot]);
 
   return (
     <div className="upgrade-item">

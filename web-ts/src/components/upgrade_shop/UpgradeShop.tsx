@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Upgrade } from '../../Client/Upgrade';
+import { Upgrade } from '../../client/Upgrade';
 import { UpgradeItem } from './UpgradeItem';
 
 export interface UpgradeShopProps {
