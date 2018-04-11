@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 import UpgradeShop from '../UpgradeShop';
-import { UpgradeItem } from '../UpgradeItem';
+import UpgradeItem from '../UpgradeItem';
 
 const turretUpgrades = [
   {

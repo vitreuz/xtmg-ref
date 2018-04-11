@@ -1,12 +1,12 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { Upgrade } from "../../client/Upgrade";
+import { Upgrade } from '../../client/Upgrade';
 
 export interface UpgradeBaseProps {
   upgrade: Upgrade;
 }
 
-export default function UpgradeBase({ upgrade }: UpgradeBaseProps) {
+function UpgradeBase({ upgrade }: UpgradeBaseProps) {
   const textHTML = { __html: upgrade.text };
 
   return (
@@ -28,9 +28,11 @@ function combatDetails(upgrade: Upgrade) {
         <span className="field-value">{upgrade.attack}</span>
       </div>
       <div className="upgrade-item-combat-range">
-        <span className="field-name">Range</span>{" "}
+        <span className="field-name">Range</span>{' '}
         <span className="field-value">{upgrade.range}</span>
       </div>
     </div>
   );
 }
+
+export default UpgradeBase;

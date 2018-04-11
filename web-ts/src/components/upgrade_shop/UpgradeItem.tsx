@@ -1,20 +1,15 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { Upgrade } from "../../client/Upgrade";
-import UpgradeBase from "../upgrade_base";
+import { Upgrade } from '../../client/Upgrade';
+import UpgradeBase from '../upgrade_base';
 
 export interface UpgradeItemProps {
-  upgrade: Upgrade;
   current_xp: number;
+  upgrade: Upgrade;
   onPurchase: (id: number) => void;
 }
 
-export function UpgradeItem({
-  upgrade,
-  current_xp,
-  onPurchase
-}: UpgradeItemProps) {
-  const textHTML = { __html: upgrade.text };
+function UpgradeItem({ current_xp, upgrade, onPurchase }: UpgradeItemProps) {
   const canPurchase = current_xp - upgrade.points >= 0;
   const handleClick = () => onPurchase(upgrade.id);
 
@@ -31,16 +26,4 @@ export function UpgradeItem({
   );
 }
 
-function combatDetails(upgrade: Upgrade) {
-  return (
-    <div className="upgrade-item-combat">
-      <div className="upgrade-item-combat-attack">
-        <span className="field-value">{upgrade.attack}</span>
-      </div>
-      <div className="upgrade-item-combat-range">
-        <span className="field-name">Range</span>{" "}
-        <span className="field-value">{upgrade.range}</span>
-      </div>
-    </div>
-  );
-}
+export default UpgradeItem;
