@@ -1,6 +1,21 @@
 export enum UpgradeSlotType {
+  Elite,
   Astromech,
-  Turret
+  Topredos,
+  Missiles,
+  Cannon,
+  Turret,
+  Bomb,
+  Crew,
+  SalvagedAstromech,
+  System,
+  Title,
+  Modification,
+  Illicit,
+  Cargo,
+  Hardpoint,
+  Team,
+  Tech
 }
 
 export interface Upgrade {
