@@ -54,7 +54,11 @@ describe('UpgradeSlots', () => {
     it('renders empty', () => {
       const wrapper = shallow(<UpgradeSlots slots={slots} />);
 
-      expect(wrapper).toMatchElement(<div />);
+      expect(wrapper).toMatchElement(
+        <div>
+          <div />
+        </div>
+      );
     });
   });
 
@@ -71,10 +75,12 @@ describe('UpgradeSlots', () => {
 
       expect(wrapper).toMatchElement(
         <div>
-          <UpgradeSlot />
-          <UpgradeSlot />
-          <UpgradeSlot />
-          <UpgradeSlot />
+          <div>
+            <UpgradeSlot />
+            <UpgradeSlot />
+            <UpgradeSlot />
+            <UpgradeSlot />
+          </div>
         </div>
       );
     });
@@ -93,19 +99,22 @@ describe('UpgradeSlots', () => {
 
       expect(wrapper).toMatchElement(
         <div>
-          <UpgradeSlot slot={UpgradeSlotType.Topredos} />
-          <UpgradeSlot slot={UpgradeSlotType.Astromech} upgrade={r2d2Upgrade} />
-          <UpgradeSlot
-            slot={UpgradeSlotType.Modification}
-            upgrade={stealthDeviceUpgrade}
-          />
-          <UpgradeSlot slot={UpgradeSlotType.Title} />
+          <div>
+            <UpgradeSlot slot={UpgradeSlotType.Topredos} />
+            <UpgradeSlot
+              slot={UpgradeSlotType.Astromech}
+              upgrade={r2d2Upgrade}
+            />
+            <UpgradeSlot
+              slot={UpgradeSlotType.Modification}
+              upgrade={stealthDeviceUpgrade}
+            />
+            <UpgradeSlot slot={UpgradeSlotType.Title} />
+          </div>
         </div>
-        // { ignoreProps: false }, should start working in https://github.com/FormidableLabs/enzyme-matchers/issues/186
+        // { ignoreProps: false }
+        // should start workingin https://github.com/FormidableLabs/enzyme-matchers/issues/186
       );
-
-      const slot2 = wrapper.find('UpgradeSlot').at(2);
-      console.log(slot2.props());
     });
   });
 });
