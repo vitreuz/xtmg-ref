@@ -32,15 +32,21 @@ const intimidationUpgrade = {
 describe('UpgradeItem', () => {
   let upgrade = {};
   let current_xp = 0;
+  let buttonText = '';
+  let canClick = false;
+  const onPurchase = jest.fn();
 
   describe('render', () => {
     describe('when given an offense upgrade', () => {
       beforeEach(() => {
         upgrade = turretUpgrade;
+        buttonText = 'Purchase';
       });
 
       it('renders the upgrade and the purchase button', () => {
-        const wrapper = shallow(<UpgradeItem upgrade={upgrade} />);
+        const wrapper = shallow(
+          <UpgradeItem upgrade={upgrade} buttonText={buttonText} />
+        );
 
         expect(wrapper).toMatchElement(
           <div>
@@ -57,10 +63,13 @@ describe('UpgradeItem', () => {
     describe('when given a non-offense upgrade', () => {
       beforeEach(() => {
         upgrade = intimidationUpgrade;
+        buttonText = 'Equip';
       });
 
       it('renders the upgrade and the purchase button', () => {
-        const wrapper = shallow(<UpgradeItem upgrade={upgrade} />);
+        const wrapper = shallow(
+          <UpgradeItem upgrade={upgrade} buttonText={buttonText} />
+        );
 
         expect(wrapper).toMatchElement(
           <div>
@@ -68,7 +77,7 @@ describe('UpgradeItem', () => {
             <div>
               <span>2</span>
             </div>
-            <button>Purchase</button>
+            <button>Equip</button>
           </div>
         );
       });
@@ -76,15 +85,15 @@ describe('UpgradeItem', () => {
   });
 
   describe('purchase button', () => {
-    describe('when a player has enough xp to purchase an upgrade', () => {
+    describe('when canClick returns true', () => {
       beforeEach(() => {
         upgrade = { id: 42, points: 3 };
-        current_xp = 4;
+        canClick = true;
       });
 
       it('enables the purchase button', () => {
         const wrapper = shallow(
-          <UpgradeItem upgrade={upgrade} current_xp={current_xp} />
+          <UpgradeItem upgrade={upgrade} canClick={canClick} />
         );
 
         const button = wrapper.find('button');
@@ -92,20 +101,18 @@ describe('UpgradeItem', () => {
       });
 
       describe('when the button is pressed', () => {
-        const mock = jest.fn();
-
         it('issues a callback using the upgrade id', () => {
           const wrapper = shallow(
             <UpgradeItem
               upgrade={upgrade}
-              current_xp={current_xp}
-              onPurchase={mock}
+              canClick={canClick}
+              onClick={onPurchase}
             />
           );
 
           const button = wrapper.find('button');
           button.simulate('click');
-          expect(mock).toHaveBeenCalledWith(42);
+          expect(onPurchase).toHaveBeenCalledWith(42);
         });
       });
     });
@@ -113,12 +120,12 @@ describe('UpgradeItem', () => {
     describe("when a player doesn't have enought xp to purchase an upgrade", () => {
       beforeEach(() => {
         upgrade = { points: 5 };
-        current_xp = 2;
+        canClick = false;
       });
 
       it('disables the purchase button', () => {
         const wrapper = shallow(
-          <UpgradeItem upgrade={upgrade} current_xp={current_xp} />
+          <UpgradeItem upgrade={upgrade} canClick={canClick} />
         );
 
         const button = wrapper.find('button');

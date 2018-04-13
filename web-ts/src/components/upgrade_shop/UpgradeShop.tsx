@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Upgrade } from '../../client/Upgrade';
-import UpgradeItem from './UpgradeItem';
+import UpgradeItem from '../upgrade_item';
 
 export interface UpgradeShopProps {
   current_xp: number;
@@ -21,14 +21,19 @@ function UpgradeShop(props: UpgradeShopProps) {
 }
 
 function listUpgrades({ current_xp, upgrades, onPurchase }: UpgradeShopProps) {
-  return upgrades.map((upgrade, i) => (
-    <UpgradeItem
-      current_xp={current_xp}
-      upgrade={upgrade}
-      onPurchase={onPurchase}
-      key={i}
-    />
-  ));
+  return upgrades.map((upgrade, i) => {
+    const canClick = current_xp >= upgrade.id;
+
+    return (
+      <UpgradeItem
+        buttonText={'Purchase'}
+        canClick={canClick}
+        onClick={onPurchase}
+        upgrade={upgrade}
+        key={i}
+      />
+    );
+  });
 }
 
 export default UpgradeShop;
