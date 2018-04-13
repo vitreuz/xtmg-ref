@@ -13,10 +13,10 @@ class UpgradeSlots extends React.Component<UpgradeSlotsProps, {}> {
     return slots.map((slot, i) => {
       const upgrade = upgrades[i];
       if (upgrade && upgrade.id) {
-        return <UpgradeSlot type={slot} upgrade={upgrade} key={i} />;
+        return <UpgradeSlot slot={slot} upgrade={upgrade} key={i} />;
       }
 
-      return <UpgradeSlot type={slot} key={i} />;
+      return <UpgradeSlot slot={slot} key={i} />;
     });
   }
 

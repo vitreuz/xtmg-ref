@@ -40,7 +40,7 @@ const stealthDeviceUpgrade = {
     }
   ]
 };
-const xwingUpgrades = [{}, r2d2Upgrade, stealthDeviceUpgrade];
+const xwingUpgrades = [null, r2d2Upgrade, stealthDeviceUpgrade];
 
 describe('UpgradeSlots', () => {
   let slots = [];

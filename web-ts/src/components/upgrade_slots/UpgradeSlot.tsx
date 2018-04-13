@@ -4,11 +4,11 @@ import { Upgrade, UpgradeSlotType } from '../../client/Upgrade';
 import UpgradeBase from '../upgrade_base';
 
 export interface UpgradeSlotProps {
-  type: UpgradeSlotType;
+  slot: UpgradeSlotType;
   upgrade?: Upgrade;
 }
 
-function UpgradeSlot({ type, upgrade }: UpgradeSlotProps) {
+function UpgradeSlot({ slot, upgrade }: UpgradeSlotProps) {
   return (
     <div className="upgrade-slot">
       <button className="upgrade-slot-button">
@@ -16,7 +16,7 @@ function UpgradeSlot({ type, upgrade }: UpgradeSlotProps) {
         {upgrade ? (
           <UpgradeBase upgrade={upgrade} />
         ) : (
-          <span className="button-name">{UpgradeSlotType[type]}</span>
+          <span className="button-name">{UpgradeSlotType[slot]}</span>
         )}
       </button>
     </div>
