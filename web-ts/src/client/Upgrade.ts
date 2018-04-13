@@ -1,7 +1,7 @@
 export enum UpgradeSlotType {
   Elite,
   Astromech,
-  Topredos,
+  Torpedos,
   Missiles,
   Cannon,
   Turret,
@@ -28,4 +28,9 @@ export interface Upgrade {
   slot: UpgradeSlotType;
   attack?: number;
   range?: string;
+}
+
+export interface UpgradeSlot {
+  slot: UpgradeSlotType;
+  upgrade?: Upgrade;
 }
