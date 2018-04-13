@@ -1,32 +1,33 @@
 import * as React from 'react';
 
-import { Upgrade, UpgradeSlotType } from '../../client/Upgrade';
-import UpgradeSlot from './UpgradeSlot';
+import { Upgrade, UpgradeSlotType, UpgradeSlot } from '../../client/Upgrade';
+import UpgradeBase from '../upgrade_base';
 
 export interface UpgradeSlotsProps {
-  slots: UpgradeSlotType[];
-  upgrades: Upgrade[];
+  slots: UpgradeSlot[];
 }
 
-class UpgradeSlots extends React.Component<UpgradeSlotsProps, {}> {
-  listSlots({ slots, upgrades }: UpgradeSlotsProps) {
-    return slots.map((slot, i) => {
-      const upgrade = upgrades[i];
-      if (upgrade && upgrade.id) {
-        return <UpgradeSlot slot={slot} upgrade={upgrade} key={i} />;
-      }
-
-      return <UpgradeSlot slot={slot} key={i} />;
-    });
-  }
-
-  render() {
-    return (
-      <div className="upgrade-slots">
-        <div className="upgrade-slots-list">{this.listSlots(this.props)}</div>
-      </div>
-    );
-  }
+function UpgradeSlots({ slots }: UpgradeSlotsProps) {
+  return (
+    <div className="upgrade-slots">
+      <div className="upgrade-slots-list">{listSlots(slots)}</div>
+    </div>
+  );
 }
 
 export default UpgradeSlots;
+
+function listSlots(slots: UpgradeSlot[]) {
+  return slots.map(({ slot, upgrade }: UpgradeSlot, i) => (
+    <div className="upgrade-slot" key={i}>
+      <button className="upgrade-slot-button">
+        <span className="button-icon">{/* add upgrade-slot icon */}</span>
+        {upgrade ? (
+          <UpgradeBase upgrade={upgrade} />
+        ) : (
+          <span className="button-name">{UpgradeSlotType[slot]}</span>
+        )}
+      </button>
+    </div>
+  ));
+}

@@ -3,14 +3,8 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import UpgradeSlots from '../UpgradeSlots';
 import { Upgrades, UpgradeSlotType, Upgrade } from '../../../client/Upgrade';
-import UpgradeSlot from '../UpgradeSlot';
+import UpgradeBase from '../../upgrade_base';
 
-const xwingSlots = [
-  UpgradeSlotType.Topredos,
-  UpgradeSlotType.Astromech,
-  UpgradeSlotType.Modification,
-  UpgradeSlotType.Title
-];
 const r2d2Upgrade = {
   name: 'R2-D2',
   id: 3,
@@ -40,11 +34,16 @@ const stealthDeviceUpgrade = {
     }
   ]
 };
-const xwingUpgrades = [null, r2d2Upgrade, stealthDeviceUpgrade];
+
+const xwingUpgrades = [
+  { slot: UpgradeSlotType.Torpedos },
+  { slot: UpgradeSlotType.Astromech, upgrade: r2d2Upgrade },
+  { slot: UpgradeSlotType.Modification, upgrade: stealthDeviceUpgrade },
+  { slot: UpgradeSlotType.Title }
+];
 
 describe('UpgradeSlots', () => {
   let slots = [];
-  let upgrades = [{}];
 
   describe('when no slot-types are provided', () => {
     beforeEach(() => {
@@ -62,58 +61,43 @@ describe('UpgradeSlots', () => {
     });
   });
 
-  describe('when several slots are provided without upgrade', () => {
-    beforeEach(() => {
-      slots = xwingSlots;
-      upgrades = [{}];
-    });
-
-    it('renders empty slots', () => {
-      const wrapper = shallow(
-        <UpgradeSlots slots={slots} upgrades={upgrades} />
-      );
-
-      expect(wrapper).toMatchElement(
-        <div>
-          <div>
-            <UpgradeSlot />
-            <UpgradeSlot />
-            <UpgradeSlot />
-            <UpgradeSlot />
-          </div>
-        </div>
-      );
-    });
-  });
-
   describe('when several slots are passed, some with upgrades', () => {
     beforeEach(() => {
-      slots = xwingSlots;
-      upgrades = xwingUpgrades;
+      slots = xwingUpgrades;
     });
 
     it('renders some slots with upgrades, and others empty', () => {
-      const wrapper = shallow(
-        <UpgradeSlots slots={slots} upgrades={upgrades} />
-      );
+      const wrapper = shallow(<UpgradeSlots slots={slots} />);
 
       expect(wrapper).toMatchElement(
         <div>
           <div>
-            <UpgradeSlot slot={UpgradeSlotType.Topredos} />
-            <UpgradeSlot
-              slot={UpgradeSlotType.Astromech}
-              upgrade={r2d2Upgrade}
-            />
-            <UpgradeSlot
-              slot={UpgradeSlotType.Modification}
-              upgrade={stealthDeviceUpgrade}
-            />
-            <UpgradeSlot slot={UpgradeSlotType.Title} />
+            <div>
+              <button>
+                <span>{/* TODO: ICON */}</span>
+                <span>Torpedos</span>
+              </button>
+            </div>
+            <div>
+              <button>
+                <span>{/* TODO: ICON */}</span>
+                <UpgradeBase />
+              </button>
+            </div>
+            <div>
+              <button>
+                <span>{/* TODO: ICON */}</span>
+                <UpgradeBase />
+              </button>
+            </div>
+            <div>
+              <button>
+                <span>{/* TODO: ICON */}</span>
+                <span>Title</span>
+              </button>
+            </div>
           </div>
         </div>
-        // { ignoreProps: false }
-        // should start workingin https://github.com/FormidableLabs/enzyme-matchers/issues/186
       );
     });
   });
