@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { Player } from '../../client/Player';
+import { Player, UpgradeAction } from '../../client/Player';
 import ActionBar from '../action_bar';
 import ManeuverCard from '../maneuver_card';
 import StatusBar from '../status_bar';
 import UpgradesCard from '../upgrades_card';
+import { ActionModifier } from '../action_bar/ActionBar';
+import { Action } from '../../client/Ship';
 
 export interface PlayerCardProps {
   player: Player;
@@ -12,7 +14,9 @@ export interface PlayerCardProps {
 class PlayerCard extends React.Component<PlayerCardProps, {}> {
   render() {
     const { player } = this.props;
-    const { name, callsign, pilot_skill } = player;
+    const { name, callsign, pilot_skill, ship, modifiers } = player;
+    const { actions } = ship;
+    const upgradeActions = (!!modifiers && modifiers.upgrade_actions) || [];
 
     return (
       <div className="player-card">
@@ -23,7 +27,7 @@ class PlayerCard extends React.Component<PlayerCardProps, {}> {
           <StatusBar />
         </div>
         <div className="player-card-actions">
-          <ActionBar />
+          <ActionBar actions={actionModifiers(actions, upgradeActions)} />
         </div>
         <div className="player-card-maneuvers">
           <ManeuverCard />
@@ -34,6 +38,16 @@ class PlayerCard extends React.Component<PlayerCardProps, {}> {
       </div>
     );
   }
+}
+
+function actionModifiers(actions: Action[], modifiers: UpgradeAction[]) {
+  const base: ActionModifier[] = actions.map(action => ({ action: action }));
+  const mods: ActionModifier[] = modifiers.map(upgradeAction => ({
+    action: upgradeAction.action,
+    upgrade: upgradeAction.upgrade
+  }));
+
+  return base.concat(mods);
 }
 
 export default PlayerCard;

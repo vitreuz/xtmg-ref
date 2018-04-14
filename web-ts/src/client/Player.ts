@@ -1,9 +1,18 @@
 import { Upgrade, UpgradeSlot } from './Upgrade';
-import { Ship } from './Ship';
+import { Ship, Action } from './Ship';
 
 export interface Hangar {
   ships: Ship[];
   upgrades: Upgrade[];
+}
+
+export interface UpgradeAction {
+  action: Action;
+  upgrade: Upgrade;
+}
+
+export interface Modifiers {
+  upgrade_actions?: UpgradeAction[];
 }
 
 export interface Player {
@@ -16,4 +25,6 @@ export interface Player {
   slots: UpgradeSlot[];
 
   hangar: Hangar;
+
+  modifiers?: Modifiers;
 }

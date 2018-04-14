@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Upgrade, UpgradeSlotType, UpgradeSlot } from '../../client/Upgrade';
+import { UpgradeSlotType, UpgradeSlot } from '../../client/Upgrade';
 import UpgradeBase from '../upgrade_base';
 
 export interface UpgradeSlotsProps {

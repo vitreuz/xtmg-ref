@@ -1,4 +1,5 @@
 import { Ship, FiringArc, Action, ShipSize } from '../client/Ship';
+import { Upgrade, UpgradeSlotType } from '../client/Upgrade';
 
 const xwing: Ship = {
   name: 'X-wing',
@@ -92,5 +93,23 @@ const tiefighter: Ship = {
 };
 
 const ships = { xwing, ywing, tieadvanced, tiefighter };
-const helpers = { ships };
+
+const engineUpgrade: Upgrade = {
+  name: 'Engine Upgrade',
+  id: 176,
+  points: 4,
+  slot: UpgradeSlotType['Modification'],
+  text: 'Your action bar gains the [Boost] action icon.',
+  image: 'upgrades/Modification/engine-upgrade.png',
+  xws: 'engineupgrade',
+  grants: [
+    {
+      type: 'action',
+      name: 'Boost'
+    }
+  ]
+};
+const upgrades = { engineUpgrade };
+
+const helpers = { ships, upgrades };
 export default helpers;

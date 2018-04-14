@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Action } from '../../client/Ship';
+import { UpgradeSlotType } from '../../client/Upgrade';
 import './xwingfont.css';
 import 'xwing-miniatures-font/dist/xwing-miniatures.css';
 
@@ -8,7 +9,8 @@ export enum FontType {
   firing_arc,
   maneuver,
   ship,
-  slot
+  slot,
+  upgrade
 }
 
 export interface XWingFontProps {
@@ -34,6 +36,8 @@ function convertSymbolToFont(symbol: number, type: string | FontType): string {
   switch (FontType[type]) {
     case 'action':
       return Action[symbol].toLowerCase();
+    case 'upgrade':
+      return UpgradeSlotType[symbol].toLowerCase();
     default:
       return '' + type;
   }

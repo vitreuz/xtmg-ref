@@ -3,6 +3,7 @@ export enum Action {
   Boost,
   Cloak,
   Coordinate,
+  Evade,
   Focus,
   Jam,
   Recover,

@@ -18,6 +18,11 @@ export enum UpgradeSlotType {
   Tech
 }
 
+export interface Grant {
+  type: string;
+  name: string;
+}
+
 export interface Upgrade {
   id: number;
   name: string;
@@ -28,6 +33,7 @@ export interface Upgrade {
   slot: UpgradeSlotType;
   attack?: number;
   range?: string;
+  grants?: Grant[];
 }
 
 export interface UpgradeSlot {
