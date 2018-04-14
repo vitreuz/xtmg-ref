@@ -3,9 +3,17 @@ import { Action } from '../../client/Ship';
 import './xwingfont.css';
 import 'xwing-miniatures-font/dist/xwing-miniatures.css';
 
+export enum FontType {
+  action,
+  firing_arc,
+  maneuver,
+  ship,
+  slot
+}
+
 export interface XWingFontProps {
   symbol: number;
-  type: string;
+  type: string | FontType;
 }
 
 function XWingFont({ symbol, type }: XWingFontProps) {
@@ -22,17 +30,17 @@ function XWingFont({ symbol, type }: XWingFontProps) {
   );
 }
 
-function convertSymbolToFont(symbol: number, type: string): string {
-  switch (type) {
+function convertSymbolToFont(symbol: number, type: string | FontType): string {
+  switch (FontType[type]) {
     case 'action':
       return Action[symbol].toLowerCase();
     default:
-      return '';
+      return '' + type;
   }
 }
 
-function isShip(type: string): boolean {
-  return type === 'ship';
+function isShip(type: string | FontType): boolean {
+  return FontType[type] === 'ship';
 }
 
 export default XWingFont;
