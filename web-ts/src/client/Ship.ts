@@ -1,3 +1,9 @@
+export enum Action {
+  BarrelRoll,
+  Focus,
+  TargetLock
+}
+
 export enum Bearing {
   LeftTurn,
   LeftBank,
@@ -14,6 +20,11 @@ export enum Bearing {
   ReverseBankRight
 }
 
+export enum FiringArc {
+  Front,
+  Turret
+}
+
 export enum Maneuver {
   none,
   white,
@@ -21,11 +32,26 @@ export enum Maneuver {
   red
 }
 
+export enum ShipSize {
+  small,
+  large,
+  huge
+}
+
 export interface Ship {
+  id: number;
+
+  name: string;
   agility: number;
   attack: number;
   hull: number;
-  shield: number;
+  shields: number;
+  firing_arcs: FiringArc[];
 
+  actions: Action[];
   maneuvers: Maneuver[][];
+
+  faction: string[];
+  size: ShipSize;
+  xws: string;
 }
