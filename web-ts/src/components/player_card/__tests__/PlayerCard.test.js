@@ -9,7 +9,7 @@ import UpgradesCard from '../../upgrades_card';
 import PlayerCard from '../PlayerCard';
 
 describe('PlayerCard', () => {
-  let player: Player;
+  let player
   describe('render', () => {
     describe('when given a simple level 2 player', () => {
       beforeEach(() => {

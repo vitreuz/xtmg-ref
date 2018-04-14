@@ -2,5 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "commonjs"
-  }
+  },
+  "files": [
+    "**/__tests__/*.test.tsx"
+  ]
 }

@@ -1,6 +1,15 @@
 export enum Action {
   BarrelRoll,
+  Boost,
+  Cloak,
+  Coordinate,
   Focus,
+  Jam,
+  Recover,
+  Reinforce,
+  Reload,
+  RotateArc,
+  SLAM,
   TargetLock
 }
 

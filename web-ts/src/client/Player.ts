@@ -1,4 +1,4 @@
-import { Upgrade, UpgradeSlotType, UpgradeSlot } from './Upgrade';
+import { Upgrade, UpgradeSlot } from './Upgrade';
 import { Ship } from './Ship';
 
 export interface Hangar {
