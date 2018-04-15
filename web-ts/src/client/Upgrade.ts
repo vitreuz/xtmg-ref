@@ -28,11 +28,13 @@ export interface Upgrade {
   name: string;
   xws: string;
   image: string;
+  unique?: boolean;
   text: string;
   points: number;
   slot: UpgradeSlotType;
   attack?: number;
   range?: string;
+  ship?: string[];
   grants?: Grant[];
 }
 
