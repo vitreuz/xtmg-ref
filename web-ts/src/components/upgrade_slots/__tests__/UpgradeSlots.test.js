@@ -36,7 +36,7 @@ const stealthDeviceUpgrade = {
 };
 
 const xwingUpgrades = [
-  { slot: UpgradeSlotType.Torpedos },
+  { slot: UpgradeSlotType.Torpedo },
   { slot: UpgradeSlotType.Astromech, upgrade: r2d2Upgrade },
   { slot: UpgradeSlotType.Modification, upgrade: stealthDeviceUpgrade },
   { slot: UpgradeSlotType.Title }
@@ -75,7 +75,7 @@ describe('UpgradeSlots', () => {
             <div>
               <button>
                 <span>{/* TODO: ICON */}</span>
-                <span>Torpedos</span>
+                <span>Torpedo</span>
               </button>
             </div>
             <div>

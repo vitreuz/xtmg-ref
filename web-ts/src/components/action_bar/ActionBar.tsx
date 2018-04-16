@@ -26,7 +26,7 @@ function listActions(ams: ActionModifier[]) {
           <span className="action-bar-action-upgraded">
             <XWingFont symbol={action} type={FontType.action} />
           </span>
-          <XWingFont symbol={upgrade.slot} type={FontType.upgrade} />
+          <XWingFont symbol={upgrade.slot} type={FontType.slot} />
         </span>
       );
     }

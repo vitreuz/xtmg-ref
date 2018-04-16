@@ -1,7 +1,7 @@
 export enum UpgradeSlotType {
   Elite,
   Astromech,
-  Torpedos,
+  Torpedo,
   Missiles,
   Cannon,
   Turret,
@@ -10,6 +10,7 @@ export enum UpgradeSlotType {
   SalvagedAstromech,
   System,
   Title,
+  Missile,
   Modification,
   Illicit,
   Cargo,

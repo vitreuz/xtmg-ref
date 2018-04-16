@@ -142,8 +142,25 @@ const wired: Upgrade = {
   image: 'upgrades/Elite/wired.png',
   xws: 'wired'
 };
+const heavyscykinterceptor: Upgrade = {
+  name: '"Heavy Scyk" Interceptor',
+  id: 165,
+  slot: UpgradeSlotType['Title'],
+  points: 2,
+  ship: ['M3-A Interceptor'],
+  text:
+    'Your upgrade bar gains the [Cannon], [Torpedo] or [Missile] upgrade icon.',
+  image: 'upgrades/Title/heavy-scyk-interceptor.png',
+  xws: 'heavyscykinterceptor'
+};
 
-const upgrades = { engineUpgrade, integratedastromech, r2f2, wired };
+const upgrades = {
+  engineUpgrade,
+  integratedastromech,
+  heavyscykinterceptor,
+  r2f2,
+  wired
+};
 
 const leeroyjenkins: Player = {
   name: 'Leeroy Jenkins',
@@ -153,7 +170,7 @@ const leeroyjenkins: Player = {
 
   ship: xwing,
   slots: [
-    { slot: UpgradeSlotType.Torpedos },
+    { slot: UpgradeSlotType.Torpedo },
     { slot: UpgradeSlotType.Astromech, upgrade: r2f2 },
     { slot: UpgradeSlotType.Title },
     { slot: UpgradeSlotType.Modification, upgrade: engineUpgrade },

@@ -9,8 +9,20 @@ export enum FontType {
   firing_arc,
   maneuver,
   ship,
-  slot,
-  upgrade
+  slot
+}
+
+export function ParseFontType(
+  text: string
+): { type: FontType; symbol: number } {
+  if (!!Action[text]) {
+    return { type: FontType.action, symbol: Action[text] };
+  }
+  if (!!UpgradeSlotType[text]) {
+    return { type: FontType.slot, symbol: UpgradeSlotType[text] };
+  }
+
+  throw new Error(`Non-exhaustive match for font type ${text}`);
 }
 
 export interface XWingFontProps {
@@ -36,7 +48,7 @@ function convertSymbolToFont(symbol: number, type: string | FontType): string {
   switch (FontType[type]) {
     case 'action':
       return Action[symbol].toLowerCase();
-    case 'upgrade':
+    case 'slot':
       return UpgradeSlotType[symbol].toLowerCase();
     default:
       return '' + type;

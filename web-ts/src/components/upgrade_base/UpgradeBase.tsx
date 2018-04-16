@@ -1,22 +1,61 @@
 import * as React from 'react';
-
 import { Upgrade } from '../../client/Upgrade';
+import XWingFont from '../xwing_font';
+import { ParseFontType } from '../xwing_font/XWingFont';
 
 export interface UpgradeBaseProps {
   upgrade: Upgrade;
 }
 
 function UpgradeBase({ upgrade }: UpgradeBaseProps) {
-  const textHTML = { __html: upgrade.text };
-
   return (
     <div className="upgrade-item">
       <div className="upgrade-item-name">
         <span className="field-value">{upgrade.name}</span>
       </div>
       {!!upgrade.attack && combatDetails(upgrade)}
-      <div className="upgrade-item-text" dangerouslySetInnerHTML={textHTML} />
+      <div className="upgrade-item-text">{setInnerText(upgrade.text)}</div>
     </div>
+  );
+}
+
+function setInnerText(text: string) {
+  return Array.from(matchGenerator(text));
+}
+
+function* matchGenerator(text: string) {
+  let remaider = text;
+
+  let i: number = 0;
+  while (true) {
+    const match = remaider.match('\\[(.*?)\\]');
+    if (!!!match) {
+      yield dangerousInnerHTML(remaider, i);
+      break;
+    }
+
+    const splits = remaider.split(match[0]);
+    yield dangerousInnerHTML(splits[0], i);
+    yield inlineXWingFont(match[1], i);
+
+    remaider = splits[1];
+    i++;
+  }
+}
+
+function dangerousInnerHTML(text: string, key: number): JSX.Element {
+  const innerHTML = { __html: text };
+  return <span dangerouslySetInnerHTML={innerHTML} key={key} />;
+}
+
+function inlineXWingFont(match: string, key: number): JSX.Element {
+  const text = match.replace(' ', '');
+  const symbol = ParseFontType(text);
+
+  return (
+    <span key={key}>
+      <XWingFont type={symbol.type} symbol={symbol.symbol} />
+    </span>
   );
 }
 
