@@ -4,6 +4,7 @@ import { shallow, mount } from 'enzyme';
 import UpgradeSlots from '../UpgradeSlots';
 import { Upgrades, UpgradeSlotType, Upgrade } from '../../../client/Upgrade';
 import UpgradeBase from '../../upgrade_base';
+import XWingFont from '../../xwing_font/index';
 
 const r2d2Upgrade = {
   name: 'R2-D2',
@@ -74,25 +75,33 @@ describe('UpgradeSlots', () => {
           <div>
             <div>
               <button>
-                <span>{/* TODO: ICON */}</span>
+                <span>
+                  <XWingFont />
+                </span>
                 <span>Torpedo</span>
               </button>
             </div>
             <div>
               <button>
-                <span>{/* TODO: ICON */}</span>
+                <span>
+                  <XWingFont />
+                </span>
                 <UpgradeBase />
               </button>
             </div>
             <div>
               <button>
-                <span>{/* TODO: ICON */}</span>
+                <span>
+                  <XWingFont />
+                </span>
                 <UpgradeBase />
               </button>
             </div>
             <div>
               <button>
-                <span>{/* TODO: ICON */}</span>
+                <span>
+                  <XWingFont />
+                </span>
                 <span>Title</span>
               </button>
             </div>

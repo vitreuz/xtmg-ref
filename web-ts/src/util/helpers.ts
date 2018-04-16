@@ -172,6 +172,7 @@ const leeroyjenkins: Player = {
   slots: [
     { slot: UpgradeSlotType.Torpedo },
     { slot: UpgradeSlotType.Astromech, upgrade: r2f2 },
+    { slot: UpgradeSlotType.SalvagedAstromech },
     { slot: UpgradeSlotType.Title },
     { slot: UpgradeSlotType.Modification, upgrade: engineUpgrade },
     { slot: UpgradeSlotType.Modification, upgrade: integratedastromech },

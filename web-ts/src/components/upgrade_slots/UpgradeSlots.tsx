@@ -1,7 +1,8 @@
 import * as React from 'react';
-
-import { UpgradeSlotType, UpgradeSlot } from '../../client/Upgrade';
+import { UpgradeSlot, UpgradeSlotType } from '../../client/Upgrade';
 import UpgradeBase from '../upgrade_base';
+import { FontType } from '../xwing_font/XWingFont';
+import XWingFont from '../xwing_font/index';
 
 export interface UpgradeSlotsProps {
   slots: UpgradeSlot[];
@@ -21,7 +22,9 @@ function listSlots(slots: UpgradeSlot[]) {
   return slots.map(({ slot, upgrade }: UpgradeSlot, i) => (
     <div className="upgrade-slot" key={i}>
       <button className="upgrade-slot-button">
-        <span className="button-icon">{/* add upgrade-slot icon */}</span>
+        <span className="button-icon">
+          <XWingFont symbol={slot} type={FontType.slot} />
+        </span>
         {upgrade ? (
           <UpgradeBase upgrade={upgrade} />
         ) : (
