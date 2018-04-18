@@ -5,10 +5,12 @@ import { Player } from '../client/Player';
 const xwing: Ship = {
   name: 'X-wing',
   faction: ['Rebel Alliance'],
-  attack: 3,
-  agility: 2,
-  hull: 3,
-  shields: 2,
+  status: {
+    attack: 3,
+    agility: 2,
+    hull: 3,
+    shield: 2
+  },
   actions: [Action['Focus'], Action['Target Lock']],
   maneuvers: [
     [0, 0, 0, 0, 0, 0],
@@ -26,10 +28,12 @@ const xwing: Ship = {
 const ywing: Ship = {
   name: 'Y-wing',
   faction: ['Rebel Alliance', 'Scum and Villainy'],
-  attack: 2,
-  agility: 1,
-  hull: 5,
-  shields: 3,
+  status: {
+    attack: 2,
+    agility: 1,
+    hull: 5,
+    shield: 3
+  },
   actions: [Action['Focus'], Action['Target Lock']],
   maneuvers: [
     [0, 0, 0, 0, 0, 0],
@@ -47,10 +51,12 @@ const ywing: Ship = {
 const tieadvanced: Ship = {
   name: 'TIE Advanced',
   faction: ['Galactic Empire'],
-  attack: 2,
-  agility: 3,
-  hull: 3,
-  shields: 2,
+  status: {
+    attack: 2,
+    agility: 3,
+    hull: 3,
+    shield: 2
+  },
   actions: [
     Action['Focus'],
     Action['Target Lock'],
@@ -74,10 +80,12 @@ const tieadvanced: Ship = {
 const tiefighter: Ship = {
   name: 'TIE Fighter',
   faction: ['Galactic Empire', 'Rebel Alliance'],
-  attack: 2,
-  agility: 3,
-  hull: 3,
-  shields: 0,
+  status: {
+    attack: 2,
+    agility: 3,
+    hull: 3,
+    shield: 0
+  },
   actions: [Action['Focus'], Action['Barrel Roll'], Action['Evade']],
   maneuvers: [
     [0, 0, 0, 0, 0, 0],
@@ -172,7 +180,6 @@ const leeroyjenkins: Player = {
   slots: [
     { slot: UpgradeSlotType.Torpedo },
     { slot: UpgradeSlotType.Astromech, upgrade: r2f2 },
-    { slot: UpgradeSlotType.SalvagedAstromech },
     { slot: UpgradeSlotType.Title },
     { slot: UpgradeSlotType.Modification, upgrade: engineUpgrade },
     { slot: UpgradeSlotType.Modification, upgrade: integratedastromech },

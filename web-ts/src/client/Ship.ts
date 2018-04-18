@@ -31,6 +31,10 @@ export enum Bearing {
 }
 
 export enum FiringArc {
+  Auxiliary180,
+  AuxiliaryRear,
+  Bullseye,
+
   Front,
   Turret
 }
@@ -48,14 +52,25 @@ export enum ShipSize {
   huge
 }
 
+export enum ShipStat {
+  Attack,
+  Agility,
+  Hull,
+  Shield
+}
+
+export interface Status {
+  agility: number;
+  attack: number;
+  hull: number;
+  shield: number;
+}
+
 export interface Ship {
   id: number;
 
   name: string;
-  agility: number;
-  attack: number;
-  hull: number;
-  shields: number;
+  status: Status;
   firing_arcs: FiringArc[];
 
   actions: Action[];
