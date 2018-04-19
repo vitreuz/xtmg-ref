@@ -75,34 +75,34 @@ describe('UpgradeSlots', () => {
           <div>
             <div>
               <button>
-                <span>
+                <div>
                   <XWingFont />
-                </span>
-                <span>Torpedo</span>
+                </div>
+                <div>Torpedo</div>
               </button>
             </div>
             <div>
               <button>
-                <span>
+                <div>
                   <XWingFont />
-                </span>
+                </div>
                 <UpgradeBase />
               </button>
             </div>
             <div>
               <button>
-                <span>
+                <div>
                   <XWingFont />
-                </span>
+                </div>
                 <UpgradeBase />
               </button>
             </div>
             <div>
               <button>
-                <span>
+                <div>
                   <XWingFont />
-                </span>
-                <span>Title</span>
+                </div>
+                <div>Title</div>
               </button>
             </div>
           </div>

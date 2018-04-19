@@ -9,12 +9,12 @@ export interface UpgradeBaseProps {
 
 function UpgradeBase({ upgrade }: UpgradeBaseProps) {
   return (
-    <div className="upgrade-item">
-      <div className="upgrade-item-name">
+    <div className="upgrade-base">
+      <div className="upgrade-base-name">
         <span className="field-value">{upgrade.name}</span>
       </div>
       {!!upgrade.attack && combatDetails(upgrade)}
-      <div className="upgrade-item-text">{setInnerText(upgrade.text)}</div>
+      <div className="upgrade-base-text">{setInnerText(upgrade.text)}</div>
     </div>
   );
 }
@@ -61,12 +61,12 @@ function inlineXWingFont(match: string, key: number): JSX.Element {
 
 function combatDetails(upgrade: Upgrade) {
   return (
-    <div className="upgrade-item-combat">
-      <div className="upgrade-item-combat-attack">
+    <div className="upgrade-base-combat">
+      <div className="upgrade-base-combat-attack">
         <span className="field-icon" />
         <span className="field-value">{upgrade.attack}</span>
       </div>
-      <div className="upgrade-item-combat-range">
+      <div className="upgrade-base-combat-range">
         <span className="field-name">Range</span>{' '}
         <span className="field-value">{upgrade.range}</span>
       </div>

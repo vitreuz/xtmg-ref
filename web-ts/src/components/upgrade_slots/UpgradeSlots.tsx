@@ -22,13 +22,13 @@ function listSlots(slots: UpgradeSlot[]) {
   return slots.map(({ slot, upgrade }: UpgradeSlot, i) => (
     <div className="upgrade-slot" key={i}>
       <button className="upgrade-slot-button">
-        <span className="button-icon">
+        <div className="button-icon">
           <XWingFont symbol={slot} type={FontType.slot} />
-        </span>
+        </div>
         {upgrade ? (
           <UpgradeBase upgrade={upgrade} />
         ) : (
-          <span className="button-name">{UpgradeSlotType[slot]}</span>
+          <div className="button-name">{UpgradeSlotType[slot]}</div>
         )}
       </button>
     </div>
