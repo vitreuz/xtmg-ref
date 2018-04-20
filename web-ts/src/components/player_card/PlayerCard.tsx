@@ -15,7 +15,7 @@ class PlayerCard extends React.Component<PlayerCardProps, {}> {
   render() {
     const { player } = this.props;
     const { name, callsign, pilot_skill, ship, modifiers } = player;
-    const { actions, status } = ship;
+    const { actions, status, maneuvers } = ship;
     const upgradeActions = (!!modifiers && modifiers.upgrade_actions) || [];
 
     return (
@@ -30,7 +30,7 @@ class PlayerCard extends React.Component<PlayerCardProps, {}> {
           <ActionBar actions={actionModifiers(actions, upgradeActions)} />
         </div>
         <div className="player-card-maneuvers">
-          <ManeuverCard />
+          <ManeuverCard maneuvers={maneuvers} />
         </div>
         <div className="player-card-upgrades">
           <UpgradesCard />

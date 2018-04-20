@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Action, ShipStat, FiringArc } from '../../client/Ship';
+import 'xwing-miniatures-font/dist/xwing-miniatures.css';
+import { Action, FiringArc, Bearing, ShipStat } from '../../client/Ship';
 import { UpgradeSlotType } from '../../client/Upgrade';
 import './xwingfont.css';
-import 'xwing-miniatures-font/dist/xwing-miniatures.css';
 
 export enum FontType {
   action,
@@ -55,6 +55,8 @@ function convertSymbolToFont(symbol: number, type: string | FontType): string {
       return ShipStat[symbol].toLowerCase();
     case 'firing_arc':
       return firingArcSymbol(symbol);
+    case 'maneuver':
+      return Bearing[symbol].toLowerCase();
     default:
       return '' + type;
   }

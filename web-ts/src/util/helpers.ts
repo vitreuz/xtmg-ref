@@ -48,6 +48,28 @@ const ywing: Ship = {
   firing_arcs: [FiringArc['Front']]
 };
 
+const lambdaclassshuttle: Ship = {
+  name: 'Lambda-class Shuttle',
+  faction: ['Galactic Empire'],
+  status: {
+    attack: 3,
+    agility: 1,
+    hull: 5,
+    shield: 5
+  },
+  actions: [Action['Focus'], Action['Target Lock']],
+  maneuvers: [
+    [0, 0, 3, 0, 0],
+    [0, 2, 2, 2, 0],
+    [3, 1, 2, 1, 3],
+    [0, 3, 1, 3, 0]
+  ],
+  size: ShipSize['large'],
+  xws: 'lambdaclassshuttle',
+  id: 9,
+  firing_arcs: [FiringArc['Front']]
+};
+
 const tieadvanced: Ship = {
   name: 'TIE Advanced',
   faction: ['Galactic Empire'],
@@ -100,8 +122,65 @@ const tiefighter: Ship = {
   id: 4,
   firing_arcs: [FiringArc['Front']]
 };
+const tiesilencer: Ship = {
+  name: 'TIE Silencer',
+  xws: 'tiesilencer',
+  faction: ['First Order'],
+  actions: [
+    Action['Barrel Roll'],
+    Action['Boost'],
+    Action['Focus'],
+    Action['Target Lock']
+  ],
+  size: ShipSize['small'],
+  status: {
+    attack: 3,
+    agility: 3,
+    hull: 4,
+    shield: 2
+  },
+  firing_arcs: [FiringArc['Front']],
+  id: 53,
+  maneuvers: [
+    [],
+    [1, 0, 0, 0, 1],
+    [2, 2, 2, 2, 2],
+    [1, 2, 2, 2, 1, 0, 0, 0, 3, 3],
+    [0, 0, 2, 0, 0, 3],
+    [0, 0, 2]
+  ]
+};
 
-const ships = { xwing, ywing, tieadvanced, tiefighter };
+const quadjumper: Ship = {
+  name: 'Quadjumper',
+  xws: 'quadjumper',
+  faction: ['Scum and Villainy'],
+  actions: [Action['Barrel Roll'], Action['Focus']],
+  size: ShipSize['small'],
+  status: {
+    attack: 2,
+    agility: 2,
+    hull: 5,
+    shield: 0
+  },
+  maneuvers: [
+    [],
+    [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 3, 3, 3],
+    [1, 2, 2, 2, 1, 0, 3, 3, 0],
+    [0, 1, 2, 1]
+  ],
+  id: 43,
+  firing_arcs: [FiringArc['Front']]
+};
+const ships = {
+  xwing,
+  ywing,
+  lambdaclassshuttle,
+  tieadvanced,
+  tiefighter,
+  tiesilencer,
+  quadjumper
+};
 
 const engineUpgrade: Upgrade = {
   name: 'Engine Upgrade',

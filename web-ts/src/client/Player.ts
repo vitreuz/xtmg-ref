@@ -1,5 +1,5 @@
+import { Action, Ship, Status } from './Ship';
 import { Upgrade, UpgradeSlot } from './Upgrade';
-import { Ship, Action } from './Ship';
 
 export interface Hangar {
   ships: Ship[];
@@ -13,6 +13,8 @@ export interface UpgradeAction {
 
 export interface Modifiers {
   upgrade_actions?: UpgradeAction[];
+  modified_status?: Status;
+  live_status?: Status;
 }
 
 export interface Player {

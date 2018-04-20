@@ -15,11 +15,11 @@ export enum Action {
 }
 
 export enum Bearing {
-  LeftTurn,
-  LeftBank,
+  TurnLeft,
+  BankLeft,
   Straight,
-  RightBank,
-  RightTurn,
+  BankRight,
+  TurnRight,
   KTurn,
   SLoopLeft,
   SLoopRight,
@@ -27,7 +27,8 @@ export enum Bearing {
   TRollRight,
   ReverseBankLeft,
   ReverseStraight,
-  ReverseBankRight
+  ReverseBankRight,
+  Stop
 }
 
 export enum FiringArc {

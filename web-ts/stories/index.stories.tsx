@@ -4,6 +4,7 @@ import { Action, FiringArc } from '../src/client/Ship';
 // import { action } from '@storybook/addon-actions';
 // import { linkTo } from '@storybook/addon-links';
 import ActionBar from '../src/components/action_bar';
+import ManeuverCard from '../src/components/maneuver_card';
 import StatusBar from '../src/components/status_bar';
 import UpgradeSlots from '../src/components/upgrade_slots';
 import helpers from '../src/util/helpers';
@@ -30,6 +31,20 @@ storiesOf('Status Bar', module)
       base={helpers.ships.xwing.status}
       firing_arc={FiringArc.AuxiliaryRear}
     />
+  ));
+
+storiesOf('Maneuver Card', module)
+  .add('X-Wing maneuvers', () => (
+    <ManeuverCard maneuvers={helpers.ships.xwing.maneuvers} />
+  ))
+  .add('Lambda Shuttle maneuvers', () => (
+    <ManeuverCard maneuvers={helpers.ships.lambdaclassshuttle.maneuvers} />
+  ))
+  .add('Quad Jumper maneuvers', () => (
+    <ManeuverCard maneuvers={helpers.ships.quadjumper.maneuvers} />
+  ))
+  .add('Tie Silencer maneuvers', () => (
+    <ManeuverCard maneuvers={helpers.ships.tiesilencer.maneuvers} />
   ));
 
 storiesOf('Upgrade slots', module).add('as default', () => (
