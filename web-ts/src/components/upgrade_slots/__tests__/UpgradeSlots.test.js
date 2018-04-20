@@ -1,10 +1,9 @@
+import { shallow } from 'enzyme';
 import React from 'react';
-
-import { shallow, mount } from 'enzyme';
-import UpgradeSlots from '../UpgradeSlots';
-import { Upgrades, UpgradeSlotType, Upgrade } from '../../../client/Upgrade';
+import { UpgradeSlotType } from '../../../client/Upgrade';
 import UpgradeBase from '../../upgrade_base';
 import XWingFont from '../../xwing_font/index';
+import UpgradeSlots from '../UpgradeSlots';
 
 const r2d2Upgrade = {
   name: 'R2-D2',

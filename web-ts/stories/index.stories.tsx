@@ -5,6 +5,7 @@ import { Action, FiringArc } from '../src/client/Ship';
 // import { linkTo } from '@storybook/addon-links';
 import ActionBar from '../src/components/action_bar';
 import ManeuverCard from '../src/components/maneuver_card';
+import PlayerCard from '../src/components/player_card';
 import StatusBar from '../src/components/status_bar';
 import UpgradeSlots from '../src/components/upgrade_slots';
 import helpers from '../src/util/helpers';
@@ -49,6 +50,10 @@ storiesOf('Maneuver Card', module)
 
 storiesOf('Upgrade slots', module).add('as default', () => (
   <UpgradeSlots slots={helpers.players.leeroyjenkins.slots} />
+));
+
+storiesOf('Player Card', module).add('Leeroy', () => (
+  <PlayerCard player={helpers.players.leeroyjenkins} />
 ));
 // storiesOf('Welcome', module).add('to Storybook', () => (
 //   <Welcome showApp={linkTo('Button')} />

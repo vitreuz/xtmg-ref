@@ -11,7 +11,7 @@ const xwing: Ship = {
     hull: 3,
     shield: 2
   },
-  actions: [Action['Focus'], Action['Target Lock']],
+  actions: Action.parse(...['Focus', 'Target Lock']),
   maneuvers: [
     [0, 0, 0, 0, 0, 0],
     [0, 2, 2, 2, 0, 0],
@@ -34,7 +34,7 @@ const ywing: Ship = {
     hull: 5,
     shield: 3
   },
-  actions: [Action['Focus'], Action['Target Lock']],
+  actions: Action.parse(...['Focus', 'Target Lock']),
   maneuvers: [
     [0, 0, 0, 0, 0, 0],
     [0, 1, 2, 1, 0, 0],
@@ -57,7 +57,7 @@ const lambdaclassshuttle: Ship = {
     hull: 5,
     shield: 5
   },
-  actions: [Action['Focus'], Action['Target Lock']],
+  actions: Action.parse(...['Focus', 'Target Lock']),
   maneuvers: [
     [0, 0, 3, 0, 0],
     [0, 2, 2, 2, 0],
@@ -79,12 +79,7 @@ const tieadvanced: Ship = {
     hull: 3,
     shield: 2
   },
-  actions: [
-    Action['Focus'],
-    Action['Target Lock'],
-    Action['Barrel Roll'],
-    Action['Evade']
-  ],
+  actions: Action.parse(...['Focus', 'Target Lock', 'Barrel Roll', 'Evade']),
   maneuvers: [
     [0, 0, 0, 0, 0, 0],
     [0, 2, 0, 2, 0, 0],
@@ -108,7 +103,7 @@ const tiefighter: Ship = {
     hull: 3,
     shield: 0
   },
-  actions: [Action['Focus'], Action['Barrel Roll'], Action['Evade']],
+  actions: Action.parse(...['Focus', 'Barrel Roll', 'Evade']),
   maneuvers: [
     [0, 0, 0, 0, 0, 0],
     [1, 0, 0, 0, 1, 0],
@@ -155,7 +150,7 @@ const quadjumper: Ship = {
   name: 'Quadjumper',
   xws: 'quadjumper',
   faction: ['Scum and Villainy'],
-  actions: [Action['Barrel Roll'], Action['Focus']],
+  actions: Action.parse(...['Barrel Roll', 'Focus']),
   size: ShipSize['small'],
   status: {
     attack: 2,

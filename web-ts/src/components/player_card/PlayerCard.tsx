@@ -14,7 +14,7 @@ export interface PlayerCardProps {
 class PlayerCard extends React.Component<PlayerCardProps, {}> {
   render() {
     const { player } = this.props;
-    const { name, callsign, pilot_skill, ship, modifiers } = player;
+    const { name, callsign, pilot_skill, ship, modifiers, slots } = player;
     const { actions, status, maneuvers } = ship;
     const upgradeActions = (!!modifiers && modifiers.upgrade_actions) || [];
 
@@ -33,7 +33,7 @@ class PlayerCard extends React.Component<PlayerCardProps, {}> {
           <ManeuverCard maneuvers={maneuvers} />
         </div>
         <div className="player-card-upgrades">
-          <UpgradesCard />
+          <UpgradesCard slots={slots} />
         </div>
       </div>
     );

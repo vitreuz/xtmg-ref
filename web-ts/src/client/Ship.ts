@@ -14,6 +14,12 @@ export enum Action {
   TargetLock
 }
 
+export namespace Action {
+  export function parse(...actions: string[]): Action[] {
+    return actions.map(action => Action[action.replace(' ', '')]);
+  }
+}
+
 export enum Bearing {
   TurnLeft,
   BankLeft,
