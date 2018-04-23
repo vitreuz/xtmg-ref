@@ -214,6 +214,17 @@ const r2f2: Upgrade = {
   image: 'upgrades/Astromech/r2-f2.png',
   xws: 'r2f2'
 };
+const r2d2: Upgrade = {
+  name: 'R2-D2',
+  id: 3,
+  unique: true,
+  slot: UpgradeSlotType['Astromech'],
+  points: 4,
+  text:
+    'After executing a green maneuver, you may recover 1 shield (up to your shield value).',
+  image: 'upgrades/Astromech/r2-d2.png',
+  xws: 'r2d2'
+};
 const wired: Upgrade = {
   name: 'Wired',
   id: 148,
@@ -266,7 +277,31 @@ const leeroyjenkins: Player = {
     upgrades: []
   }
 };
-const players = { leeroyjenkins };
+
+const lukeskywalker: Player = {
+  name: 'Luke Skywalker',
+  callsign: 'Red Five',
+  pilot_skill: 8,
+  current_xp: 12,
+
+  ship: xwing,
+  slots: [
+    { slot: UpgradeSlotType.Torpedo },
+    { slot: UpgradeSlotType.Astromech, upgrade: r2d2 },
+    { slot: UpgradeSlotType.Title },
+    { slot: UpgradeSlotType.Modification },
+    { slot: UpgradeSlotType.Modification },
+    { slot: UpgradeSlotType.Elite },
+    { slot: UpgradeSlotType.Elite }
+  ],
+
+  hangar: {
+    ships: [xwing],
+    upgrades: []
+  }
+};
+
+const players = { leeroyjenkins, lukeskywalker };
 
 const helpers = { ships, upgrades, players };
 export default helpers;

@@ -33,7 +33,7 @@ export interface XWingFontProps {
 
 function XWingFont({ symbol, type }: XWingFontProps) {
   if (isShip(type)) {
-    return <div />;
+    return <i className={'xwing-ship xwing-miniatures-ship-' + symbol} />;
   }
 
   return (

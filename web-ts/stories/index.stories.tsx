@@ -1,11 +1,10 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { Action, FiringArc } from '../src/client/Ship';
-// import { action } from '@storybook/addon-actions';
-// import { linkTo } from '@storybook/addon-links';
 import ActionBar from '../src/components/action_bar';
 import ManeuverCard from '../src/components/maneuver_card';
 import PlayerCard from '../src/components/player_card';
+import PlayersList from '../src/components/players_list';
 import StatusBar from '../src/components/status_bar';
 import UpgradeSlots from '../src/components/upgrade_slots';
 import helpers from '../src/util/helpers';
@@ -54,6 +53,12 @@ storiesOf('Upgrade slots', module).add('as default', () => (
 
 storiesOf('Player Card', module).add('Leeroy', () => (
   <PlayerCard player={helpers.players.leeroyjenkins} />
+));
+
+storiesOf('Full List', module).add('Luke and Leeroy', () => (
+  <PlayersList
+    players={[helpers.players.leeroyjenkins, helpers.players.lukeskywalker]}
+  />
 ));
 // storiesOf('Welcome', module).add('to Storybook', () => (
 //   <Welcome showApp={linkTo('Button')} />
