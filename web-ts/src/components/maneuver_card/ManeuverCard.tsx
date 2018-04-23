@@ -57,12 +57,12 @@ function formatRows(maneuvers: Maneuver[][]) {
 }
 
 function rowLen(maneuvers: Maneuver[]): number {
-  if (maneuvers.length == 0) {
+  if (maneuvers.length === 0) {
     return 0;
   }
 
   return maneuvers.reduce((prev, cur, i) => {
-    if (cur != Maneuver.none && i < Bearing.ReverseBankLeft) {
+    if (!!cur && i < Bearing.ReverseBankLeft) {
       return i;
     }
 
@@ -102,7 +102,7 @@ function listCells(row: Maneuver[], speed: number) {
 }
 
 function speedBearing(index: number, speed: number) {
-  if (speed == 0) {
+  if (speed === 0) {
     return Bearing.Stop;
   }
   if (speed < 0) {
