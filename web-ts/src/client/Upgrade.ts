@@ -7,7 +7,6 @@ export enum UpgradeSlotType {
   Turret,
   Bomb,
   Crew,
-  SalvagedAstromech,
   System,
   Title,
   Missile,
@@ -16,7 +15,14 @@ export enum UpgradeSlotType {
   Cargo,
   Hardpoint,
   Team,
-  Tech
+  Tech,
+  SalvagedAstromech = 'Salvaged Astromech'
+}
+
+export namespace UpgradeSlotType {
+  export function parse(...slots: string[]): UpgradeSlotType[] {
+    return slots.map(slot => UpgradeSlotType[slot.replace(' ', '')]);
+  }
 }
 
 export interface Grant {

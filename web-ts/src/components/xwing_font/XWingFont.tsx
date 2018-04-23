@@ -27,7 +27,7 @@ export function ParseFontType(
 }
 
 export interface XWingFontProps {
-  symbol: number;
+  symbol: number | string;
   type: string | FontType;
 }
 
@@ -45,12 +45,15 @@ function XWingFont({ symbol, type }: XWingFontProps) {
   );
 }
 
-function convertSymbolToFont(symbol: number, type: string | FontType): string {
+function convertSymbolToFont(
+  symbol: number | string,
+  type: string | FontType
+): string {
   switch (FontType[type]) {
     case 'action':
-      return Action[symbol].toLowerCase();
+      return Action[symbol].replace(' ', '').toLowerCase();
     case 'slot':
-      return UpgradeSlotType[symbol].toLowerCase();
+      return UpgradeSlotType[symbol].replace(' ', '').toLowerCase();
     case 'stat':
       return ShipStat[symbol].toLowerCase();
     case 'firing_arc':
@@ -62,7 +65,7 @@ function convertSymbolToFont(symbol: number, type: string | FontType): string {
   }
 }
 
-function firingArcSymbol(firingArc: FiringArc): string {
+function firingArcSymbol(firingArc: FiringArc | string): string {
   switch (firingArc) {
     case FiringArc.Auxiliary180:
       return 'attack-180';
