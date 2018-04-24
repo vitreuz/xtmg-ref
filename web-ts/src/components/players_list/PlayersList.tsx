@@ -8,23 +8,17 @@ export interface PLProps {
   players: Player[];
 }
 
-class PlayersList extends React.Component<PLProps, {}> {
-  render() {
-    const { players } = this.props;
-
-    return (
-      <div className="players-list">
-        <ul className="players-list-list">
-          {listPlayers(players)}
-          <li className="players-list-item">
-            <button className="players-list-newplayer-button">
-              New Player
-            </button>
-          </li>
-        </ul>
-      </div>
-    );
-  }
+function PlayersList({ players }: PLProps) {
+  return (
+    <div className="players-list">
+      <ul className="players-list-list">
+        {listPlayers(players)}
+        <li className="players-list-item">
+          <button className="players-list-newplayer-button">New Player</button>
+        </li>
+      </ul>
+    </div>
+  );
 }
 
 function listPlayers(players: Player[]): JSX.Element[] {
