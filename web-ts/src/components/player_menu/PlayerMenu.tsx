@@ -30,6 +30,8 @@ class PlayerMenu extends React.Component<PMProps, PMState> {
     this.state = {
       activeDisplay: 0
     };
+
+    this.setDisplay = this.setDisplay.bind(this);
   }
 
   setDisplay(display: Display): void {
@@ -40,7 +42,11 @@ class PlayerMenu extends React.Component<PMProps, PMState> {
     const { activeDisplay } = this.state;
     return (
       <div className="player-menu">
-        <MenuBar />
+        <MenuBar
+          current={activeDisplay}
+          type={Display}
+          onClick={this.setDisplay}
+        />
         {chooseDisplay(activeDisplay, this.props)}
       </div>
     );
