@@ -1,6 +1,7 @@
 import { Ship, FiringArc, Action, ShipSize } from '../client/Ship';
 import { Upgrade, UpgradeSlotType } from '../client/Upgrade';
 import { Player } from '../client/Player';
+import { UgpradesCardProps } from '../components/upgrades_card/UpgradesCard';
 
 const xwing: Ship = {
   name: 'X-wing',
@@ -177,6 +178,30 @@ const ships = {
   quadjumper
 };
 
+const blasterturret: Upgrade = {
+  name: 'Blaster Turret',
+  id: 37,
+  slot: UpgradeSlotType['Turret'],
+  points: 4,
+  attack: 3,
+  range: '1-2',
+  text:
+    '<strong>Attack (focus):</strong> Spend 1 focus token to perform this attack against 1 ship (even a ship outside your firing arc).',
+  image: 'upgrades/Turret/blaster-turret.png',
+  xws: 'blasterturrettoMatchElement'
+};
+const dorsalturret: Upgrade = {
+  image: 'upgrades/Turret/dorsal-turret.png',
+  text:
+    '<strong>Attack:</strong> Attack 1 ship (even a ship outside your firing arc).<br /><br />If the target of this attack is at Range 1, roll 1 additional attack die.',
+  name: 'Dorsal Turret',
+  points: 3,
+  slot: UpgradeSlotType['Turret'],
+  attack: 2,
+  range: '1-2',
+  id: 212,
+  xws: 'dorsalturret'
+};
 const engineUpgrade: Upgrade = {
   name: 'Engine Upgrade',
   id: 176,
@@ -202,6 +227,18 @@ const integratedastromech: Upgrade = {
     'When you are dealt a Damage card, you may discard 1 of your [Astromech] Upgrade cards to discard that Damage card (without resolving its effect).',
   image: 'upgrades/Modification/integrated-astromech.png',
   xws: 'integratedastromech'
+};
+const ioncannonturret: Upgrade = {
+  name: 'Ion Cannon Turret',
+  id: 0,
+  slot: UpgradeSlotType['Turret'],
+  points: 5,
+  attack: 4,
+  range: '1-2',
+  text:
+    '<strong>Attack:</strong> Attack 1 ship (even a ship outside your firing arc).<br /><br />If this attack hits the target ship, the ship suffers 1 damage and receives 1 ion token.  Then cancel <strong>all</strong> dice results.',
+  image: 'upgrades/Turret/ion-cannon-turret.png',
+  xws: 'ioncannonturret'
 };
 const r2f2: Upgrade = {
   name: 'R2-F2',
@@ -248,8 +285,11 @@ const heavyscykinterceptor: Upgrade = {
 };
 
 const upgrades = {
+  blasterturret,
+  dorsalturret,
   engineUpgrade,
   integratedastromech,
+  ioncannonturret,
   heavyscykinterceptor,
   r2f2,
   wired

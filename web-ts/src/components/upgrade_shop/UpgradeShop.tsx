@@ -1,11 +1,12 @@
 import * as React from 'react';
 
-import { Upgrade } from '../../client/Upgrade';
+import { Upgrade, UpgradeSlotType } from '../../client/Upgrade';
 import UpgradeItem from '../upgrade_item';
 
 export interface UpgradeShopProps {
   current_xp: number;
   upgrades: Upgrade[];
+  slot?: UpgradeSlotType;
   onPurchase: (id: number) => void;
 }
 
@@ -14,15 +15,19 @@ function UpgradeShop(props: UpgradeShopProps) {
 
   return (
     <div className="upgrade-shop">
-      <button className="button-cancel">Cancel</button>
       <ul>{!!upgrades && listUpgrades(props)}</ul>
     </div>
   );
 }
 
-function listUpgrades({ current_xp, upgrades, onPurchase }: UpgradeShopProps) {
+function listUpgrades(props: UpgradeShopProps) {
+  const { current_xp, slot, upgrades, onPurchase } = props;
+
   return upgrades.map((upgrade, i) => {
-    const canClick = current_xp >= upgrade.id;
+    const canClick = current_xp >= upgrade.points;
+    if (slot != undefined && upgrade.slot !== slot) {
+      return;
+    }
 
     return (
       <UpgradeItem

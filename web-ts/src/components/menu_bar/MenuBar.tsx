@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 interface MBProps {
-  type: Object;
+  type: any;
   current: number;
   onClick: (id: number) => void;
 }
