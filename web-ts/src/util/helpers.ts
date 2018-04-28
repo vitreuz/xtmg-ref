@@ -1,7 +1,6 @@
-import { Ship, FiringArc, Action, ShipSize } from '../client/Ship';
-import { Upgrade, UpgradeSlotType } from '../client/Upgrade';
 import { Player } from '../client/Player';
-import { UgpradesCardProps } from '../components/upgrades_card/UpgradesCard';
+import { Action, FiringArc, Ship, ShipSize } from '../client/Ship';
+import { Upgrade, UpgradeSlotType } from '../client/Upgrade';
 
 const xwing: Ship = {
   name: 'X-wing',
@@ -262,6 +261,23 @@ const r2d2: Upgrade = {
   image: 'upgrades/Astromech/r2-d2.png',
   xws: 'r2d2'
 };
+const stealthdevice: Upgrade = {
+  name: 'Stealth Device',
+  id: 174,
+  points: 3,
+  slot: UpgradeSlotType['Modification'],
+  text:
+    'Increase your agility value by 1. If you are hit by an attack, discard this card.',
+  image: 'upgrades/Modification/stealth-device.png',
+  xws: 'stealthdevice',
+  grants: [
+    {
+      type: 'stats',
+      name: 'agility',
+      value: 1
+    }
+  ]
+};
 const wired: Upgrade = {
   name: 'Wired',
   id: 148,
@@ -291,7 +307,9 @@ const upgrades = {
   integratedastromech,
   ioncannonturret,
   heavyscykinterceptor,
+  r2d2,
   r2f2,
+  stealthdevice,
   wired
 };
 
@@ -322,7 +340,7 @@ const lukeskywalker: Player = {
   name: 'Luke Skywalker',
   callsign: 'Red Five',
   pilot_skill: 8,
-  current_xp: 12,
+  current_xp: 2,
 
   ship: xwing,
   slots: [
@@ -337,7 +355,7 @@ const lukeskywalker: Player = {
 
   hangar: {
     ships: [xwing],
-    upgrades: []
+    upgrades: [r2d2, ioncannonturret]
   }
 };
 

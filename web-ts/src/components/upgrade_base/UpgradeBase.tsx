@@ -30,16 +30,15 @@ function* matchGenerator(text: string) {
   while (true) {
     const match = remaider.match('\\[(.*?)\\]');
     if (!!!match) {
-      yield dangerousInnerHTML(remaider, i);
+      yield dangerousInnerHTML(remaider, i++);
       break;
     }
 
     const splits = remaider.split(match[0]);
-    yield dangerousInnerHTML(splits[0], i);
-    yield inlineXWingFont(match[1], i);
+    yield dangerousInnerHTML(splits[0], i++);
+    yield inlineXWingFont(match[1], i++);
 
     remaider = splits[1];
-    i++;
   }
 }
 

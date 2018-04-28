@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PlayerCard from '../player_card';
 import { Player } from '../../client/Player';
-import { Upgrade } from '../../client/Upgrade';
+import { Upgrade, UpgradeSlot } from '../../client/Upgrade';
 import UpgradeInventory from '../upgrade_inventory/index';
 import UpgradeShop from '../upgrade_shop/index';
 import MenuBar from '../menu_bar/index';
@@ -21,6 +21,7 @@ interface PMProps {
 
 interface PMState {
   activeDisplay: Display;
+  activeSlot?: UpgradeSlot;
 }
 
 class PlayerMenu extends React.Component<PMProps, PMState> {
@@ -28,48 +29,73 @@ class PlayerMenu extends React.Component<PMProps, PMState> {
     super(props);
 
     this.state = {
-      activeDisplay: 0
+      activeDisplay: 0,
+      activeSlot: undefined
     };
 
     this.setDisplay = this.setDisplay.bind(this);
+    this.setSlot = this.setSlot.bind(this);
+
+    this.chooseDisplay = this.chooseDisplay.bind(this);
+    this.selectUpgrade = this.selectUpgrade.bind(this);
   }
 
   setDisplay(display: Display): void {
     this.setState({ activeDisplay: display });
   }
 
+  setSlot(slot: UpgradeSlot): void {
+    this.setState({ activeSlot: slot });
+  }
+  chooseDisplay(state: PMState, props: PMProps): JSX.Element {
+    const { player, upgrades, PurchaseUpgrade } = props;
+    const { current_xp } = player;
+
+    const { activeDisplay, activeSlot } = state;
+
+    switch (activeDisplay) {
+      case Display.shop:
+        return (
+          <UpgradeShop
+            current_xp={current_xp}
+            upgrades={upgrades}
+            onPurchase={PurchaseUpgrade}
+            slot={!!activeSlot ? activeSlot.slot : undefined}
+          />
+        );
+      case Display.inventory:
+        return <UpgradeInventory />;
+      default:
+        return (
+          <PlayerCard player={player} onSelectUpgrade={this.selectUpgrade} />
+        );
+    }
+  }
+
+  selectUpgrade(slot: UpgradeSlot): void {
+    this.setSlot(slot);
+
+    if (!slot.upgrade) {
+      this.setDisplay(Display.shop);
+    } else {
+      this.setDisplay(Display.inventory);
+    }
+  }
+
   render() {
-    const { activeDisplay } = this.state;
+    const { activeDisplay, activeSlot } = this.state;
+
     return (
       <div className="player-menu">
         <MenuBar
-          current={activeDisplay}
+          currentID={activeDisplay}
+          lock={activeSlot === undefined}
           type={Display}
           onClick={this.setDisplay}
         />
-        {chooseDisplay(activeDisplay, this.props)}
+        {this.chooseDisplay(this.state, this.props)}
       </div>
     );
-  }
-}
-
-function chooseDisplay(active: Display, props: PMProps): JSX.Element {
-  const { player, upgrades, PurchaseUpgrade } = props;
-  const { current_xp } = player;
-
-  switch (active) {
-    case Display.shop:
-      return (
-        <UpgradeShop
-          current_xp={current_xp}
-          upgrades={upgrades}
-          onPurchase={PurchaseUpgrade}
-        />
-      );
-    case Display.inventory:
-      return <UpgradeInventory />;
-    default:
-      return <PlayerCard player={player} />;
   }
 }
 

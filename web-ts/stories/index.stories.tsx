@@ -50,11 +50,17 @@ storiesOf('Maneuver Card', module)
   ));
 
 storiesOf('Upgrade slots', module).add('as default', () => (
-  <UpgradeSlots slots={helpers.players.leeroyjenkins.slots} />
+  <UpgradeSlots
+    slots={helpers.players.leeroyjenkins.slots}
+    onSelect={action('clicked')}
+  />
 ));
 
 storiesOf('Player Card', module).add('Leeroy', () => (
-  <PlayerCard player={helpers.players.leeroyjenkins} />
+  <PlayerCard
+    player={helpers.players.leeroyjenkins}
+    onSelectUpgrade={action('clicked')}
+  />
 ));
 
 storiesOf('Full List', module).add('Luke and Leeroy', () => (
@@ -65,9 +71,14 @@ storiesOf('Full List', module).add('Luke and Leeroy', () => (
 
 storiesOf('Player Menu', module).add('Leeroy', () => (
   <PlayerMenu
-    player={helpers.players.leeroyjenkins}
+    player={helpers.players.lukeskywalker}
     PurchaseUpgrade={action('clicked')}
-    upgrades={[]}
+    upgrades={[
+      helpers.upgrades.engineUpgrade,
+      helpers.upgrades.integratedastromech,
+      helpers.upgrades.r2f2,
+      helpers.upgrades.wired
+    ]}
   />
 ));
 // storiesOf('Welcome', module).add('to Storybook', () => (

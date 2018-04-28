@@ -1,8 +1,9 @@
 import * as React from 'react';
 
 interface MBProps {
+  currentID: number;
+  lock: boolean;
   type: any;
-  current: number;
   onClick: (id: number) => void;
 }
 function MenuBar(props: MBProps): JSX.Element {
@@ -13,7 +14,9 @@ function MenuBar(props: MBProps): JSX.Element {
   );
 }
 
-function listButtons({ type, current, onClick }: MBProps): JSX.Element[] {
+function listButtons(props: MBProps): JSX.Element[] {
+  const { type, lock, currentID, onClick } = props;
+
   const keys = Object.keys(type).filter(
     k => typeof type[k as any] === 'number'
   );
@@ -23,7 +26,7 @@ function listButtons({ type, current, onClick }: MBProps): JSX.Element[] {
       <button
         className="menu-bar-list-button"
         onClick={() => onClick(type[key])}
-        disabled={type[key] === current}
+        disabled={type[key] === currentID || !!lock}
       >
         {key}
       </button>

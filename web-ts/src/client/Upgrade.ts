@@ -28,6 +28,7 @@ export namespace UpgradeSlotType {
 export interface Grant {
   type: string;
   name: string;
+  value?: number;
 }
 
 export interface Upgrade {

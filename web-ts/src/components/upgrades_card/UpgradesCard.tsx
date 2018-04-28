@@ -10,7 +10,7 @@ function UpgradesCard({ slots }: UgpradesCardProps) {
   return (
     <div>
       <div>
-        <UpgradeSlots slots={slots} />
+        <UpgradeSlots slots={slots} onSelect={() => {}} />
       </div>
     </div>
   );

@@ -7,9 +7,10 @@ import ManeuverCard from '../../maneuver_card';
 import StatusBar from '../../status_bar';
 import UpgradesCard from '../../upgrades_card';
 import PlayerCard from '../PlayerCard';
+import UpgradeSlots from '../../upgrade_slots/index';
 
 describe('PlayerCard', () => {
-  let player
+  let player;
   describe('render', () => {
     describe('when given a simple level 2 player', () => {
       beforeEach(() => {
@@ -37,6 +38,7 @@ describe('PlayerCard', () => {
             <div>Leeroy Jenkins</div>
             <div>LEEEEEERoy</div>
             <div>2</div>
+            <div>5</div>
             <div>
               <StatusBar />
             </div>
@@ -47,7 +49,7 @@ describe('PlayerCard', () => {
               <ManeuverCard />
             </div>
             <div>
-              <UpgradesCard />
+              <UpgradeSlots />
             </div>
           </div>
         );

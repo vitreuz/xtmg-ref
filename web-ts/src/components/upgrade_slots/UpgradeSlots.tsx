@@ -4,33 +4,43 @@ import UpgradeBase from '../upgrade_base';
 import { FontType } from '../xwing_font/XWingFont';
 import XWingFont from '../xwing_font/index';
 
-export interface UpgradeSlotsProps {
+export interface USProps {
+  onSelect: (upgradeSlot: UpgradeSlot) => void;
   slots: UpgradeSlot[];
 }
 
-function UpgradeSlots({ slots }: UpgradeSlotsProps) {
+function UpgradeSlots(props: USProps) {
   return (
     <div className="upgrade-slots">
-      <div className="upgrade-slots-list">{listSlots(slots)}</div>
+      <div className="upgrade-slots-list">{listSlots(props)}</div>
     </div>
   );
 }
 
-export default UpgradeSlots;
+function listSlots(props: USProps) {
+  const { slots, onSelect } = props;
 
-function listSlots(slots: UpgradeSlot[]) {
-  return slots.map(({ slot, upgrade }: UpgradeSlot, i) => (
-    <div className="upgrade-slot" key={i}>
-      <button className="upgrade-slot-button">
-        <div className="button-icon">
-          <XWingFont symbol={slot} type={FontType.slot} />
-        </div>
-        {upgrade ? (
-          <UpgradeBase upgrade={upgrade} />
-        ) : (
-          <div className="button-name">{UpgradeSlotType[slot]}</div>
-        )}
-      </button>
-    </div>
-  ));
+  return slots.map((upgradeSlot, i) => {
+    const { slot, upgrade } = upgradeSlot;
+
+    return (
+      <div className="upgrade-slot" key={i}>
+        <button
+          className="upgrade-slot-button"
+          onClick={() => onSelect(upgradeSlot)}
+        >
+          <div className="button-icon">
+            <XWingFont symbol={slot} type={FontType.slot} />
+          </div>
+          {upgrade ? (
+            <UpgradeBase upgrade={upgrade} />
+          ) : (
+            <div className="button-name">{UpgradeSlotType[slot]}</div>
+          )}
+        </button>
+      </div>
+    );
+  });
 }
+
+export default UpgradeSlots;

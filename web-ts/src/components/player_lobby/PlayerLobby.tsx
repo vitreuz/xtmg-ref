@@ -25,7 +25,7 @@ class PlayerLobby extends React.Component<PLProps, PLState> {
     return (
       <div className="player-lobby">
         {chosenPlayer ? (
-          <PlayerCard player={chosenPlayer} />
+          <PlayerCard player={chosenPlayer} onSelectUpgrade={() => {}} />
         ) : (
           <PlayersList players={players} />
         )}

@@ -38,13 +38,37 @@ describe('MenuBar', () => {
 
   describe('buttons', () => {
     describe('when a button is already active', () => {
-      it('disables that button', () => {
+      it('disables only that button', () => {
         const wrapper = shallow(
-          <MenuBar type={type} onClick={onClick} current={current} />
+          <MenuBar type={type} onClick={onClick} currentID={current} />
         );
+
+        const buttonOne = wrapper.find('button').at(0);
+        expect(buttonOne).toHaveProp('disabled', false);
 
         const buttonTwo = wrapper.find('button').at(1);
         expect(buttonTwo).toHaveProp('disabled', true);
+
+        const buttonThree = wrapper.find('button').at(2);
+        expect(buttonThree).toHaveProp('disabled', false);
+      });
+    });
+
+    describe('when the component is locked', () => {
+      it('disables all buttons', () => {
+        const wrapper = shallow(
+          <MenuBar
+            type={type}
+            onClick={onClick}
+            currentID={current}
+            lock={true}
+          />
+        );
+
+        const buttons = wrapper.find('button');
+        buttons.forEach(button => {
+          expect(button).toHaveProp('disabled', true);
+        });
       });
     });
 
