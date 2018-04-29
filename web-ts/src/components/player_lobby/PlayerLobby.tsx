@@ -1,11 +1,14 @@
 import * as React from 'react';
 import { Player } from 'client/Player';
 import { Upgrade } from 'client/Upgrade';
+import { Ship } from 'client/Ship';
 import PlayersList from '../players_list';
 import PlayerMenu from '../player_menu/index';
 import PlayerForm from '../player_form/index';
 
-interface PLProps {}
+interface PLProps {
+  starterShips: Ship[];
+}
 
 interface PLState {
   chosenPlayer?: Player;
@@ -28,12 +31,15 @@ class PlayerLobby extends React.Component<PLProps, PLState> {
   startNewPlayer() {}
 
   render() {
-    return <div className="player-lobby">{renderLobby(this.state)}</div>;
+    return (
+      <div className="player-lobby">{renderLobby(this.props, this.state)}</div>
+    );
   }
 }
 
-function renderLobby(state: PLState): JSX.Element {
+function renderLobby(props: PLProps, state: PLState): JSX.Element {
   const { chosenPlayer, isCreateOpen, players, upgrades } = state;
+  const { starterShips } = props;
 
   if (!!chosenPlayer) {
     return (
@@ -47,7 +53,13 @@ function renderLobby(state: PLState): JSX.Element {
     );
   }
   if (isCreateOpen) {
-    return <PlayerForm />;
+    return (
+      <PlayerForm
+        starterShips={starterShips}
+        CreatePlayer={() => {}}
+        CancelForm={() => {}}
+      />
+    );
   }
   return (
     <PlayersList

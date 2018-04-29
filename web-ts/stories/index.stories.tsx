@@ -10,6 +10,7 @@ import PlayersList from '../src/components/players_list';
 import StatusBar from '../src/components/status_bar';
 import UpgradeSlots from '../src/components/upgrade_slots';
 import helpers from '../src/util/helpers';
+import PlayerForm from '../src/components/player_form';
 
 const actions = [
   { action: Action.Focus },
@@ -68,6 +69,15 @@ storiesOf('Full List', module).add('Luke and Leeroy', () => (
     players={[helpers.players.leeroyjenkins, helpers.players.lukeskywalker]}
     NewPlayer={action('new')}
     SelectPlayer={action('select')}
+  />
+));
+
+const starterShips = [helpers.ships.xwing, helpers.ships.ywing];
+storiesOf('Player Form', module).add('new form', () => (
+  <PlayerForm
+    starterShips={starterShips}
+    CreatePlayer={action('submit')}
+    CancelForm={action('cancel')}
   />
 ));
 
