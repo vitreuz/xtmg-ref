@@ -325,6 +325,7 @@ const upgrades = {
 };
 
 const leeroyjenkins: Player = {
+  id: 'cccddd',
   name: 'Leeroy Jenkins',
   callsign: 'LEEEEEEroy',
   pilot_skill: 5,
@@ -348,6 +349,7 @@ const leeroyjenkins: Player = {
 };
 
 const lukeskywalker: Player = {
+  id: 'aaabbb',
   name: 'Luke Skywalker',
   callsign: 'Red Five',
   pilot_skill: 8,

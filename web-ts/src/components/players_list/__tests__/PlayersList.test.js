@@ -7,6 +7,15 @@ import XWingFont from '../../xwing_font/index';
 
 describe('PlayersList', () => {
   let players;
+  let onNew = jest.fn();
+  let onSelect = jest.fn();
+
+  beforeEach(() => {
+    players = [];
+
+    onNew.mockReset();
+    onSelect.mockReset();
+  });
 
   describe('render', () => {
     describe('when no players are given', () => {
@@ -59,6 +68,38 @@ describe('PlayersList', () => {
             </ul>
           </div>
         );
+      });
+    });
+  });
+
+  describe('New Player button', () => {
+    describe('when attempting to create a new player', () => {
+      it('calls the onNew function', () => {
+        const wrapper = shallow(
+          <PlayersList players={players} NewPlayer={onNew} />
+        );
+
+        const button = wrapper.find('.players-list-newplayer-button');
+        button.simulate('click');
+        expect(onNew.mock.calls.length).toBe(1);
+      });
+    });
+  });
+
+  describe('Player button', () => {
+    describe('when selecting an existing player', () => {
+      beforeEach(() => {
+        players = [helpers.players.leeroyjenkins];
+      });
+
+      it('passes the player id to onSelect', () => {
+        const wrapper = shallow(
+          <PlayersList players={players} SelectPlayer={onSelect} />
+        );
+
+        const button = wrapper.find('.players-list-player-button');
+        button.simulate('click');
+        expect(onSelect.mock.calls.length).toBe(1);
       });
     });
   });

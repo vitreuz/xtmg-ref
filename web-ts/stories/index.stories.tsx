@@ -66,6 +66,8 @@ storiesOf('Player Card', module).add('Leeroy', () => (
 storiesOf('Full List', module).add('Luke and Leeroy', () => (
   <PlayersList
     players={[helpers.players.leeroyjenkins, helpers.players.lukeskywalker]}
+    NewPlayer={action('new')}
+    SelectPlayer={action('select')}
   />
 ));
 

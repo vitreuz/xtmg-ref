@@ -18,6 +18,7 @@ export interface Modifiers {
 }
 
 export interface Player {
+  id: string;
   name: string;
   callsign: string;
   pilot_skill: number;
