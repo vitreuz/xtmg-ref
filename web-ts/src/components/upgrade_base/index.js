@@ -1,2 +1,2 @@
-import UpgradeBase from "./UpgradeBase";
+import UpgradeBase from './UpgradeBase';
 export default UpgradeBase;

@@ -1,16 +1,17 @@
 import * as React from 'react';
 
-import { Upgrade, UpgradeSlotType } from '../../client/Upgrade';
+import { Upgrade, UpgradeSlot } from 'client/Upgrade';
 import UpgradeItem from '../upgrade_item';
 
-export interface UpgradeShopProps {
+interface USProps {
   current_xp: number;
   upgrades: Upgrade[];
-  slot?: UpgradeSlotType;
+  upgradeSlot?: UpgradeSlot;
   onPurchase: (id: number) => void;
+  onEquip: (id: number) => void;
 }
 
-function UpgradeShop(props: UpgradeShopProps) {
+function UpgradeShop(props: USProps) {
   const { upgrades } = props;
 
   return (
@@ -20,25 +21,39 @@ function UpgradeShop(props: UpgradeShopProps) {
   );
 }
 
-function listUpgrades(props: UpgradeShopProps) {
-  const { current_xp, slot, upgrades, onPurchase } = props;
+function listUpgrades(props: USProps) {
+  const { current_xp, upgradeSlot, upgrades } = props;
 
   return upgrades.map((upgrade, i) => {
     const canClick = current_xp >= upgrade.points;
-    if (slot != undefined && upgrade.slot !== slot) {
+    if (!!upgradeSlot && upgrade.slot !== upgradeSlot.slot) {
       return;
     }
 
     return (
-      <UpgradeItem
-        buttonText={'Purchase'}
-        canClick={canClick}
-        onClick={onPurchase}
-        upgrade={upgrade}
-        key={i}
-      />
+      <li className="upgrade-shop-item" key={i}>
+        <UpgradeItem
+          buttonText={'Purchase'}
+          canClick={canClick}
+          onClick={handleClick(props)}
+          upgrade={upgrade}
+        />
+      </li>
     );
   });
+}
+
+function handleClick(props: USProps): (id: number) => void {
+  const { upgradeSlot, onPurchase, onEquip } = props;
+  const equipped = !!upgradeSlot ? upgradeSlot.upgrade : undefined;
+
+  return (id: number) => {
+    onPurchase(id);
+
+    if (!equipped) {
+      onEquip(id);
+    }
+  };
 }
 
 export default UpgradeShop;

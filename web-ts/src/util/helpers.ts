@@ -261,6 +261,16 @@ const r2d2: Upgrade = {
   image: 'upgrades/Astromech/r2-d2.png',
   xws: 'r2d2'
 };
+const r5astromech: Upgrade = {
+  name: 'R5 Astromech',
+  id: 7,
+  slot: UpgradeSlotType['Astromech'],
+  points: 1,
+  text:
+    'During the End phase, you may choose 1 of your faceup Damage cards with the <strong>Ship</strong> trait and flip it facedown.',
+  image: 'upgrades/Astromech/r5-astromech.png',
+  xws: 'r5astromech'
+};
 const stealthdevice: Upgrade = {
   name: 'Stealth Device',
   id: 174,
@@ -309,6 +319,7 @@ const upgrades = {
   heavyscykinterceptor,
   r2d2,
   r2f2,
+  r5astromech,
   stealthdevice,
   wired
 };
@@ -355,7 +366,7 @@ const lukeskywalker: Player = {
 
   hangar: {
     ships: [xwing],
-    upgrades: [r2d2, ioncannonturret]
+    upgrades: [r2d2, r5astromech, ioncannonturret, stealthdevice]
   }
 };
 

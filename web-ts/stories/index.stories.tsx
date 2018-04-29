@@ -72,7 +72,9 @@ storiesOf('Full List', module).add('Luke and Leeroy', () => (
 storiesOf('Player Menu', module).add('Leeroy', () => (
   <PlayerMenu
     player={helpers.players.lukeskywalker}
-    PurchaseUpgrade={action('clicked')}
+    EquipUpgrade={action('equip')}
+    UnequipUpgrade={action('unequip')}
+    PurchaseUpgrade={action('purchase')}
     upgrades={[
       helpers.upgrades.engineUpgrade,
       helpers.upgrades.integratedastromech,

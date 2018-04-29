@@ -16,7 +16,9 @@ interface PMProps {
   player: Player;
   upgrades: Upgrade[];
 
+  EquipUpgrade: (id: number) => void;
   PurchaseUpgrade: (id: number) => void;
+  UnequipUpgrade: (id: number) => void;
 }
 
 interface PMState {
@@ -48,8 +50,9 @@ class PlayerMenu extends React.Component<PMProps, PMState> {
     this.setState({ activeSlot: slot });
   }
   chooseDisplay(state: PMState, props: PMProps): JSX.Element {
-    const { player, upgrades, PurchaseUpgrade } = props;
-    const { current_xp } = player;
+    const { player, upgrades } = props;
+    const { EquipUpgrade, PurchaseUpgrade, UnequipUpgrade } = props;
+    const { current_xp, hangar } = player;
 
     const { activeDisplay, activeSlot } = state;
 
@@ -59,12 +62,20 @@ class PlayerMenu extends React.Component<PMProps, PMState> {
           <UpgradeShop
             current_xp={current_xp}
             upgrades={upgrades}
+            upgradeSlot={activeSlot}
+            onEquip={EquipUpgrade}
             onPurchase={PurchaseUpgrade}
-            slot={!!activeSlot ? activeSlot.slot : undefined}
           />
         );
       case Display.inventory:
-        return <UpgradeInventory />;
+        return (
+          <UpgradeInventory
+            upgradeSlot={activeSlot}
+            upgrades={hangar.upgrades}
+            onEquip={EquipUpgrade}
+            onUnequip={UnequipUpgrade}
+          />
+        );
       default:
         return (
           <PlayerCard player={player} onSelectUpgrade={this.selectUpgrade} />

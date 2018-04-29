@@ -26,7 +26,6 @@
     "webpack",
     "jest",
     "src/setupTests.ts",
-    "stories",
-    "src/util/helpers.ts"
+    "stories"
   ]
 }

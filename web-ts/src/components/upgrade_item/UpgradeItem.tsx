@@ -1,7 +1,6 @@
-import * as React from 'react';
-import { Upgrade } from '../../client/Upgrade';
-
+import { Upgrade } from 'client/Upgrade';
 import UpgradeBase from '../upgrade_base';
+import * as React from 'react';
 
 export interface UpgradeItemProps {
   buttonText: string;
@@ -12,8 +11,6 @@ export interface UpgradeItemProps {
 
 function UpgradeItem(props: UpgradeItemProps) {
   const { canClick, buttonText, onClick, upgrade } = props;
-
-  // const canPurchase = current_xp - upgrade.points >= 0;
   const handleClick = () => onClick(upgrade.id);
 
   return (

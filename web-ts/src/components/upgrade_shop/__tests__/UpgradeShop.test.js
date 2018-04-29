@@ -8,6 +8,9 @@ import UpgradeShop from '../UpgradeShop';
 describe('UpgradeShop', () => {
   let upgrades = [];
   let slot;
+  let onPurchase = jest.fn();
+  let onEquip = jest.fn();
+
   beforeEach(() => {
     const {
       ioncannonturret,
@@ -23,10 +26,16 @@ describe('UpgradeShop', () => {
       blasterturret,
       engineUpgrade
     ];
-    slot = UpgradeSlotType.Turret;
+
+    onPurchase.mockReset();
+    onEquip.mockReset();
   });
 
   describe('render', () => {
+    beforeEach(() => {
+      slot = { slot: UpgradeSlotType.Turret };
+    });
+
     describe('when slot is not specified', () => {
       it('renders each upgrade', () => {
         const wrapper = shallow(<UpgradeShop upgrades={upgrades} />);
@@ -34,11 +43,21 @@ describe('UpgradeShop', () => {
         expect(wrapper).toMatchElement(
           <div>
             <ul>
-              <UpgradeItem />
-              <UpgradeItem />
-              <UpgradeItem />
-              <UpgradeItem />
-              <UpgradeItem />
+              <li>
+                <UpgradeItem />
+              </li>
+              <li>
+                <UpgradeItem />
+              </li>
+              <li>
+                <UpgradeItem />
+              </li>
+              <li>
+                <UpgradeItem />
+              </li>
+              <li>
+                <UpgradeItem />
+              </li>
             </ul>
           </div>
         );
@@ -48,15 +67,21 @@ describe('UpgradeShop', () => {
     describe('when a slot is specified', () => {
       it('renders', () => {
         const wrapper = shallow(
-          <UpgradeShop upgrades={upgrades} slot={slot} />
+          <UpgradeShop upgrades={upgrades} upgradeSlot={slot} />
         );
 
         expect(wrapper).toMatchElement(
           <div>
             <ul>
-              <UpgradeItem />
-              <UpgradeItem />
-              <UpgradeItem />
+              <li>
+                <UpgradeItem />
+              </li>
+              <li>
+                <UpgradeItem />
+              </li>
+              <li>
+                <UpgradeItem />
+              </li>
             </ul>
           </div>
         );
@@ -73,6 +98,55 @@ describe('UpgradeShop', () => {
 
         const item = wrapper.find(UpgradeItem).at(0);
         expect(item).toHaveProp('canClick', false);
+      });
+    });
+
+    describe('when an empty slot is provided', () => {
+      beforeEach(() => {
+        slot = { slot: UpgradeSlotType.Turret };
+        upgrades = [helpers.upgrades.blasterturret];
+      });
+
+      it('runs onEquip after running onPurchase', () => {
+        const wrapper = shallow(
+          <UpgradeShop
+            upgrades={upgrades}
+            upgradeSlot={slot}
+            onEquip={onEquip}
+            onPurchase={onPurchase}
+          />
+        );
+
+        const item = wrapper.find(UpgradeItem);
+        item.prop('onClick')();
+        expect(onPurchase.mock.calls.length).toBe(1);
+        expect(onEquip.mock.calls.length).toBe(1);
+      });
+    });
+
+    describe('when an populated slot is provided', () => {
+      beforeEach(() => {
+        slot = {
+          slot: UpgradeSlotType.Turret,
+          upgrade: helpers.upgrades.dorsalturret
+        };
+        upgrades = [helpers.upgrades.blasterturret];
+      });
+
+      it('runs only onPurchase', () => {
+        const wrapper = shallow(
+          <UpgradeShop
+            upgrades={upgrades}
+            upgradeSlot={slot}
+            onEquip={onEquip}
+            onPurchase={onPurchase}
+          />
+        );
+
+        const item = wrapper.find(UpgradeItem);
+        item.prop('onClick')();
+        expect(onPurchase.mock.calls.length).toBe(1);
+        expect(onEquip.mock.calls.length).toBe(0);
       });
     });
   });
