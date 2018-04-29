@@ -49,9 +49,14 @@ class PlayerMenu extends React.Component<PMProps, PMState> {
   setSlot(slot: UpgradeSlot): void {
     this.setState({ activeSlot: slot });
   }
+
+  unsetSlot(): void {
+    this.setState({ activeSlot: undefined });
+  }
+
   chooseDisplay(state: PMState, props: PMProps): JSX.Element {
     const { player, upgrades } = props;
-    const { EquipUpgrade, PurchaseUpgrade, UnequipUpgrade } = props;
+    const { PurchaseUpgrade, UnequipUpgrade } = props;
     const { current_xp, hangar } = player;
 
     const { activeDisplay, activeSlot } = state;
@@ -63,7 +68,7 @@ class PlayerMenu extends React.Component<PMProps, PMState> {
             current_xp={current_xp}
             upgrades={upgrades}
             upgradeSlot={activeSlot}
-            onEquip={EquipUpgrade}
+            onEquip={this.onEquip(props)}
             onPurchase={PurchaseUpgrade}
           />
         );
@@ -72,7 +77,7 @@ class PlayerMenu extends React.Component<PMProps, PMState> {
           <UpgradeInventory
             upgradeSlot={activeSlot}
             upgrades={hangar.upgrades}
-            onEquip={EquipUpgrade}
+            onEquip={this.onEquip(props)}
             onUnequip={UnequipUpgrade}
           />
         );
@@ -81,6 +86,15 @@ class PlayerMenu extends React.Component<PMProps, PMState> {
           <PlayerCard player={player} onSelectUpgrade={this.selectUpgrade} />
         );
     }
+  }
+
+  onEquip({ EquipUpgrade }: PMProps): (id: number) => void {
+    return (id: number) => {
+      EquipUpgrade(id);
+
+      this.setDisplay(Display.player);
+      this.unsetSlot();
+    };
   }
 
   selectUpgrade(slot: UpgradeSlot): void {

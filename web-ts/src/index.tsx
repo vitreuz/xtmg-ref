@@ -1,10 +1,5 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import XWingFont from './components/xwing_font';
-import { Action } from 'client/Ship';
-import { FontType } from 'components/xwing_font/XWingFont';
+import App from 'components/App';
 
-ReactDOM.render(
-  <XWingFont symbol={Action.Evade} type={FontType.action} />,
-  document.getElementById('root')
-);
+ReactDOM.render(<App />, document.getElementById('root'));

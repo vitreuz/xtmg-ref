@@ -10,6 +10,12 @@ import PlayerMenu, { Display } from '../PlayerMenu';
 describe('PlayerMenu', () => {
   let activeDisplay;
   let player = helpers.players.leeroyjenkins;
+  let equipUpgrade = jest.fn();
+
+  beforeEach(() => {
+    equipUpgrade.mockReset();
+  });
+
   describe('render', () => {
     describe('when the active display is `player`', () => {
       beforeEach(() => {
@@ -115,6 +121,39 @@ describe('PlayerMenu', () => {
           activeSlot: { slot: 2, upgrade: helpers.upgrades.wired },
           activeDisplay: Display.inventory
         });
+      });
+    });
+  });
+
+  describe('onEquip', () => {
+    describe('whenever an upgrade is equipped', () => {
+      let wrapper;
+
+      beforeEach(() => {
+        wrapper = shallow(
+          <PlayerMenu player={player} EquipUpgrade={equipUpgrade} />
+        ).setState({
+          activeSlot: 3,
+          activeDisplay: Display.inventory
+        });
+      });
+
+      it('resets the activeSlot and activeDisplay', () => {
+        const inv = wrapper.find(UpgradeInventory);
+        inv.prop('onEquip')();
+
+        expect(wrapper).toHaveState({
+          activeSlot: undefined,
+          activeDisplay: Display.player
+        });
+      });
+
+      it('calls the EquipUpgrade function', () => {
+        const inv = wrapper.find(UpgradeInventory);
+        inv.prop('onEquip')(256);
+
+        expect(equipUpgrade.mock.calls.length).toBe(1);
+        expect(equipUpgrade.mock.calls[0][0]).toBe(256);
       });
     });
   });
