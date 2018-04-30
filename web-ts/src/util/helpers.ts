@@ -2,6 +2,10 @@ import { Player } from '../client/Player';
 import { Action, FiringArc, Ship, ShipSize } from '../client/Ship';
 import { Upgrade, UpgradeSlotType } from '../client/Upgrade';
 
+function parse<T extends string>(vals: string[]): T[] {
+  return vals.map(val => <T>val);
+}
+
 const xwing: Ship = {
   name: 'X-wing',
   faction: ['Rebel Alliance'],
@@ -11,7 +15,7 @@ const xwing: Ship = {
     hull: 3,
     shield: 2
   },
-  actions: Action.parse(...['Focus', 'Target Lock']),
+  actions: parse<Action>(['Focus', 'Target Lock']),
   maneuvers: [
     [0, 0, 0, 0, 0, 0],
     [0, 2, 2, 2, 0, 0],
@@ -22,7 +26,7 @@ const xwing: Ship = {
   size: ShipSize['small'],
   xws: 'xwing',
   id: 0,
-  firing_arcs: [FiringArc['Front']]
+  firing_arcs: parse<FiringArc>(['Front'])
 };
 
 const ywing: Ship = {
@@ -34,7 +38,7 @@ const ywing: Ship = {
     hull: 5,
     shield: 3
   },
-  actions: Action.parse(...['Focus', 'Target Lock']),
+  actions: parse<Action>(['Focus', 'Target Lock']),
   maneuvers: [
     [0, 0, 0, 0, 0, 0],
     [0, 1, 2, 1, 0, 0],
@@ -45,7 +49,7 @@ const ywing: Ship = {
   size: ShipSize['small'],
   xws: 'ywing',
   id: 1,
-  firing_arcs: [FiringArc['Front']]
+  firing_arcs: parse<FiringArc>(['Front'])
 };
 
 const lambdaclassshuttle: Ship = {
@@ -57,7 +61,7 @@ const lambdaclassshuttle: Ship = {
     hull: 5,
     shield: 5
   },
-  actions: Action.parse(...['Focus', 'Target Lock']),
+  actions: parse<Action>(['Focus', 'Target Lock']),
   maneuvers: [
     [0, 0, 3, 0, 0],
     [0, 2, 2, 2, 0],
@@ -67,7 +71,7 @@ const lambdaclassshuttle: Ship = {
   size: ShipSize['large'],
   xws: 'lambdaclassshuttle',
   id: 9,
-  firing_arcs: [FiringArc['Front']]
+  firing_arcs: parse<FiringArc>(['Front'])
 };
 
 const tieadvanced: Ship = {
@@ -79,7 +83,7 @@ const tieadvanced: Ship = {
     hull: 3,
     shield: 2
   },
-  actions: Action.parse(...['Focus', 'Target Lock', 'Barrel Roll', 'Evade']),
+  actions: parse<Action>(['Focus', 'Target Lock', 'Barrel Roll', 'Evade']),
   maneuvers: [
     [0, 0, 0, 0, 0, 0],
     [0, 2, 0, 2, 0, 0],
@@ -91,7 +95,7 @@ const tieadvanced: Ship = {
   size: ShipSize['small'],
   xws: 'tieadvanced',
   id: 5,
-  firing_arcs: [FiringArc['Front']]
+  firing_arcs: parse<FiringArc>(['Front'])
 };
 
 const tiefighter: Ship = {
@@ -103,7 +107,7 @@ const tiefighter: Ship = {
     hull: 3,
     shield: 0
   },
-  actions: Action.parse(...['Focus', 'Barrel Roll', 'Evade']),
+  actions: parse<Action>(['Focus', 'Barrel Roll', 'Evade']),
   maneuvers: [
     [0, 0, 0, 0, 0, 0],
     [1, 0, 0, 0, 1, 0],
@@ -115,7 +119,7 @@ const tiefighter: Ship = {
   size: ShipSize['small'],
   xws: 'tiefighter',
   id: 4,
-  firing_arcs: [FiringArc['Front']]
+  firing_arcs: parse<FiringArc>(['Front'])
 };
 const tiesilencer: Ship = {
   name: 'TIE Silencer',
@@ -134,7 +138,7 @@ const tiesilencer: Ship = {
     hull: 4,
     shield: 2
   },
-  firing_arcs: [FiringArc['Front']],
+  firing_arcs: parse<FiringArc>(['Front']),
   id: 53,
   maneuvers: [
     [],
@@ -150,7 +154,7 @@ const quadjumper: Ship = {
   name: 'Quadjumper',
   xws: 'quadjumper',
   faction: ['Scum and Villainy'],
-  actions: Action.parse(...['Barrel Roll', 'Focus']),
+  actions: parse<Action>(['Barrel Roll', 'Focus']),
   size: ShipSize['small'],
   status: {
     attack: 2,
@@ -165,7 +169,7 @@ const quadjumper: Ship = {
     [0, 1, 2, 1]
   ],
   id: 43,
-  firing_arcs: [FiringArc['Front']]
+  firing_arcs: parse<FiringArc>(['Front'])
 };
 const ships = {
   xwing,
@@ -372,7 +376,40 @@ const lukeskywalker: Player = {
   }
 };
 
-const players = { leeroyjenkins, lukeskywalker };
+const everymanjack: Player = {
+  id: 'eeefff',
+  name: 'Jack',
+  callsign: 'JJ',
+  pilot_skill: 4,
+  current_xp: 3,
+
+  ship: tiefighter,
+  slots: [
+    { slot: UpgradeSlotType.Astromech },
+    { slot: UpgradeSlotType.Bomb },
+    { slot: UpgradeSlotType.Cannon },
+    { slot: UpgradeSlotType.Cargo },
+    { slot: UpgradeSlotType.Crew },
+    { slot: UpgradeSlotType.Elite },
+    { slot: UpgradeSlotType.Hardpoint },
+    { slot: UpgradeSlotType.Illicit },
+    { slot: UpgradeSlotType.Missile },
+    { slot: UpgradeSlotType.SalvagedAstromech },
+    { slot: UpgradeSlotType.System },
+    { slot: UpgradeSlotType.Team },
+    { slot: UpgradeSlotType.Tech },
+    { slot: UpgradeSlotType.Title },
+    { slot: UpgradeSlotType.Torpedo },
+    { slot: UpgradeSlotType.Turret }
+  ],
+
+  hangar: {
+    ships: [tiefighter],
+    upgrades: []
+  }
+};
+
+const players = { leeroyjenkins, lukeskywalker, everymanjack };
 
 const helpers = { ships, upgrades, players };
 export default helpers;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import 'xwing-miniatures-font/dist/xwing-miniatures.css';
-import { Action, FiringArc, Bearing, ShipStat } from '../../client/Ship';
+import { Action, Bearing, FiringArc, ShipStat } from '../../client/Ship';
 import { UpgradeSlotType } from '../../client/Upgrade';
 import './xwingfont.css';
 
@@ -28,7 +28,7 @@ export function ParseFontType(
 
 export interface XWingFontProps {
   symbol: number | string;
-  type: string | FontType;
+  type: FontType;
 }
 
 function XWingFont({ symbol, type }: XWingFontProps) {
@@ -39,38 +39,38 @@ function XWingFont({ symbol, type }: XWingFontProps) {
   return (
     <i
       className={
-        'xwing-font xwing-miniatures-font-' + convertSymbolToFont(symbol, type)
+        'xwing-font xwing-miniatures-font-' +
+        convertSymbolToFont(symbol.toString(), type)
       }
     />
   );
 }
 
-function convertSymbolToFont(
-  symbol: number | string,
-  type: string | FontType
-): string {
-  switch (FontType[type]) {
-    case 'action':
-      return Action[symbol].replace(' ', '').toLowerCase();
-    case 'slot':
-      return UpgradeSlotType[symbol].replace(' ', '').toLowerCase();
-    case 'stat':
-      return ShipStat[symbol].toLowerCase();
-    case 'firing_arc':
+function convertSymbolToFont(symbol: string, type: FontType): string {
+  switch (type) {
+    case FontType.action:
+      return symbol.replace(' ', '').toLowerCase();
+    case FontType.firing_arc:
       return firingArcSymbol(symbol);
-    case 'maneuver':
-      return Bearing[symbol].toLowerCase();
+    case FontType.maneuver:
+      return Bearing[symbol].replace(' ', '').toLowerCase();
+    case FontType.slot:
+      return symbol.replace(' ', '').toLowerCase();
+    case FontType.stat:
+      return ShipStat[symbol].replace(' ', '').toLowerCase();
     default:
-      return '' + type;
+      throw new Error(`non-exhaustive match for symbol ${symbol}`);
   }
 }
 
-function firingArcSymbol(firingArc: FiringArc | string): string {
+function firingArcSymbol(firingArc: string): string {
   switch (firingArc) {
     case FiringArc.Auxiliary180:
       return 'attack-180';
     case FiringArc.AuxiliaryRear:
       return 'attack-frontback';
+    case FiringArc.Front:
+      return 'attack';
     default:
       return 'attack-' + FiringArc[firingArc].toLowerCase();
   }

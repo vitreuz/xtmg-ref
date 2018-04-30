@@ -1,23 +1,17 @@
 export enum Action {
-  BarrelRoll,
-  Boost,
-  Cloak,
-  Coordinate,
-  Evade,
-  Focus,
-  Jam,
-  Recover,
-  Reinforce,
-  Reload,
-  RotateArc,
-  SLAM,
-  TargetLock
-}
-
-export namespace Action {
-  export function parse(...actions: string[]): Action[] {
-    return actions.map(action => Action[action.replace(' ', '')]);
-  }
+  BarrelRoll = 'Barrel Roll',
+  Boost = 'Boost',
+  Cloak = 'Cloak',
+  Coordinate = 'Coordinate',
+  Evade = 'Evade',
+  Focus = 'Focus',
+  Jam = 'Jam',
+  Recover = 'Recover',
+  Reinforce = 'Reinforce',
+  Reload = 'Reload',
+  RotateArc = 'Rotate Arc',
+  SLAM = 'SLAM',
+  TargetLock = 'Target Lock'
 }
 
 export enum Bearing {
@@ -38,12 +32,11 @@ export enum Bearing {
 }
 
 export enum FiringArc {
-  Auxiliary180,
-  AuxiliaryRear,
-  Bullseye,
-
-  Front,
-  Turret
+  Auxiliary180 = 'Auxiliary 180',
+  AuxiliaryRear = 'Auxiliary Rear',
+  Bullseye = 'Bullseye',
+  Front = 'Front',
+  Turret = 'Turret'
 }
 
 export enum Maneuver {
@@ -54,9 +47,9 @@ export enum Maneuver {
 }
 
 export enum ShipSize {
-  small,
-  large,
-  huge
+  small = 'small',
+  large = 'large',
+  huge = 'huge'
 }
 
 export enum ShipStat {
