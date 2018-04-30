@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Upgrade } from '../../client/Upgrade';
 import XWingFont from '../xwing_font';
-import { ParseFontType } from '../xwing_font/XWingFont';
+import { FontType } from '../xwing_font/XWingFont';
 
 export interface UpgradeBaseProps {
   upgrade: Upgrade;
@@ -48,12 +48,9 @@ function dangerousInnerHTML(text: string, key: number): JSX.Element {
 }
 
 function inlineXWingFont(match: string, key: number): JSX.Element {
-  const text = match.replace(' ', '');
-  const symbol = ParseFontType(text);
-
   return (
     <span key={key}>
-      <XWingFont type={symbol.type} symbol={symbol.symbol} />
+      <XWingFont type={FontType.misc} symbol={match} />
     </span>
   );
 }

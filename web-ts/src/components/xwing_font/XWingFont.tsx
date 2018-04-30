@@ -1,29 +1,16 @@
 import * as React from 'react';
 import 'xwing-miniatures-font/dist/xwing-miniatures.css';
-import { Action, Bearing, FiringArc, ShipStat } from '../../client/Ship';
-import { UpgradeSlotType } from '../../client/Upgrade';
+import { Bearing, FiringArc, ShipStat } from '../../client/Ship';
 import './xwingfont.css';
 
 export enum FontType {
+  misc,
   action,
   firing_arc,
   maneuver,
   ship,
   slot,
   stat
-}
-
-export function ParseFontType(
-  text: string
-): { type: FontType; symbol: number } {
-  if (Action[text] !== undefined) {
-    return { type: FontType.action, symbol: Action[text] };
-  }
-  if (UpgradeSlotType[text] !== undefined) {
-    return { type: FontType.slot, symbol: UpgradeSlotType[text] };
-  }
-
-  throw new Error(`Non-exhaustive match for font type ${text}`);
 }
 
 export interface XWingFontProps {
@@ -59,7 +46,7 @@ function convertSymbolToFont(symbol: string, type: FontType): string {
     case FontType.stat:
       return ShipStat[symbol].replace(' ', '').toLowerCase();
     default:
-      throw new Error(`non-exhaustive match for symbol ${symbol}`);
+      return symbol.replace(' ', '').toLowerCase();
   }
 }
 
