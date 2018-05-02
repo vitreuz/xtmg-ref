@@ -9,8 +9,9 @@ import { wrap } from 'module';
 
 describe('PlayerLobby', () => {
   let fetchPlayer = jest.fn(id => ({ id: id }));
+  let listPlayers = jest.fn(() => ['some-player']);
   let listUpgrades = jest.fn(() => ['some-upgrade']);
-  let createPlayer = jest.fn();
+  let createPlayer = jest.fn(() => 'some-id');
 
   let updatePlayerSlots = jest.fn();
   let updatePlayerHangarUpgrades = jest.fn();
@@ -24,9 +25,22 @@ describe('PlayerLobby', () => {
   });
 
   describe('render', () => {
+    describe('when no loading component', () => {
+      it('renders LOADING text', () => {
+        const wrapper = shallow(<PlayerLobby />);
+        wrapper.setState({ chosenPlayer: undefined });
+
+        expect(wrapper).toMatchElement(
+          <div>
+            <div>LOADING...</div>
+          </div>
+        );
+      });
+    });
+
     describe('when no player is chosen and not creating a player', () => {
       it('renders a PlayersList', () => {
-        const wrapper = shallow(<PlayerLobby />);
+        const wrapper = shallow(<PlayerLobby />).setState({ players: [] });
         wrapper.setState({ chosenPlayer: undefined });
 
         expect(wrapper).toMatchElement(
@@ -65,39 +79,66 @@ describe('PlayerLobby', () => {
   });
 
   describe('state', () => {
+    describe('onListPlyaers', () => {
+      describe('when onListPlayers is called', () => {
+        it('should set the list of players', async () => {
+          expect.assertions(2);
+
+          const wrapper = shallow(<PlayerLobby ListPlayers={listPlayers} />);
+
+          return wrapper
+            .instance()
+            .onListPlayers()
+            .then(() => {
+              expect(listPlayers).toBeCalled();
+              expect(wrapper).toHaveState('players', ['some-player']);
+            });
+        });
+      });
+    });
     describe('onSelectPlayer', () => {
       describe('when onSelectPlayer is called', () => {
-        it('should set the chosen player and their equipable upgrades', () => {
+        it('should set the chosen player and their equipable upgrades', async () => {
+          expect.assertions(3);
           const wrapper = shallow(
             <PlayerLobby
               FetchPlayer={fetchPlayer}
               ListUpgradesForPlayer={listUpgrades}
             />
           );
-          wrapper.instance().onSelectPlayer('aabb');
 
-          expect(fetchPlayer).toBeCalledWith('aabb');
-          expect(listUpgrades).toBeCalledWith('aabb');
+          return wrapper
+            .instance()
+            .onSelectPlayer('aabb')
+            .then(() => {
+              expect(fetchPlayer).toBeCalledWith('aabb');
+              expect(listUpgrades).toBeCalledWith('aabb');
 
-          expect(wrapper).toHaveState({
-            chosenPlayer: { id: 'aabb' },
-            upgrades: ['some-upgrade']
-          });
+              expect(wrapper).toHaveState({
+                chosenPlayer: { id: 'aabb' },
+                upgrades: ['some-upgrade']
+              });
+            });
         });
       });
 
       describe('when PlayersList calls SelectPlayer', () => {
-        it('should set the chosen player', () => {
+        it('should set the chosen player', async () => {
+          expect.assertions(1);
+
           const wrapper = shallow(
             <PlayerLobby
               FetchPlayer={fetchPlayer}
               ListUpgradesForPlayer={listUpgrades}
             />
-          );
+          ).setState({ players: [] });
           const list = wrapper.find(PlayersList);
-          list.props().SelectPlayer('aabb');
-
-          expect(wrapper).toHaveState('chosenPlayer', { id: 'aabb' });
+          return list
+            .props()
+            .SelectPlayer('aabb')
+            .then(() => {
+              expect(wrapper).toHaveState('chosenPlayer', { id: 'aabb' });
+            });
         });
       });
     });
@@ -111,7 +152,8 @@ describe('PlayerLobby', () => {
       });
 
       describe('when onEquipUpgrade is called', () => {
-        it('should update the player and equipable upgrades', () => {
+        it('should update the player and equipable upgrades', async () => {
+          expect.assertions(4);
           const wrapper = shallow(
             <PlayerLobby
               ListUpgradesForPlayer={listUpgrades}
@@ -121,24 +163,28 @@ describe('PlayerLobby', () => {
           ).setState({
             chosenPlayer: { id: 'aabb' }
           });
-          wrapper.instance().onEquipUpgrade(1);
+          wrapper
+            .instance()
+            .onEquipUpgrade(1)
+            .then(() => {
+              expect(updatePlayerSlots).toBeCalledWith('aabb', 1, 'add');
+              expect(fetchPlayer).toBeCalledWith('aabb');
+              expect(listUpgrades).toBeCalledWith('aabb');
 
-          expect(updatePlayerSlots).toBeCalledWith('aabb', 1, 'add');
-          expect(fetchPlayer).toBeCalledWith('aabb');
-          expect(listUpgrades).toBeCalledWith('aabb');
-
-          expect(wrapper).toHaveState({
-            chosenPlayer: {
-              id: 'aabb',
-              slots: slots
-            },
-            upgrades: ['some-upgrade']
-          });
+              expect(wrapper).toHaveState({
+                chosenPlayer: {
+                  id: 'aabb',
+                  slots: slots
+                },
+                upgrades: ['some-upgrade']
+              });
+            });
         });
       });
 
       describe('when PlayerMenu calls EquipUpgrade', () => {
-        it('should update the player', () => {
+        it('should update the player', async () => {
+          expect.assertions(1);
           const wrapper = shallow(
             <PlayerLobby
               ListUpgradesForPlayer={listUpgrades}
@@ -149,12 +195,16 @@ describe('PlayerLobby', () => {
             chosenPlayer: { id: 'aabb' }
           });
           const menu = wrapper.find(PlayerMenu);
-          menu.props().EquipUpgrade(1);
 
-          expect(wrapper).toHaveState('chosenPlayer', {
-            id: 'aabb',
-            slots: slots
-          });
+          return menu
+            .props()
+            .EquipUpgrade(1)
+            .then(() => {
+              expect(wrapper).toHaveState('chosenPlayer', {
+                id: 'aabb',
+                slots: slots
+              });
+            });
         });
       });
     });
@@ -168,7 +218,9 @@ describe('PlayerLobby', () => {
       });
 
       describe('when onPurchaseUpgrade is called', () => {
-        it('should update the player', () => {
+        it('should update the player', async () => {
+          expect.assertions(4);
+
           const wrapper = shallow(
             <PlayerLobby
               ListUpgradesForPlayer={listUpgrades}
@@ -178,23 +230,33 @@ describe('PlayerLobby', () => {
           ).setState({
             chosenPlayer: { id: 'aabb' }
           });
-          wrapper.instance().onPurchaseUpgrade(1);
 
-          expect(updatePlayerHangarUpgrades).toBeCalledWith('aabb', 1, 'add');
-          expect(fetchPlayer).toBeCalledWith('aabb');
-          expect(listUpgrades).toBeCalledWith('aabb');
-          expect(wrapper).toHaveState({
-            chosenPlayer: {
-              id: 'aabb',
-              slots: slots
-            },
-            upgrades: ['some-upgrade']
-          });
+          return wrapper
+            .instance()
+            .onPurchaseUpgrade(1)
+            .then(() => {
+              expect(updatePlayerHangarUpgrades).toBeCalledWith(
+                'aabb',
+                1,
+                'add'
+              );
+              expect(fetchPlayer).toBeCalledWith('aabb');
+              expect(listUpgrades).toBeCalledWith('aabb');
+              expect(wrapper).toHaveState({
+                chosenPlayer: {
+                  id: 'aabb',
+                  slots: slots
+                },
+                upgrades: ['some-upgrade']
+              });
+            });
         });
       });
 
       describe('when PlayerMenu calls PurchaseUpgrade', () => {
-        it('should update the player', () => {
+        it('should update the player', async () => {
+          expect.assertions(1);
+
           const wrapper = shallow(
             <PlayerLobby
               ListUpgradesForPlayer={listUpgrades}
@@ -205,12 +267,16 @@ describe('PlayerLobby', () => {
             chosenPlayer: { id: 'aabb' }
           });
           const menu = wrapper.find(PlayerMenu);
-          menu.props().PurchaseUpgrade(1);
 
-          expect(wrapper).toHaveState('chosenPlayer', {
-            id: 'aabb',
-            slots: slots
-          });
+          return menu
+            .props()
+            .PurchaseUpgrade(1)
+            .then(() => {
+              expect(wrapper).toHaveState('chosenPlayer', {
+                id: 'aabb',
+                slots: slots
+              });
+            });
         });
       });
     });
@@ -224,7 +290,9 @@ describe('PlayerLobby', () => {
       });
 
       describe('when onUnequipUpgrade is called', () => {
-        it('should update the player', () => {
+        it('should update the player', async () => {
+          expect.assertions(4);
+
           const wrapper = shallow(
             <PlayerLobby
               ListUpgradesForPlayer={listUpgrades}
@@ -234,23 +302,29 @@ describe('PlayerLobby', () => {
           ).setState({
             chosenPlayer: { id: 'aabb' }
           });
-          wrapper.instance().onUnequipUpgrade(1);
 
-          expect(updatePlayerSlots).toBeCalledWith('aabb', 1, 'remove');
-          expect(fetchPlayer).toBeCalledWith('aabb');
-          expect(listUpgrades).toBeCalledWith('aabb');
-          expect(wrapper).toHaveState({
-            chosenPlayer: {
-              id: 'aabb',
-              slots: slots
-            },
-            upgrades: ['some-upgrade']
-          });
+          return wrapper
+            .instance()
+            .onUnequipUpgrade(1)
+            .then(() => {
+              expect(updatePlayerSlots).toBeCalledWith('aabb', 1, 'remove');
+              expect(fetchPlayer).toBeCalledWith('aabb');
+              expect(listUpgrades).toBeCalledWith('aabb');
+              expect(wrapper).toHaveState({
+                chosenPlayer: {
+                  id: 'aabb',
+                  slots: slots
+                },
+                upgrades: ['some-upgrade']
+              });
+            });
         });
       });
 
       describe('when PlayerMenu calls UnequipUpgrade', () => {
-        it('should update the player', () => {
+        it('should update the player', async () => {
+          expect.assertions(1);
+
           const wrapper = shallow(
             <PlayerLobby
               ListUpgradesForPlayer={listUpgrades}
@@ -261,28 +335,41 @@ describe('PlayerLobby', () => {
             chosenPlayer: { id: 'aabb' }
           });
           const menu = wrapper.find(PlayerMenu);
-          menu.props().UnequipUpgrade(1);
 
-          expect(wrapper).toHaveState('chosenPlayer', {
-            id: 'aabb',
-            slots: slots
-          });
+          return menu
+            .props()
+            .UnequipUpgrade(1)
+            .then(() => {
+              expect(wrapper).toHaveState('chosenPlayer', {
+                id: 'aabb',
+                slots: slots
+              });
+            });
         });
       });
     });
 
     describe('onCreatePlayer', () => {
       describe('when onCreatePlayer is called', () => {
-        it('sets calls CreatePlayer', () => {
-          const wrapper = shallow(<PlayerLobby CreatePlayer={createPlayer} />);
-          const id = wrapper.instance().onCreatePlayer({ a: 'b' });
+        it('sets calls CreatePlayer and closes the create window', async () => {
+          expect.assertions(3);
 
-          expect(createPlayer).toBeCalledWith({ a: 'b' });
+          const wrapper = shallow(<PlayerLobby CreatePlayer={createPlayer} />);
+          wrapper
+            .instance()
+            .onCreatePlayer({ a: 'b' })
+            .then(id => {
+              expect(createPlayer).toBeCalledWith({ a: 'b' });
+              expect(id).toBe('some-id');
+              expect(wrapper).toHaveState('isCreateOpen', false);
+            });
         });
       });
 
       describe('when PlayerForm calls CreatePlayer', () => {
-        it('sets calls CreatePlayer', () => {
+        it('sets calls CreatePlayer', async () => {
+          expect.assertions(1);
+
           const wrapper = shallow(
             <PlayerLobby CreatePlayer={createPlayer} />
           ).setState({
@@ -333,7 +420,7 @@ describe('PlayerLobby', () => {
 
       describe('when PlayerList calls NewPlayer', () => {
         it('sets isCreateOpen to true', () => {
-          const wrapper = shallow(<PlayerLobby />);
+          const wrapper = shallow(<PlayerLobby />).setState({ players: [] });
           const list = wrapper.find(PlayersList);
           list.props().NewPlayer();
 

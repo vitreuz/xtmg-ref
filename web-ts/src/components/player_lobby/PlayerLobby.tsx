@@ -1,32 +1,34 @@
-import * as React from 'react';
+import { CreatePlayerReq } from 'client/Client';
 import { Player } from 'client/Player';
-import { Upgrade } from 'client/Upgrade';
 import { Ship } from 'client/Ship';
-import PlayersList from '../players_list';
-import PlayerMenu from '../player_menu/index';
+import { Upgrade } from 'client/Upgrade';
+import * as React from 'react';
 import PlayerForm from '../player_form/index';
-import { PFState } from '../player_form/PlayerForm';
+import PlayerMenu from '../player_menu/index';
+import PlayersList from '../players_list';
 
 interface PLProps {
   starterShips: Ship[];
-  CreatePlayer: (player: PFState) => string;
-  ListUpgradesForPlayer: (id: string) => Upgrade[];
-  FetchPlayer: (id: string) => Player;
+  CreatePlayer: (player: CreatePlayerReq) => Promise<string>;
+  ListPlayers: () => Promise<Player[]>;
+  ListUpgradesForPlayer: (id: string) => Promise<Upgrade[]>;
+  FetchPlayer: (id: string) => Promise<Player>;
   UpdatePlayerHangarUpgrades: (
     player_id: string,
     upgrade_id: number,
     action: string
-  ) => void;
+  ) => Promise<void>;
   UpdatePlayerSlots: (
     player_id: string,
     upgrade_id: number,
     action: string
-  ) => void;
+  ) => Promise<void>;
 }
+
 interface PLState {
   chosenPlayer?: Player;
   isCreateOpen: boolean;
-  players: Player[];
+  players?: Player[];
   upgrades: Upgrade[];
 }
 
@@ -36,7 +38,6 @@ class PlayerLobby extends React.Component<PLProps, PLState> {
 
     this.state = {
       isCreateOpen: false,
-      players: [],
       upgrades: []
     };
 
@@ -53,47 +54,67 @@ class PlayerLobby extends React.Component<PLProps, PLState> {
     this.setState({ isCreateOpen: false });
   }
 
-  onCreatePlayer(player: PFState): string {
+  async onCreatePlayer(request: CreatePlayerReq): Promise<string> {
     const { CreatePlayer } = this.props;
 
-    return CreatePlayer(player);
+    const player = await CreatePlayer(request);
+    this.setState({ isCreateOpen: false });
+    return player;
   }
 
-  onEquipUpgrade(id: number): void {
+  async onEquipUpgrade(id: number): Promise<void> {
     const { UpdatePlayerSlots } = this.props;
 
-    UpdatePlayerSlots(this.playerID(), id, 'add');
+    await UpdatePlayerSlots(this.playerID(), id, 'add');
     this.updatePlayerState(this.playerID());
+  }
+
+  async onListPlayers(): Promise<void> {
+    const { ListPlayers } = this.props;
+
+    const players = await ListPlayers();
+    this.setState({ players: players });
   }
 
   onNewPlayer(): void {
     this.setState({ isCreateOpen: true });
   }
 
-  onPurchaseUpgrade(id: number): void {
+  async onPurchaseUpgrade(id: number): Promise<void> {
     const { UpdatePlayerHangarUpgrades } = this.props;
 
-    UpdatePlayerHangarUpgrades(this.playerID(), id, 'add');
+    await UpdatePlayerHangarUpgrades(this.playerID(), id, 'add');
     this.updatePlayerState(this.playerID());
   }
 
-  onSelectPlayer(id: string): void {
+  async onSelectPlayer(id: string): Promise<void> {
     this.updatePlayerState(id);
   }
 
-  onUnequipUpgrade(id: number): void {
+  async onUnequipUpgrade(id: number): Promise<void> {
     const { UpdatePlayerSlots } = this.props;
 
-    UpdatePlayerSlots(this.playerID(), id, 'remove');
+    await UpdatePlayerSlots(this.playerID(), id, 'remove');
     this.updatePlayerState(this.playerID());
   }
 
   updatePlayerState(id: string): void {
-    const { ListUpgradesForPlayer, FetchPlayer } = this.props;
+    this.setPlayer(id);
+    this.setUpgrades(id);
+  }
 
-    const player = FetchPlayer(id);
-    const upgrades = ListUpgradesForPlayer(id);
-    this.setState({ chosenPlayer: player, upgrades: upgrades });
+  async setPlayer(id: string): Promise<void> {
+    const { FetchPlayer } = this.props;
+
+    const player = await FetchPlayer(id);
+    this.setState({ chosenPlayer: player });
+  }
+
+  async setUpgrades(id: string): Promise<void> {
+    const { ListUpgradesForPlayer } = this.props;
+
+    const ugprades = await ListUpgradesForPlayer(id);
+    this.setState({ upgrades: ugprades });
   }
 
   playerID(): string {
@@ -104,6 +125,8 @@ class PlayerLobby extends React.Component<PLProps, PLState> {
 
     return chosenPlayer.id;
   }
+
+  componentDidMount(): void {}
 
   renderLobby(props: PLProps, state: PLState): JSX.Element {
     const { chosenPlayer, isCreateOpen, players, upgrades } = state;
@@ -129,13 +152,16 @@ class PlayerLobby extends React.Component<PLProps, PLState> {
         />
       );
     }
-    return (
-      <PlayersList
-        players={players}
-        NewPlayer={this.onNewPlayer}
-        SelectPlayer={this.onSelectPlayer}
-      />
-    );
+    if (!!players) {
+      return (
+        <PlayersList
+          players={players}
+          NewPlayer={this.onNewPlayer}
+          SelectPlayer={this.onSelectPlayer}
+        />
+      );
+    }
+    return <div className="player-lobby-loading">LOADING...</div>;
   }
 
   render() {
