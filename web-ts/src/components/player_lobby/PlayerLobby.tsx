@@ -9,10 +9,10 @@ import PlayersList from '../players_list';
 
 interface PLProps {
   starterShips: Ship[];
+  players: Player[];
   CreatePlayer: (player: CreatePlayerReq) => Promise<string>;
-  ListPlayers: () => Promise<Player[]>;
-  ListUpgradesForPlayer: (id: string) => Promise<Upgrade[]>;
   FetchPlayer: (id: string) => Promise<Player>;
+  ListUpgradesByPlayer: (id: string) => Promise<Upgrade[]>;
   UpdatePlayerHangarUpgrades: (
     player_id: string,
     upgrade_id: number,
@@ -69,13 +69,6 @@ class PlayerLobby extends React.Component<PLProps, PLState> {
     this.updatePlayerState(this.playerID());
   }
 
-  async onListPlayers(): Promise<void> {
-    const { ListPlayers } = this.props;
-
-    const players = await ListPlayers();
-    this.setState({ players: players });
-  }
-
   onNewPlayer(): void {
     this.setState({ isCreateOpen: true });
   }
@@ -94,7 +87,7 @@ class PlayerLobby extends React.Component<PLProps, PLState> {
   async onUnequipUpgrade(id: number): Promise<void> {
     const { UpdatePlayerSlots } = this.props;
 
-    await UpdatePlayerSlots(this.playerID(), id, 'remove');
+    await UpdatePlayerSlots(this.playerID(), id, 'rem');
     this.updatePlayerState(this.playerID());
   }
 
@@ -111,9 +104,9 @@ class PlayerLobby extends React.Component<PLProps, PLState> {
   }
 
   async setUpgrades(id: string): Promise<void> {
-    const { ListUpgradesForPlayer } = this.props;
+    const { ListUpgradesByPlayer } = this.props;
 
-    const ugprades = await ListUpgradesForPlayer(id);
+    const ugprades = await ListUpgradesByPlayer(id);
     this.setState({ upgrades: ugprades });
   }
 
@@ -126,11 +119,9 @@ class PlayerLobby extends React.Component<PLProps, PLState> {
     return chosenPlayer.id;
   }
 
-  componentDidMount(): void {}
-
   renderLobby(props: PLProps, state: PLState): JSX.Element {
-    const { chosenPlayer, isCreateOpen, players, upgrades } = state;
-    const { starterShips } = props;
+    const { chosenPlayer, isCreateOpen, upgrades } = state;
+    const { starterShips, players } = props;
 
     if (!!chosenPlayer) {
       return (
@@ -153,16 +144,13 @@ class PlayerLobby extends React.Component<PLProps, PLState> {
         />
       );
     }
-    if (!!players) {
-      return (
-        <PlayersList
-          players={players}
-          NewPlayer={this.onNewPlayer}
-          SelectPlayer={this.onSelectPlayer}
-        />
-      );
-    }
-    return <div className="player-lobby-loading">LOADING...</div>;
+    return (
+      <PlayersList
+        players={players}
+        NewPlayer={this.onNewPlayer}
+        SelectPlayer={this.onSelectPlayer}
+      />
+    );
   }
 
   render() {

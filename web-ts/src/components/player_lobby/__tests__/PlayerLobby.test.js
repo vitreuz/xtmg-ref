@@ -9,7 +9,6 @@ import { wrap } from 'module';
 
 describe('PlayerLobby', () => {
   let fetchPlayer = jest.fn(id => ({ id: id }));
-  let listPlayers = jest.fn(() => ['some-player']);
   let listUpgrades = jest.fn(() => ['some-upgrade']);
   let createPlayer = jest.fn(() => 'some-id');
 
@@ -25,19 +24,6 @@ describe('PlayerLobby', () => {
   });
 
   describe('render', () => {
-    describe('when no loading component', () => {
-      it('renders LOADING text', () => {
-        const wrapper = shallow(<PlayerLobby />);
-        wrapper.setState({ chosenPlayer: undefined });
-
-        expect(wrapper).toMatchElement(
-          <div>
-            <div>LOADING...</div>
-          </div>
-        );
-      });
-    });
-
     describe('when no player is chosen and not creating a player', () => {
       it('renders a PlayersList', () => {
         const wrapper = shallow(<PlayerLobby />).setState({ players: [] });
@@ -79,23 +65,6 @@ describe('PlayerLobby', () => {
   });
 
   describe('state', () => {
-    describe('onListPlyaers', () => {
-      describe('when onListPlayers is called', () => {
-        it('should set the list of players', async () => {
-          expect.assertions(2);
-
-          const wrapper = shallow(<PlayerLobby ListPlayers={listPlayers} />);
-
-          return wrapper
-            .instance()
-            .onListPlayers()
-            .then(() => {
-              expect(listPlayers).toBeCalled();
-              expect(wrapper).toHaveState('players', ['some-player']);
-            });
-        });
-      });
-    });
     describe('onSelectPlayer', () => {
       describe('when onSelectPlayer is called', () => {
         it('should set the chosen player and their equipable upgrades', async () => {
@@ -103,7 +72,7 @@ describe('PlayerLobby', () => {
           const wrapper = shallow(
             <PlayerLobby
               FetchPlayer={fetchPlayer}
-              ListUpgradesForPlayer={listUpgrades}
+              ListUpgradesByPlayer={listUpgrades}
             />
           );
 
@@ -129,7 +98,7 @@ describe('PlayerLobby', () => {
           const wrapper = shallow(
             <PlayerLobby
               FetchPlayer={fetchPlayer}
-              ListUpgradesForPlayer={listUpgrades}
+              ListUpgradesByPlayer={listUpgrades}
             />
           ).setState({ players: [] });
           const list = wrapper.find(PlayersList);
@@ -156,7 +125,7 @@ describe('PlayerLobby', () => {
           expect.assertions(4);
           const wrapper = shallow(
             <PlayerLobby
-              ListUpgradesForPlayer={listUpgrades}
+              ListUpgradesByPlayer={listUpgrades}
               FetchPlayer={fetchPlayer}
               UpdatePlayerSlots={updatePlayerSlots}
             />
@@ -187,7 +156,7 @@ describe('PlayerLobby', () => {
           expect.assertions(1);
           const wrapper = shallow(
             <PlayerLobby
-              ListUpgradesForPlayer={listUpgrades}
+              ListUpgradesByPlayer={listUpgrades}
               FetchPlayer={fetchPlayer}
               UpdatePlayerSlots={updatePlayerSlots}
             />
@@ -223,7 +192,7 @@ describe('PlayerLobby', () => {
 
           const wrapper = shallow(
             <PlayerLobby
-              ListUpgradesForPlayer={listUpgrades}
+              ListUpgradesByPlayer={listUpgrades}
               FetchPlayer={fetchPlayer}
               UpdatePlayerHangarUpgrades={updatePlayerHangarUpgrades}
             />
@@ -259,7 +228,7 @@ describe('PlayerLobby', () => {
 
           const wrapper = shallow(
             <PlayerLobby
-              ListUpgradesForPlayer={listUpgrades}
+              ListUpgradesByPlayer={listUpgrades}
               FetchPlayer={fetchPlayer}
               UpdatePlayerHangarUpgrades={updatePlayerHangarUpgrades}
             />
@@ -295,7 +264,7 @@ describe('PlayerLobby', () => {
 
           const wrapper = shallow(
             <PlayerLobby
-              ListUpgradesForPlayer={listUpgrades}
+              ListUpgradesByPlayer={listUpgrades}
               FetchPlayer={fetchPlayer}
               UpdatePlayerSlots={updatePlayerSlots}
             />
@@ -307,7 +276,7 @@ describe('PlayerLobby', () => {
             .instance()
             .onUnequipUpgrade(1)
             .then(() => {
-              expect(updatePlayerSlots).toBeCalledWith('aabb', 1, 'remove');
+              expect(updatePlayerSlots).toBeCalledWith('aabb', 1, 'rem');
               expect(fetchPlayer).toBeCalledWith('aabb');
               expect(listUpgrades).toBeCalledWith('aabb');
               expect(wrapper).toHaveState({
@@ -327,7 +296,7 @@ describe('PlayerLobby', () => {
 
           const wrapper = shallow(
             <PlayerLobby
-              ListUpgradesForPlayer={listUpgrades}
+              ListUpgradesByPlayer={listUpgrades}
               FetchPlayer={fetchPlayer}
               UpdatePlayerSlots={updatePlayerSlots}
             />

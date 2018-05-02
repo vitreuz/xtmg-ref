@@ -6,7 +6,7 @@ interface PFProps {
   starterShips: Ship[];
   CancelForm: () => void;
   CreatePlayer: (player: CreatePlayerReq) => Promise<string>;
-  SelectPlayer: (id: string) => Promise<void>;
+  SelectPlayer: (id: string) => void;
 }
 
 export interface PFState {

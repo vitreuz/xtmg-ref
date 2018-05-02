@@ -76,8 +76,12 @@ const starterShips = [helpers.ships.xwing, helpers.ships.ywing];
 storiesOf('Player Form', module).add('new form', () => (
   <PlayerForm
     starterShips={starterShips}
-    CreatePlayer={action('submit')}
+    CreatePlayer={req => {
+      action('submit')(req);
+      return new Promise(resolve => resolve('some-player-id'));
+    }}
     CancelForm={action('cancel')}
+    SelectPlayer={action('select')}
   />
 ));
 

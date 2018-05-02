@@ -67,7 +67,7 @@ function ListPlayers() {
   );
 }
 
-function FetchPlayer(player_id: number): Promise<Player> {
+function FetchPlayer(player_id: string): Promise<Player> {
   return get<{ data: { player: Player } }>(`/v1/players/${player_id}`).then(
     body => body.data.player
   );
@@ -88,13 +88,13 @@ function UpdatePlayerHangar(
   return put(`/v1/players/${player_id}/hangar`, req);
 }
 
-interface UpgradesQuery {
+export interface UpgradesQuery {
   owned?: boolean;
   player_id?: string;
 }
 
 function ListUpgrades(query: UpgradesQuery) {
-  return get<{ data: { upgrades: Upgrade } }>(`/v1/upgrades`, query).then(
+  return get<{ data: { upgrades: Upgrade[] } }>(`/v1/upgrades`, query).then(
     body => body.data.upgrades
   );
 }
