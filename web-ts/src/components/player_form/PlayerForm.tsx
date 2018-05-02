@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Ship } from 'client/Ship';
+import { CreatePlayerReq } from '../../client/Client';
 
 interface PFProps {
   starterShips: Ship[];
   CancelForm: () => void;
-  CreatePlayer: (player: PFState) => void;
+  CreatePlayer: (player: CreatePlayerReq) => Promise<string>;
+  SelectPlayer: (id: string) => Promise<void>;
 }
 
 export interface PFState {
@@ -41,10 +43,11 @@ class PlayerForm extends React.Component<PFProps, PFState> {
     this.setState({ ship_xws: e.target.value });
   }
 
-  handleSubmit() {
-    const { CreatePlayer } = this.props;
+  async handleSubmit(): Promise<void> {
+    const { CreatePlayer, SelectPlayer } = this.props;
 
-    CreatePlayer(this.state);
+    const id = await CreatePlayer(this.state);
+    SelectPlayer(id);
   }
 
   listShips(ships: Ship[]): (JSX.Element | undefined)[] {

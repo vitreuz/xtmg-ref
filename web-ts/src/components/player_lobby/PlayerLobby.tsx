@@ -149,6 +149,7 @@ class PlayerLobby extends React.Component<PLProps, PLState> {
           starterShips={starterShips}
           CreatePlayer={this.onCreatePlayer}
           CancelForm={this.onCancelCreate}
+          SelectPlayer={this.onSelectPlayer}
         />
       );
     }

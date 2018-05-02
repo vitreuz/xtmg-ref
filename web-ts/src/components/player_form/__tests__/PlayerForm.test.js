@@ -5,14 +5,16 @@ import { start } from 'repl';
 import helpers from '../../../util/helpers';
 
 describe('PlayerForm', () => {
-  let createPlayer = jest.fn();
+  let createPlayer = jest.fn(() => 'some-id');
+  let selectPlayer = jest.fn();
   let cancelForm = jest.fn();
   let starterShips = [];
 
   beforeEach(() => {
     starterShips = [helpers.ships.xwing, helpers.ships.ywing];
 
-    createPlayer.mockReset();
+    createPlayer.mockClear();
+    selectPlayer.mockClear();
     cancelForm.mockReset();
   });
 
@@ -101,18 +103,22 @@ describe('PlayerForm', () => {
         expect(preventDefault.mock.calls.length).toBe(1);
       });
 
-      it('calls CreatePlayer with the current state', () => {
+      it('calls CreatePlayer with the current state the calls SelectPlayer', async () => {
         const wrapper = shallow(
-          <PlayerForm CreatePlayer={createPlayer} starterShips={starterShips} />
+          <PlayerForm
+            CreatePlayer={createPlayer}
+            SelectPlayer={selectPlayer}
+            starterShips={starterShips}
+          />
         ).setState({
           name: 'some-name',
           callsign: 'some-callsign',
           ship_xws: 'some-ship'
         });
+        await wrapper.instance().handleSubmit();
 
-        const button = wrapper.find('.submit-button');
-        button.simulate('click');
-        expect(createPlayer.mock.calls.length).toBe(1);
+        expect(createPlayer).toBeCalled();
+        expect(selectPlayer).toBeCalledWith('some-id');
       });
     });
   });
