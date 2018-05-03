@@ -1,13 +1,11 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { Player } from '../../../client/Player';
 import helpers from '../../../util/helpers';
 import ActionBar from '../../action_bar';
 import ManeuverCard from '../../maneuver_card';
 import StatusBar from '../../status_bar';
-import UpgradesCard from '../../upgrades_card';
-import PlayerCard from '../PlayerCard';
 import UpgradeSlots from '../../upgrade_slots/index';
+import PlayerCard from '../PlayerCard';
 
 describe('PlayerCard', () => {
   let player;
