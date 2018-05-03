@@ -14,13 +14,13 @@ interface PLProps {
   FetchPlayer: (id: string) => Promise<Player>;
   ListUpgradesByPlayer: (id: string) => Promise<Upgrade[]>;
   UpdatePlayerHangarUpgrades: (
-    player_id: string,
-    upgrade_id: number,
+    playerID: string,
+    upgradeID: number,
     action: string
   ) => Promise<void>;
   UpdatePlayerSlots: (
-    player_id: string,
-    upgrade_id: number,
+    playerID: string,
+    upgradeID: number,
     action: string
   ) => Promise<void>;
 }

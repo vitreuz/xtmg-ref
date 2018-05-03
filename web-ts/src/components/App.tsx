@@ -62,40 +62,40 @@ class App extends React.Component<AProps, AState> {
     this.setState({ players: players });
   }
 
-  async FetchPlayer(player_id: string): Promise<Player> {
+  async FetchPlayer(playerID: string): Promise<Player> {
     const { client } = this.props;
 
-    return client.FetchPlayer(player_id);
+    return client.FetchPlayer(playerID);
   }
 
   async UpdatePlayerSlots(
-    player_id: string,
-    upgrade_id: number,
+    playerID: string,
+    upgradeID: number,
     action: string
   ): Promise<void> {
     const { client } = this.props;
 
-    const slot = action === 'add' ? { add: upgrade_id } : { rem: upgrade_id };
+    const slot = action === 'add' ? { add: upgradeID } : { rem: upgradeID };
     const request = { slots: [slot] };
-    return client.UpdatePlayer(player_id, request);
+    return client.UpdatePlayer(playerID, request);
   }
 
   async UpdatePlayerHangarUpgrades(
-    player_id: string,
-    upgrade_id: number,
+    playerID: string,
+    upgradeID: number,
     action: string
   ): Promise<void> {
     const { client } = this.props;
 
-    const slot = action === 'add' ? { add: upgrade_id } : { rem: upgrade_id };
+    const slot = action === 'add' ? { add: upgradeID } : { rem: upgradeID };
     const request = { slots: [slot] };
-    return client.UpdatePlayerHangar(player_id, request);
+    return client.UpdatePlayerHangar(playerID, request);
   }
 
-  ListUpgradesByPlayer(player_id: string): Promise<Upgrade[]> {
+  ListUpgradesByPlayer(playerID: string): Promise<Upgrade[]> {
     const { client } = this.props;
 
-    return client.ListUpgrades({ player_id: player_id, owned: true });
+    return client.ListUpgrades({ player_id: playerID, owned: true });
   }
 
   componentDidMount() {

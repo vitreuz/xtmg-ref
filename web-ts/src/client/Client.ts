@@ -28,7 +28,9 @@ export function post<T>(url: string, body: Object): Promise<T> {
 export function put(url: string, body: Object): Promise<void> {
   return fetch(url, { body: JSON.stringify(body), method: 'PUT' })
     .then(status)
-    .then(response => {});
+    .then(() => {
+      return;
+    });
 }
 
 function status(response: Response | undefined) {
@@ -67,8 +69,8 @@ function ListPlayers() {
   );
 }
 
-function FetchPlayer(player_id: string): Promise<Player> {
-  return get<{ data: { player: Player } }>(`/v1/players/${player_id}`).then(
+function FetchPlayer(playerID: string): Promise<Player> {
+  return get<{ data: { player: Player } }>(`/v1/players/${playerID}`).then(
     body => body.data.player
   );
 }
@@ -77,15 +79,15 @@ export interface UpdatePlayerReq {
   slots: ({ add: number } | { rem: number })[];
 }
 
-function UpdatePlayer(player_id: string, req: UpdatePlayerReq): Promise<void> {
-  return put(`/v1/players/${player_id}`, req);
+function UpdatePlayer(playerID: string, req: UpdatePlayerReq): Promise<void> {
+  return put(`/v1/players/${playerID}`, req);
 }
 
 function UpdatePlayerHangar(
-  player_id: string,
+  playerID: string,
   req: UpdatePlayerReq
 ): Promise<void> {
-  return put(`/v1/players/${player_id}/hangar`, req);
+  return put(`/v1/players/${playerID}/hangar`, req);
 }
 
 export interface UpgradesQuery {
